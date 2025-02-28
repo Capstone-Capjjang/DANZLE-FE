@@ -2,12 +2,14 @@ package com.example.danzle.myprofile
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.danzle.R
+import com.example.danzle.databinding.ActivityMyProfileMainBinding
 import com.example.danzle.myprofile.editProfile.EditProfile
 import com.example.danzle.myprofile.infoApp.InfoApp
 import com.example.danzle.myprofile.logout.FragmentLogout
@@ -15,6 +17,9 @@ import com.example.danzle.myprofile.myScore.MyScore
 import com.example.danzle.myprofile.myVideo.MyVideo
 
 class MyProfileMain : AppCompatActivity() {
+
+    private lateinit var binding: ActivityMyProfileMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -25,29 +30,32 @@ class MyProfileMain : AppCompatActivity() {
             insets
         }
 
+        binding = ActivityMyProfileMainBinding.inflate(LayoutInflater.from(this))
+        setContentView(binding.root)
+
         // converting screen when clicking
         // editProfile
-        findViewById<ConstraintLayout>(R.id.editProfile).setOnClickListener {
+        binding.editProfile.setOnClickListener {
             startActivity(Intent(this@MyProfileMain, EditProfile::class.java))
         }
 
         // myVideo
-        findViewById<ConstraintLayout>(R.id.myVideo).setOnClickListener {
+        binding.myVideo.setOnClickListener {
             startActivity(Intent(this@MyProfileMain, MyVideo::class.java))
         }
 
         // myScore
-        findViewById<ConstraintLayout>(R.id.myScore).setOnClickListener {
+        binding.myScore.setOnClickListener {
             startActivity(Intent(this@MyProfileMain, MyScore::class.java))
         }
 
         // infoApp
-        findViewById<ConstraintLayout>(R.id.infoApp).setOnClickListener {
+        binding.infoApp.setOnClickListener {
             startActivity(Intent(this@MyProfileMain, InfoApp::class.java))
         }
 
         // logout
-        findViewById<ConstraintLayout>(R.id.logout).setOnClickListener {
+        binding.logout.setOnClickListener {
             startActivity(Intent(this@MyProfileMain, FragmentLogout::class.java))
         }
     }

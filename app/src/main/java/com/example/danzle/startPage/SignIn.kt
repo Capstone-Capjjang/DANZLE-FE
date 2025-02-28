@@ -3,6 +3,7 @@ package com.example.danzle.startPage
 import android.content.Intent
 import android.graphics.Paint
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -14,6 +15,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.doAfterTextChanged
 import com.example.danzle.MainActivity
 import com.example.danzle.R
+import com.example.danzle.databinding.ActivitySignInBinding
 import com.example.danzle.retrofit.RetrofitService
 import com.example.danzle.retrofit.UserToken
 import retrofit2.Call
@@ -28,6 +30,7 @@ class SignIn : AppCompatActivity() {
     var email: String = ""
     var password: String = ""
 
+    private lateinit var binding: ActivitySignInBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +42,9 @@ class SignIn : AppCompatActivity() {
             insets
         }
 
+        binding = ActivitySignInBinding.inflate(LayoutInflater.from(this))
+        setContentView(binding.root)
+
         // Connecting with server (Using Retrofit)
         val retrofit = Retrofit.Builder()
             .baseUrl("http://10.0.2.2:8080/")
@@ -46,31 +52,24 @@ class SignIn : AppCompatActivity() {
             .build()
         val retrofitService = retrofit.create(RetrofitService::class.java)
 
-
-
-
         // convert SignIn to CreateAccount
-//        findViewById<TextView>(R.id.createAccount).apply {
-//            this.setOnClickListener {
-//                startActivity(
-//                    Intent(this@SignIn, CreateAccount::class.java)
-//                )
-//            }
-//        }
-        // making as one line
-        findViewById<TextView>(R.id.createAccount).setOnClickListener {
-            startActivity(Intent(this, CreateAccount::class.java))
+        binding.createAccount.setOnClickListener {
+            startActivity(Intent(this@SignIn, CreateAccount::class.java))
         }
 
         // making underline at <CreateAccount> TextView
-        findViewById<TextView>(R.id.createAccount).paintFlags = Paint.UNDERLINE_TEXT_FLAG
-
+        binding.createAccount.paintFlags = Paint.UNDERLINE_TEXT_FLAG
 
         // writing email
-        findViewById<EditText>(R.id.id).doAfterTextChanged {
+        binding.id.doAfterTextChanged {
             // assign value on email variable
             email = it.toString()
         }
+
+//        findViewById<EditText>(R.id.id).doAfterTextChanged {
+//            // assign value on email variable
+//            email = it.toString()
+//        }
 
         // writing password
         findViewById<EditText>(R.id.password).doAfterTextChanged {
@@ -79,7 +78,7 @@ class SignIn : AppCompatActivity() {
         }
 
         // click ForgotPassword text, then ForgotPassword
-        findViewById<TextView>(R.id.forgotPassword).setOnClickListener {
+        binding.forgotPassword.setOnClickListener {
             startActivity(Intent(this@SignIn, ForgotPassword1::class.java))
         }
 

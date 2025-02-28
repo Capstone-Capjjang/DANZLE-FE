@@ -16,6 +16,15 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31" >
         <activity
+            android:name=".myprofile.editProfile.DeleteAccount"
+            android:exported="false" />
+        <activity
+            android:name=".myprofile.editProfile.ChangePassword"
+            android:exported="false" />
+        <activity
+            android:name=".myprofile.editProfile.Username"
+            android:exported="false" />
+        <activity
             android:name=".HighlightFinish"
             android:exported="false" />
         <activity
@@ -34,7 +43,7 @@
             android:name=".myprofile.editProfile.EditProfile"
             android:exported="false" />
         <activity
-            android:name=".myprofile.MyProfileMain"
+            android:name=".startPage.SignIn"
             android:exported="false" />
         <activity
             android:name=".startPage.ForgotPassword2"
@@ -82,7 +91,7 @@
             android:name=".MainActivity"
             android:exported="false" />
         <activity
-            android:name=".startPage.SignIn"
+            android:name=".myprofile.MyProfileMain"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

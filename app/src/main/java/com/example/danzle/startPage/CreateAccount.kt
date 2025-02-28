@@ -58,30 +58,6 @@ class CreateAccount : AppCompatActivity(), View.OnClickListener, View.OnFocusCha
         setContentView(binding.root)
 
 
-        // Not using findViewById
-//        // Back to Sign In
-//        findViewById<TextView>(R.id.backToSignin).setOnClickListener {
-//            startActivity(Intent(this, SignIn::class.java))
-//        }
-//
-//        // making underline
-//        findViewById<TextView>(R.id.backToSignin).paintFlags = Paint.UNDERLINE_TEXT_FLAG
-//
-//
-//        // assign variables for each EditText
-//        // EditText에 들어온 내용이 email에 할당되는 것이다.
-//        findViewById<EditText>(R.id.email).doAfterTextChanged { email = it.toString() }
-//
-//        // checking email is valid or not
-//        if (!isValidEmail(email)){
-//            Toast.makeText(this@CreateAccount, "Sorry, but the email is not valid", Toast.LENGTH_SHORT).show()
-//        }
-//
-//        findViewById<EditText>(R.id.username).doAfterTextChanged { username = it.toString() }
-//
-//        findViewById<EditText>(R.id.password1).doAfterTextChanged { password1 = it. toString() }
-//
-//        findViewById<EditText>(R.id.password2).doAfterTextChanged { password2 = it.toString() }
 
         // Connecting with server (Using Retrofit)
         val retrofit = Retrofit.Builder()
