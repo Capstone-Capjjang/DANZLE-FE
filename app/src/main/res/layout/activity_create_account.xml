@@ -43,7 +43,9 @@
             android:id="@+id/email"
             android:layout_width="320dp"
             android:layout_height="46dp"
-            android:background="@drawable/edittext_box"/>
+            android:background="@drawable/edittext_box"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="12dp"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -71,7 +73,9 @@
             android:id="@+id/username"
             android:layout_width="320dp"
             android:layout_height="46dp"
-            android:background="@drawable/edittext_box"/>
+            android:background="@drawable/edittext_box"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="12dp"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -101,7 +105,9 @@
             android:id="@+id/password1"
             android:layout_width="320dp"
             android:layout_height="46dp"
-            android:background="@drawable/edittext_box"/>
+            android:background="@drawable/edittext_box"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="12dp"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -131,16 +137,18 @@
             android:id="@+id/password2"
             android:layout_width="320dp"
             android:layout_height="46dp"
-            android:background="@drawable/edittext_box"/>
+            android:background="@drawable/edittext_box"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="12dp" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
-
-    <Button
+    <CheckBox
         android:id="@+id/checkButton"
         android:layout_width="15dp"
         android:layout_height="15dp"
-        android:background="@drawable/create_checkbutton1"
+        android:background="@drawable/custom_checkbox_createaccount"
+        android:button="@null"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/password2Layout"
         android:layout_marginStart="40dp"

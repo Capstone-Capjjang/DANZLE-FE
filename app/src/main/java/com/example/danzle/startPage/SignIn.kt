@@ -3,10 +3,11 @@ package com.example.danzle.startPage
 import android.content.Intent
 import android.graphics.Paint
 import android.os.Bundle
+import android.util.Log
+import android.util.Patterns
+import android.view.KeyEvent
 import android.view.LayoutInflater
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
+import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -23,8 +24,9 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import kotlin.math.sign
 
-class SignIn : AppCompatActivity() {
+class SignIn : AppCompatActivity(), View.OnClickListener, View.OnFocusChangeListener, View.OnKeyListener {
 
     // declare variable for SignIn
     var email: String = ""
@@ -35,22 +37,16 @@ class SignIn : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_sign_in)
+        binding = ActivitySignInBinding.inflate(LayoutInflater.from(this))
+        setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        binding = ActivitySignInBinding.inflate(LayoutInflater.from(this))
-        setContentView(binding.root)
-
-        // Connecting with server (Using Retrofit)
-        val retrofit = Retrofit.Builder()
-            .baseUrl("http://10.0.2.2:8080/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-        val retrofitService = retrofit.create(RetrofitService::class.java)
+        binding.email.onFocusChangeListener = this
+        binding.password.onFocusChangeListener = this
 
         // convert SignIn to CreateAccount
         binding.createAccount.setOnClickListener {
@@ -60,20 +56,15 @@ class SignIn : AppCompatActivity() {
         // making underline at <CreateAccount> TextView
         binding.createAccount.paintFlags = Paint.UNDERLINE_TEXT_FLAG
 
-        // writing email
-        binding.id.doAfterTextChanged {
-            // assign value on email variable
+
+        binding.email.doAfterTextChanged {
+            // assign value on email variable whenever user writes email
             email = it.toString()
         }
 
-//        findViewById<EditText>(R.id.id).doAfterTextChanged {
-//            // assign value on email variable
-//            email = it.toString()
-//        }
-
         // writing password
-        findViewById<EditText>(R.id.password).doAfterTextChanged {
-            // assign value on password variable
+        binding.password.doAfterTextChanged {
+            // assign value on password variable whenever user writes password
             password = it.toString()
         }
 
@@ -83,36 +74,146 @@ class SignIn : AppCompatActivity() {
         }
 
         // click remember checkbox
+        binding.checkButton.setOnClickListener{
+            if (binding.checkButton.isChecked){
+                Log.d("SignIN", "checkButton")
+            } else{
+                Log.d("SignIn", "No checkButton")
+            }
+        }
+
+
+        // Connecting with server (Using Retrofit)
+        val retrofit = Retrofit.Builder()
+            .baseUrl("http://10.0.2.2:8080/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+        val signInService = retrofit.create(SignInRequest::class.java)
 
 
         // click button, then Sign In
-        findViewById<Button>(R.id.signinButton).setOnClickListener {
-//            val user = HashMap<String, Any>()
-//            user.put("email", email)
-//            user.put("password", password)
-
-            val request = SignInRequest(email, password)
-
-            retrofitService.signin(request).enqueue(object: Callback<UserToken>{
-                override fun onFailure(p0: Call<UserToken>, p1: Throwable) {
-                    Toast.makeText(this@SignIn, "네트워크 오류 발생!", Toast.LENGTH_SHORT).show()
+        binding.signinButton.setOnClickListener {
+            signInService.signInRequest(email, password).enqueue(object: Callback<SignInResponse>{
+                override fun onFailure(call: Call<SignInResponse>, p1: Throwable) {
+                    Log.d("Debug", "Error: ${p1.message}")
+                    // fail to connect with server
+                    Toast.makeText(this@SignIn, "Network Error", Toast.LENGTH_SHORT).show()
                 }
 
-                override fun onResponse(p0: Call<UserToken>, p1: Response<UserToken>) {
-                    if(p1.isSuccessful){
-                        val token: UserToken = p1.body()!!
+                override fun onResponse(call: Call<SignInResponse>, response: Response<SignInResponse>) {
+                    // success to connect with server, get response
+                    if(response.isSuccessful){
+                        val signInResponse = response.body()
                         val intent = Intent(this@SignIn, MainActivity::class.java)
-                        intent.putExtra("Token", token.token)
+                        intent.putExtra("Token", signInResponse?.accessToken)
                         startActivity(intent)
                     } else {
                         // giving some message if it is fail to SignIn
-                        Toast.makeText(this@SignIn, "로그인 실패: ${p1.message()}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@SignIn, "Fail to Sign In: ${response.message()}", Toast.LENGTH_SHORT).show()
                     }
                 }
+
             })
         }
+
+//        findViewById<Button>(R.id.signinButton).setOnClickListener {
+//
+////            val user = HashMap<String, Any>()
+////            user.put("email", email)
+////            user.put("password", password)
+//
+//            val request = SignInRequest(email, password)
+//
+//            retrofitService.signin(request).enqueue(object: Callback<UserToken>{
+//                override fun onFailure(p0: Call<UserToken>, p1: Throwable) {
+//                    Toast.makeText(this@SignIn, "네트워크 오류 발생!", Toast.LENGTH_SHORT).show()
+//                }
+//
+//                override fun onResponse(p0: Call<UserToken>, p1: Response<UserToken>) {
+//                    if(p1.isSuccessful){
+//                        val token: UserToken = p1.body()!!
+//                        val intent = Intent(this@SignIn, MainActivity::class.java)
+//                        intent.putExtra("Token", token.token)
+//                        startActivity(intent)
+//                    } else {
+//                        // giving some message if it is fail to SignIn
+//                        Toast.makeText(this@SignIn, "로그인 실패: ${p1.message()}", Toast.LENGTH_SHORT).show()
+//                    }
+//                }
+//            })
+//        }
 
 
     }
 
+    private fun validateEmail(): Boolean{
+        var errorMessage: String? = null
+        // convert written text to String
+        val email: String = binding.email.text.toString()
+        if (email.isEmpty()){
+            errorMessage = "Email is required"
+            Log.d("createAccount", "no email")
+        } else if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+            //checking Email is valid or not
+            errorMessage = "Email Address is invalid"
+            Log.d("createAccount", "email's form is wrong")
+        }
+
+        // print the error message
+        if (errorMessage != null){
+            binding.email.apply {
+                error = errorMessage
+            }
+        }
+
+        // No error
+        return errorMessage == null
+    }
+
+    private fun validatePassword(): Boolean{
+        var errorMessage: String? = null
+        val password: String = binding.password.text.toString()
+        if (password.isEmpty()){
+            errorMessage = "Password is required"
+            Log.d("createAccount", "no password1")
+        }
+
+        // print the error message
+        if (errorMessage != null){
+            binding.password.apply {
+                error = errorMessage
+            }
+        }
+
+        return errorMessage == null
+    }
+
+    override fun onClick(view: View?) {
+
+    }
+
+    override fun onFocusChange(view: View?, hasFocus: Boolean) {
+        if (view != null){
+            when (view.id){
+                R.id.email -> {
+                    if (hasFocus){
+                        binding.email.error = null
+                    } else{
+                        validateEmail()
+                    }
+                }
+                R.id.password -> {
+                    if (hasFocus){
+                        binding.email.error = null
+                    } else{
+                        validatePassword()
+                    }
+                }
+            }
+        }
+    }
+
+    override fun onKey(view: View?, keyCode: Int, event: KeyEvent?): Boolean {
+        return false
+    }
 }

@@ -43,7 +43,7 @@
             android:name=".myprofile.editProfile.EditProfile"
             android:exported="false" />
         <activity
-            android:name=".startPage.SignIn"
+            android:name=".myprofile.MyProfileMain"
             android:exported="false" />
         <activity
             android:name=".startPage.ForgotPassword2"
@@ -91,7 +91,7 @@
             android:name=".MainActivity"
             android:exported="false" />
         <activity
-            android:name=".myprofile.MyProfileMain"
+            android:name=".startPage.SignIn"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

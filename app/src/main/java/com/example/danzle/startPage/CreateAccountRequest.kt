@@ -1,9 +1,19 @@
 package com.example.danzle.startPage
 
-data class CreateAccountRequest (
-    val email: String,
-    val username: String,
-    val password1: String,
-    val password2: String,
-    val termsAccepted: Boolean
-)
+import retrofit2.Call
+import retrofit2.http.Field
+import retrofit2.http.FormUrlEncoded
+import retrofit2.http.POST
+
+interface CreateAccountRequest{
+
+    @FormUrlEncoded
+    @POST("/join")
+    fun createAccountRequest(
+        @Field("email") email: String,
+        @Field("username") username: String,
+        @Field("password1") password1: String,
+        @Field("password2") password2: String,
+        @Field("termsAccepted") termsAccepted: Boolean
+    ): Call<CreateAccountResponse>
+}
