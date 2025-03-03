@@ -17,8 +17,7 @@ import androidx.core.widget.doAfterTextChanged
 import com.example.danzle.MainActivity
 import com.example.danzle.R
 import com.example.danzle.databinding.ActivitySignInBinding
-import com.example.danzle.retrofit.RetrofitService
-import com.example.danzle.retrofit.UserToken
+import com.example.danzle.retrofit.getRetrofit
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -84,11 +83,11 @@ class SignIn : AppCompatActivity(), View.OnClickListener, View.OnFocusChangeList
 
 
         // Connecting with server (Using Retrofit)
-        val retrofit = Retrofit.Builder()
-            .baseUrl("http://10.0.2.2:8080/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-        val signInService = retrofit.create(SignInRequest::class.java)
+//        val retrofit = Retrofit.Builder()
+//            .baseUrl("http://10.0.2.2:8080/")
+//            .addConverterFactory(GsonConverterFactory.create())
+//            .build()
+        val signInService = getRetrofit().create(SignInRequest::class.java)
 
 
         // click button, then Sign In
