@@ -81,12 +81,6 @@ class SignIn : AppCompatActivity(), View.OnClickListener, View.OnFocusChangeList
             }
         }
 
-
-        // Connecting with server (Using Retrofit)
-//        val retrofit = Retrofit.Builder()
-//            .baseUrl("http://10.0.2.2:8080/")
-//            .addConverterFactory(GsonConverterFactory.create())
-//            .build()
         val signInService = getRetrofit().create(SignInRequest::class.java)
 
 
@@ -104,44 +98,18 @@ class SignIn : AppCompatActivity(), View.OnClickListener, View.OnFocusChangeList
                     if(response.isSuccessful){
                         val signInResponse = response.body()
                         val intent = Intent(this@SignIn, MainActivity::class.java)
+                        Log.d("Debug", "Error:")
                         intent.putExtra("Token", signInResponse?.accessToken)
                         startActivity(intent)
                     } else {
                         // giving some message if it is fail to SignIn
+                        Log.d("Debug", "Error:")
                         Toast.makeText(this@SignIn, "Fail to Sign In: ${response.message()}", Toast.LENGTH_SHORT).show()
                     }
                 }
 
             })
         }
-
-//        findViewById<Button>(R.id.signinButton).setOnClickListener {
-//
-////            val user = HashMap<String, Any>()
-////            user.put("email", email)
-////            user.put("password", password)
-//
-//            val request = SignInRequest(email, password)
-//
-//            retrofitService.signin(request).enqueue(object: Callback<UserToken>{
-//                override fun onFailure(p0: Call<UserToken>, p1: Throwable) {
-//                    Toast.makeText(this@SignIn, "네트워크 오류 발생!", Toast.LENGTH_SHORT).show()
-//                }
-//
-//                override fun onResponse(p0: Call<UserToken>, p1: Response<UserToken>) {
-//                    if(p1.isSuccessful){
-//                        val token: UserToken = p1.body()!!
-//                        val intent = Intent(this@SignIn, MainActivity::class.java)
-//                        intent.putExtra("Token", token.token)
-//                        startActivity(intent)
-//                    } else {
-//                        // giving some message if it is fail to SignIn
-//                        Toast.makeText(this@SignIn, "로그인 실패: ${p1.message()}", Toast.LENGTH_SHORT).show()
-//                    }
-//                }
-//            })
-//        }
-
 
     }
 

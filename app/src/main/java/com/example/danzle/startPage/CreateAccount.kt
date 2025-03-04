@@ -94,11 +94,6 @@ class CreateAccount : AppCompatActivity(), View.OnClickListener, View.OnFocusCha
             }
         }
 
-        // Connecting with server (Using Retrofit)
-//        val retrofit = Retrofit.Builder()
-//            .baseUrl("http://10.0.2.2:8080/")
-//            .addConverterFactory(GsonConverterFactory.create())
-//            .build()
         val createAccountService = getRetrofit().create(CreateAccountRequest::class.java)
 
         binding.createAccountButton.setOnClickListener {
@@ -115,36 +110,19 @@ class CreateAccount : AppCompatActivity(), View.OnClickListener, View.OnFocusCha
                 ) {// success to connect with server, get response
                     if(response.isSuccessful){
                         val signInResponse = response.body()
-                        val intent = Intent(this@CreateAccount, MainActivity::class.java)
+                        val intent = Intent(this@CreateAccount, SignIn::class.java)
+                        Log.d("Debug", "success to create account")
                         startActivity(intent)
                     } else {
                         // giving some message if it is fail to SignIn
                         Toast.makeText(this@CreateAccount, "Fail to create account: ${response.message()}", Toast.LENGTH_SHORT).show()
+                        Log.d("Error", "${response.code()}")
+                        Log.d("Error", "${response.message()}")
                     }
                 }
             })
         }
 
-//        findViewById<Button>(R.id.createAccountButton).setOnClickListener {
-//            val request = CreateAccountRequest(email, username, password1, password2, termsAccepted = true)
-//
-//            retrofitService.createAccount(request).enqueue(object : Callback<UserToken> {
-//                override fun onFailure(p0: Call<UserToken>, p1: Throwable) {
-//
-//                }
-//
-//                override fun onResponse(p0: Call<UserToken>, p1: Response<UserToken>) {
-//                    if (p1.isSuccessful) {
-//                        val userToken = p1.body()!!
-//                        val intent = Intent(this@CreateAccount, SignIn::class.java)
-//                        startActivity(intent)
-//                        finish()
-//                    } else {
-//                        Toast.makeText(this@CreateAccount, "회원가입 실패: ${p1.message()}", Toast.LENGTH_SHORT).show()
-//                    }
-//                }
-//            })
-//        }
     }
 
     // check the vaildation of Email

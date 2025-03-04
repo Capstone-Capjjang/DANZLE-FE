@@ -90,7 +90,7 @@
             android:layout_marginTop="15dp"/>
 
         <TextView
-            android:id="@+id/rememberCheck"
+            android:id="@+id/rememberTextview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Remember me"
@@ -105,8 +105,8 @@
             android:layout_height="wrap_content"
             android:text="Forgot Password ?"
             android:textSize="12dp"
-            app:layout_constraintStart_toEndOf="@id/rememberCheck"
-            app:layout_constraintBottom_toBottomOf="@id/checkButton"
+            app:layout_constraintStart_toEndOf="@id/rememberTextview"
+            app:layout_constraintBaseline_toBaselineOf="@id/rememberTextview"
             android:layout_marginStart="110dp"/>
 
 

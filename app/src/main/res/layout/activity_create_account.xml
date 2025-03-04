@@ -175,7 +175,7 @@
         android:fontFamily="@font/inter_18pt_semibold"
         android:textColor="#2196F3"
         app:layout_constraintStart_toEndOf="@id/acceptText"
-        app:layout_constraintBottom_toBottomOf="@id/checkButton"/>
+        app:layout_constraintBaseline_toBaselineOf="@id/acceptText"/>
 
     <Button
         android:id="@+id/createAccountButton"
