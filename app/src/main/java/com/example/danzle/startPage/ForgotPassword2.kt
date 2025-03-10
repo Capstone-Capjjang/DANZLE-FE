@@ -21,12 +21,14 @@ class ForgotPassword2 : AppCompatActivity() {
         }
 
         // click the button
-        findViewById<Button>(R.id.vector).setOnClickListener {
+        findViewById<Button>(R.id.backButton).setOnClickListener {
             startActivity(Intent(this@ForgotPassword2, ForgotPassword1::class.java))
         }
 
-        findViewById<Button>(R.id.cancel).setOnClickListener {
+        findViewById<Button>(R.id.cancelButton).setOnClickListener {
             startActivity(Intent(this@ForgotPassword2, SignIn::class.java))
         }
+
+
     }
 }

@@ -22,7 +22,7 @@ class FirstStart : AppCompatActivity() {
         }
 
         // convert to Signin activity
-        findViewById<Button>(R.id.signin).apply {
+        findViewById<Button>(R.id.signinButton).apply {
             this.setOnClickListener {
                 startActivity(
                     Intent(this@FirstStart, SignIn::class.java)
@@ -31,7 +31,7 @@ class FirstStart : AppCompatActivity() {
         }
 
         // convert to CreateAccount activity
-        findViewById<Button>(R.id.createAccount).apply {
+        findViewById<Button>(R.id.createAccountButton).apply {
             this.setOnClickListener {
                 startActivity(
                     Intent(this@FirstStart, CreateAccount::class.java)
@@ -41,7 +41,7 @@ class FirstStart : AppCompatActivity() {
 
         // convert to Main activity
         // the situation using application without signin
-        findViewById<Button>(R.id.notSignin).apply {
+        findViewById<Button>(R.id.notSigninButton).apply {
             this.setOnClickListener {
                 startActivity(
                     Intent(this@FirstStart, MainActivity::class.java)

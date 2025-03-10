@@ -1,32 +1,27 @@
 package com.example.danzle.startPage
 
 import android.content.Intent
-import android.graphics.Paint
 import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.doAfterTextChanged
-import com.example.danzle.MainActivity
 import com.example.danzle.R
 import com.example.danzle.databinding.ActivityCreateAccountBinding
-import com.example.danzle.retrofit.getRetrofit
+import com.example.danzle.data.remote.request.auth.CreateAccountRequest
+import com.example.danzle.data.remote.response.auth.CreateAccountResponse
+import com.example.danzle.viewModel.SignViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import java.util.regex.Pattern
 
 class CreateAccount : AppCompatActivity(), View.OnClickListener, View.OnFocusChangeListener, View.OnKeyListener {
 
@@ -39,16 +34,14 @@ class CreateAccount : AppCompatActivity(), View.OnClickListener, View.OnFocusCha
 
     // name's form => Activity(XML name)Binding
     private lateinit var binding: ActivityCreateAccountBinding
+    private val viewModel: SignViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
-
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
         // initialize binding
         binding = ActivityCreateAccountBinding.inflate(LayoutInflater.from(this))
-
         // set the content view
         // Instead of setContentView(R.layout.activity_create_account)
         setContentView(binding.root)
@@ -94,36 +87,39 @@ class CreateAccount : AppCompatActivity(), View.OnClickListener, View.OnFocusCha
             }
         }
 
-        val createAccountService = getRetrofit().create(CreateAccountRequest::class.java)
 
-        binding.createAccountButton.setOnClickListener {
-            createAccountService.createAccountRequest(email, username, password1, password2, termsAccepted).enqueue(object: Callback<CreateAccountResponse>{
-                override fun onFailure(call: Call<CreateAccountResponse>, p1: Throwable) {
-                    Log.d("Debug", "Error: ${p1.message}")
-                    // fail to connect with server
-                    Toast.makeText(this@CreateAccount, "Network Error", Toast.LENGTH_SHORT).show()
-                }
-
-                override fun onResponse(
-                    call: Call<CreateAccountResponse>,
-                    response: Response<CreateAccountResponse>
-                ) {// success to connect with server, get response
-                    if(response.isSuccessful){
-                        val signInResponse = response.body()
-                        val intent = Intent(this@CreateAccount, SignIn::class.java)
-                        Log.d("Debug", "success to create account")
-                        startActivity(intent)
-                    } else {
-                        // giving some message if it is fail to SignIn
-                        Toast.makeText(this@CreateAccount, "Fail to create account: ${response.message()}", Toast.LENGTH_SHORT).show()
-                        Log.d("Error", "${response.code()}")
-                        Log.d("Error", "${response.message()}")
-                    }
-                }
-            })
-        }
+//        binding.createAccountButton.setOnClickListener {
+//            createAccountService.createAccountRequest(email, username, password1, password2, termsAccepted).enqueue(object: Callback<CreateAccountResponse>{
+//                override fun onFailure(call: Call<CreateAccountResponse>, p1: Throwable) {
+//                    Log.d("Debug", "Error: ${p1.message}")
+//                    // fail to connect with server
+//                    Toast.makeText(this@CreateAccount, "Network Error", Toast.LENGTH_SHORT).show()
+//                }
+//
+//                override fun onResponse(
+//                    call: Call<CreateAccountResponse>,
+//                    response: Response<CreateAccountResponse>
+//                ) {// success to connect with server, get response
+//                    if(response.isSuccessful){
+//                        val signInResponse = response.body()
+//                        Log.d("Debug", "success to create account")
+//                        startActivity(Intent(this@CreateAccount, SignIn::class.java))
+//                    } else {
+//                        // giving some message if it is fail to SignIn
+//                        Toast.makeText(this@CreateAccount, "Fail to create account: ${response.message()}", Toast.LENGTH_SHORT).show()
+//                        Log.d("Error", "${response.code()}")
+//                        Log.d("Error", "${response.message()}")
+//                    }
+//                }
+//            })
+//        }
 
     }
+
+    /*
+    Below Code is about the error message shown next to the EditText.
+    It doesn't have the function to check before changing Activity.
+ */
 
     // check the vaildation of Email
     private fun validateEmail(): Boolean{
@@ -149,6 +145,7 @@ class CreateAccount : AppCompatActivity(), View.OnClickListener, View.OnFocusCha
         // No error
         return errorMessage == null
     }
+
 
     // check the vaildation of Usename
     private fun validateUsername(): Boolean{
@@ -209,7 +206,7 @@ class CreateAccount : AppCompatActivity(), View.OnClickListener, View.OnFocusCha
     }
 
     // checking the password1 and password2 is same
-    private fun validatePasswordAndCOnfirmPassword(): Boolean{
+    private fun validatePasswordAndConfirmPassword(): Boolean{
         var errorMessage: String? = null
         val password1 = binding.password1.text.toString()
         val password2 = binding.password2.text.toString()
@@ -242,7 +239,10 @@ class CreateAccount : AppCompatActivity(), View.OnClickListener, View.OnFocusCha
                     if (hasFocus){
                         binding.email.error = null
                     }else{
-                        validateEmail()
+                        if(validateEmail()){
+                            // do validation for its uniqueness
+
+                        }
                     }
                 }
                 R.id.username -> {
@@ -256,14 +256,20 @@ class CreateAccount : AppCompatActivity(), View.OnClickListener, View.OnFocusCha
                     if (hasFocus){
                         binding.password1.error = null
                     }else{
-                        validatePassword()
+                        if(validatePassword() && binding.password1.text!!.isNotEmpty()
+                            && validateConfirmPassword() && validatePasswordAndConfirmPassword()){
+                            binding.password2.error = null
+                        }
                     }
                 }
                 R.id.password2 -> {
                     if (hasFocus){
+                        // meaning of no error
                         binding.password2.error = null
                     }else{
-                        validateConfirmPassword()
+                        if(validateConfirmPassword() && validatePassword() && validatePasswordAndConfirmPassword()){
+                            binding.password1.error = null
+                        }
                     }
                 }
             }

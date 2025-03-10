@@ -8,7 +8,7 @@
     tools:context=".startPage.CreateAccount">
 
     <TextView
-        android:id="@+id/createAccount"
+        android:id="@+id/createAccountTextview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="40dp"
@@ -26,7 +26,7 @@
         android:text="Email"
         android:textSize="12dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/createAccount"
+        app:layout_constraintTop_toBottomOf="@id/createAccountTextview"
         android:layout_marginStart="40dp"
         android:layout_marginTop="30dp"/>
 
@@ -173,7 +173,7 @@
         android:text="Terms and Conditions"
         android:textSize="12dp"
         android:fontFamily="@font/inter_18pt_semibold"
-        android:textColor="#2196F3"
+        android:textColor="@color/blue"
         app:layout_constraintStart_toEndOf="@id/acceptText"
         app:layout_constraintBaseline_toBaselineOf="@id/acceptText"/>
 

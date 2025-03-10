@@ -9,19 +9,19 @@
 
 
     <ImageView
-        android:id="@+id/danzleLogo"
+        android:id="@+id/danzleLogoImage"
         android:layout_width="140dp"
         android:layout_height="140dp"
         android:background="@drawable/danzle_logo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="150dp"
+        android:layout_marginTop="170dp"
         app:layout_constraintVertical_bias="0"
-        app:layout_constraintBottom_toTopOf="@id/danzle"/>
+        app:layout_constraintBottom_toTopOf="@id/danzleTextView"/>
 
     <TextView
-        android:id="@+id/danzle"
+        android:id="@+id/danzleTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Danzle"
@@ -29,27 +29,27 @@
         android:textSize="30dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/danzleLogo"
-        app:layout_constraintBottom_toTopOf="@id/signin"/>
+        app:layout_constraintTop_toBottomOf="@id/danzleLogoImage"
+        app:layout_constraintBottom_toTopOf="@id/signinButton"/>
 
     <Button
-        android:id="@+id/signin"
+        android:id="@+id/signinButton"
         android:layout_width="304dp"
         android:layout_height="40dp"
         android:background="@drawable/button_round_radius"
         android:backgroundTint="@color/danzlePink"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/danzle"
-        app:layout_constraintBottom_toTopOf="@+id/createAccount"
+        app:layout_constraintTop_toBottomOf="@+id/danzleTextView"
+        app:layout_constraintBottom_toTopOf="@+id/createAccountButton"
         android:fontFamily="@font/inter_18pt_semibold"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="120dp"
         android:text="Sign In"
         android:textColor="@color/white"
         android:gravity="center"/>
 
     <Button
-        android:id="@+id/createAccount"
+        android:id="@+id/createAccountButton"
         android:layout_width="304dp"
         android:layout_height="40dp"
         android:layout_marginTop="30dp"
@@ -61,22 +61,22 @@
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/signin" />
+        app:layout_constraintTop_toBottomOf="@id/signinButton" />
 
     <Button
-        android:id="@+id/notSignin"
+        android:id="@+id/notSigninButton"
         android:layout_width="304dp"
         android:layout_height="40dp"
         android:layout_marginTop="30dp"
         android:background="@drawable/button_round_radius"
-        android:backgroundTint="@color/gray"
+        android:backgroundTint="@color/lightGray"
         android:fontFamily="@font/inter_18pt_semibold"
         android:gravity="center"
         android:text="Using without Sign In"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/createAccount" />
+        app:layout_constraintTop_toBottomOf="@id/createAccountButton" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

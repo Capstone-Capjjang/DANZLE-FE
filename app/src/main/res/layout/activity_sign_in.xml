@@ -9,7 +9,7 @@
     android:theme="@style/AppTheme">
 
         <TextView
-            android:id="@id/signin"
+            android:id="@+id/signinTextview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="40dp"
@@ -28,7 +28,7 @@
             android:text="Email"
             android:textSize="12dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/signin"
+            app:layout_constraintTop_toBottomOf="@id/signinTextview"
             android:layout_marginStart="40dp"
             android:layout_marginTop="100dp"/>
 
@@ -100,7 +100,7 @@
             android:layout_marginStart="5dp" />
 
         <TextView
-            android:id="@+id/forgotPassword"
+            android:id="@+id/forgotPasswordTextview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Forgot Password ?"
@@ -126,7 +126,7 @@
             android:gravity="center"/>
 
         <TextView
-            android:id="@+id/contentOne"
+            android:id="@+id/contentOneTextview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Are you not a member?"
@@ -143,7 +143,7 @@
             android:text="Create Account"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/contentOne"
+            app:layout_constraintTop_toBottomOf="@id/contentOneTextview"
             android:layout_marginTop="8dp"/>
 
         <View
@@ -157,7 +157,7 @@
             android:layout_marginTop="18dp"/>
 
         <TextView
-            android:id="@+id/contentTwo"
+            android:id="@+id/contentTwoTextview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Other Sign In options"
@@ -165,9 +165,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/line"
             android:layout_marginTop="20dp"/>
-
-
-
 
 
 

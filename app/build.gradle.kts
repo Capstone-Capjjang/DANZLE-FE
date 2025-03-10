@@ -49,8 +49,18 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
+    // including the function of DialogFragment
+    implementation("com.google.android.material:material:1.13.0-alpha11")
+
+    // GridLayout
+    implementation ("androidx.gridlayout:gridlayout:1.0.0")
+
     // 서버 통신
     implementation ("com.squareup.retrofit2:retrofit:2.11.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.11.0")
     implementation ("com.squareup.retrofit2:adapter-rxjava2:2.9.0")
+
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+
 }

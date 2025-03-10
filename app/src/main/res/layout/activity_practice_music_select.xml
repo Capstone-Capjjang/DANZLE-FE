@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:text="practice"
         android:textSize="22dp"
-        android:textColor="@color/pink"
+        android:textColor="@color/lightPink"
         android:fontFamily="@font/inter_18pt_bold"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@+id/vector"
@@ -79,6 +79,17 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <ImageView
+        android:id="@+id/imageBanner"
+        android:layout_width="350dp"
+        android:layout_height="130dp"
+        android:src="@drawable/bannerimage"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/searchBar"
+        android:layout_marginTop="30dp"/>
+
+
     <TextView
         android:id="@+id/textMusic"
         android:layout_width="wrap_content"
@@ -86,9 +97,9 @@
         android:text="music"
         android:textSize="22dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchBar"
+        app:layout_constraintTop_toBottomOf="@+id/imageBanner"
         android:layout_marginStart="25dp"
-        android:layout_marginTop="200dp"/>
+        android:layout_marginTop="30dp"/>
 
     <View
         android:id="@+id/line"

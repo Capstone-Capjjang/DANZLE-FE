@@ -16,6 +16,12 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31" >
         <activity
+            android:name=".myprofile.myVideo.ChallengeVideoRepository"
+            android:exported="false" />
+        <activity
+            android:name=".myprofile.myVideo.PracticeVideoRepository"
+            android:exported="false" />
+        <activity
             android:name=".myprofile.editProfile.DeleteAccount"
             android:exported="false" />
         <activity

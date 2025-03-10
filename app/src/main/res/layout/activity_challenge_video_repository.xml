@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".myprofile.myScore.MyScore">
+    tools:context=".myprofile.myVideo.ChallengeVideoRepository">
 
     <Button
         android:id="@+id/vector"
@@ -31,17 +31,17 @@
         android:id="@+id/scoreIcon"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:background="@drawable/score2"
+        android:background="@drawable/video2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/vector"
         android:layout_marginStart="30dp"
         android:layout_marginTop="40dp"/>
 
     <TextView
-        android:id="@+id/scoreTitleTextview"
+        android:id="@+id/challengeTitleTextview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="score"
+        android:text="challenge"
         android:textSize="24dp"
         android:fontFamily="@font/inter_18pt_medium"
         app:layout_constraintStart_toEndOf="@id/scoreIcon"
@@ -49,27 +49,24 @@
         android:layout_marginStart="15dp"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/score"
+        android:id="@+id/challengeVideo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/scoreTitleTextview"
+        app:layout_constraintTop_toBottomOf="@id/challengeTitleTextview"
         android:layout_marginTop="25dp">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/scoreRecyclerview"
+            android:id="@+id/challengeVideoRecyclerview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:spanCount="3"
             android:layout_margin="10dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
-
-        </androidx.recyclerview.widget.RecyclerView>
-
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
