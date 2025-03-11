@@ -10,7 +10,7 @@ import retrofit2.http.POST
 interface CreateAccountService{
 
     @POST("/join")
-    suspend fun addUser(
+    fun addUser(
         @Body createAccountRequest: CreateAccountRequest
     ): Call<CreateAccountResponse>
 

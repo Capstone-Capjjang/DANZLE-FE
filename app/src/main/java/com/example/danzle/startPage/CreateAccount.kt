@@ -1,5 +1,6 @@
 package com.example.danzle.startPage
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -15,6 +16,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.doAfterTextChanged
 import com.example.danzle.R
+import com.example.danzle.data.api.RetrofitApi
 import com.example.danzle.databinding.ActivityCreateAccountBinding
 import com.example.danzle.data.remote.request.auth.CreateAccountRequest
 import com.example.danzle.data.remote.response.auth.CreateAccountResponse
@@ -87,33 +89,10 @@ class CreateAccount : AppCompatActivity(), View.OnClickListener, View.OnFocusCha
             }
         }
 
-
-//        binding.createAccountButton.setOnClickListener {
-//            createAccountService.createAccountRequest(email, username, password1, password2, termsAccepted).enqueue(object: Callback<CreateAccountResponse>{
-//                override fun onFailure(call: Call<CreateAccountResponse>, p1: Throwable) {
-//                    Log.d("Debug", "Error: ${p1.message}")
-//                    // fail to connect with server
-//                    Toast.makeText(this@CreateAccount, "Network Error", Toast.LENGTH_SHORT).show()
-//                }
-//
-//                override fun onResponse(
-//                    call: Call<CreateAccountResponse>,
-//                    response: Response<CreateAccountResponse>
-//                ) {// success to connect with server, get response
-//                    if(response.isSuccessful){
-//                        val signInResponse = response.body()
-//                        Log.d("Debug", "success to create account")
-//                        startActivity(Intent(this@CreateAccount, SignIn::class.java))
-//                    } else {
-//                        // giving some message if it is fail to SignIn
-//                        Toast.makeText(this@CreateAccount, "Fail to create account: ${response.message()}", Toast.LENGTH_SHORT).show()
-//                        Log.d("Error", "${response.code()}")
-//                        Log.d("Error", "${response.message()}")
-//                    }
-//                }
-//            })
-//        }
-
+        binding.createAccountButton.setOnClickListener {
+            val createUserData = CreateAccountRequest(email, username, password1, password2, termsAccepted)
+            RetrofitCreateAccount(createUserData, this).work()
+        }
     }
 
     /*
@@ -145,7 +124,6 @@ class CreateAccount : AppCompatActivity(), View.OnClickListener, View.OnFocusCha
         // No error
         return errorMessage == null
     }
-
 
     // check the vaildation of Usename
     private fun validateUsername(): Boolean{
@@ -227,8 +205,7 @@ class CreateAccount : AppCompatActivity(), View.OnClickListener, View.OnFocusCha
     }
 
 
-    override fun onClick(view: View?) {
-    }
+    override fun onClick(view: View?) {}
 
     override fun onFocusChange(view: View?, hasFocus: Boolean) {
         if (view != null){
@@ -278,6 +255,31 @@ class CreateAccount : AppCompatActivity(), View.OnClickListener, View.OnFocusCha
 
     override fun onKey(view: View?, keyCode: Int, event: KeyEvent?): Boolean {
         return false
+    }
+}
+
+// about retrofit
+class RetrofitCreateAccount(private val userInfo: CreateAccountRequest, private val context: Context){
+    fun work(){
+        val retrofit = RetrofitApi.getCreateAccountInstance()
+        retrofit.addUser(userInfo)
+            .enqueue(object : Callback<CreateAccountResponse>{
+                override fun onResponse(call: Call<CreateAccountResponse>, response: Response<CreateAccountResponse>) {
+                    if (response.isSuccessful){
+                        val createAccountResponse = response.body()
+
+                        // changing the page / go to SignIn
+                        val intent = Intent(context, SignIn::class.java)
+                        context.startActivity(intent)
+                    } else{
+                        Log.d("Debug", "CreateAccount / Response Code: ${response.code()}")
+                        Toast.makeText(context, "Fail to CreateAccount: ${response.message()}", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                override fun onFailure(call: Call<CreateAccountResponse>, t: Throwable) {
+                    Log.d("Debug", "CreateAccount / Error: ${t.message}")
+                }
+            })
     }
 }
 

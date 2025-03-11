@@ -1,13 +1,17 @@
 package com.example.danzle.data.api
 import com.example.danzle.startPage.CreateAccount
 import com.example.danzle.startPage.CreateAccountService
+import com.example.danzle.startPage.ForgotPassword1Service
 import com.example.danzle.startPage.SignIn
 import com.example.danzle.startPage.SignInsService
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
+import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.lang.reflect.Type
 
 
 object RetrofitApi {
@@ -28,6 +32,7 @@ object RetrofitApi {
 
     private val danzleRetrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
+        .addConverterFactory(NullOnEmptyConverterFactory())
         .addConverterFactory(GsonConverterFactory.create())
         .client(client)
         .build()
@@ -47,4 +52,36 @@ object RetrofitApi {
     fun getCreateAccountInstance(): CreateAccountService {
         return createAccountService
     }
+
+    private val forgotPassword1Service: ForgotPassword1Service by lazy {
+        danzleRetrofit.create(ForgotPassword1Service::class.java)
+    }
+
+    fun getForgotPassword1Instance(): ForgotPassword1Service{
+        return forgotPassword1Service
+    }
 }
+
+
+class NullOnEmptyConverterFactory  : Converter.Factory() {
+    fun converterFactory() = this
+    override fun responseBodyConverter(
+        type: Type,
+        annotations: Array<out Annotation>,
+        retrofit: Retrofit
+    ): Converter<ResponseBody, *>? = object : Converter<ResponseBody, Any?> {
+        val nextResponseBodyConverter = retrofit.nextResponseBodyConverter<Any?>(converterFactory(), type, annotations)
+        override fun convert(value: ResponseBody) = if (value.contentLength() != 0L) {
+            try{
+                nextResponseBodyConverter.convert(value)
+            }catch (e:Exception){
+                e.printStackTrace()
+                null
+            }
+        } else{
+            null
+        }
+    }
+}
+
+

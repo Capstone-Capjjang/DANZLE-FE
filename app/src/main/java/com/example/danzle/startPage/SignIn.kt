@@ -193,6 +193,7 @@ class SignIn : AppCompatActivity(), View.OnClickListener, View.OnFocusChangeList
     }
 }
 
+// about retrofit
 class RetrofitSignIn(private val userInfo: SignInRequest, private val context: Context){
     fun work(){
         val retrofit = RetrofitApi.getSignInInstance()
@@ -200,23 +201,23 @@ class RetrofitSignIn(private val userInfo: SignInRequest, private val context: C
             .enqueue(object : Callback<SignInResponse> {
                 override fun onResponse(call: Call<SignInResponse>, response: Response<SignInResponse>) {
                     if (response.isSuccessful) {
-                        val result = response.body()
-                        val token = result?.accessToken ?: ""
-                        Log.d("로그인 성공", "Token: $token")
+                        val signInResponse = response.body()
+                        val token = signInResponse?.accessToken ?: ""
+                        Log.d("Debug", "SignIn / Token: $token")
 
                         // 로그인 성공 후 MainActivity로 이동
                         val intent = Intent(context, MainActivity::class.java)
                         intent.putExtra("Token", token)
                         context.startActivity(intent)
                     } else {
-                        Log.d("로그인 실패", "Response Code: ${response.code()}")
-                        Toast.makeText(context, "로그인 실패: ${response.message()}", Toast.LENGTH_SHORT).show()
+                        Log.d("Debug", "SignIn / Response Code: ${response.code()}")
+                        Toast.makeText(context, "Fail to SingIn: ${response.message()}", Toast.LENGTH_SHORT).show()
                     }
                 }
 
                 override fun onFailure(call: Call<SignInResponse>, t: Throwable) {
-                    Log.d("네트워크 오류", "Error: ${t.message}")
-                    Toast.makeText(context, "네트워크 오류 발생", Toast.LENGTH_SHORT).show()
+                    Log.d("Debug", "SignIn / Error: ${t.message}")
+                    Toast.makeText(context, "Network Error", Toast.LENGTH_SHORT).show()
                 }
             })
     }

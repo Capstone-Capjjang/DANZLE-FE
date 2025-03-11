@@ -62,9 +62,11 @@ class MyProfileMain : AppCompatActivity() {
 //
 //        }
 
-
         binding.logout.setOnClickListener {
             startActivity(Intent(this@MyProfileMain, FragmentLogout::class.java))
         }
+
+
+        //
     }
 }
