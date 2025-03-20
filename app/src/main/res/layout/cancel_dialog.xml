@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="230dp"
+    android:layout_height="260dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     
     <Button
@@ -32,6 +32,7 @@
         android:layout_height="40dp"
         android:text="Yes"
         android:textColor="@color/white"
+        android:textSize="16dp"
         android:gravity="center"
         android:background="@drawable/cancel_dialog_yesbutton"
         app:layout_constraintStart_toStartOf="parent"
@@ -45,6 +46,7 @@
         android:layout_height="40dp"
         android:text="No"
         android:textColor="@color/danzlePink"
+        android:textSize="16dp"
         android:gravity="center"
         android:background="@drawable/cancel_dialog_nobutton"
         app:layout_constraintStart_toStartOf="parent"

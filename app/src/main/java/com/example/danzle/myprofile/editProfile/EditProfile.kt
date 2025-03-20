@@ -14,6 +14,9 @@ class EditProfile : AppCompatActivity() {
 
     private lateinit var binding: ActivityEditProfileBinding
 
+    var username: String = ""
+    var email: String = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -27,20 +30,22 @@ class EditProfile : AppCompatActivity() {
 
         // converting screen when clicking
         //username
-        binding.username.setOnClickListener {
-            startActivity(Intent(this@EditProfile, Username::class.java))
-        }
+        binding.username.setOnClickListener {startActivity(Intent(this@EditProfile, ChangeUsername::class.java))}
 
         // change password
-        binding.changePassword.setOnClickListener {
-            startActivity(Intent(this@EditProfile, ChangePassword::class.java))
-        }
+        binding.changePassword.setOnClickListener {startActivity(Intent(this@EditProfile, ChangePassword::class.java))}
 
-        // Logout
+        // delete account
+        // click button -> delete account -> (ok) start first
         binding.delteAccount.setOnClickListener {
             startActivity(Intent(this@EditProfile, DeleteAccount::class.java))
         }
 
+
+
+    }
+
+    private fun retrofitEditProfile(){
 
     }
 }

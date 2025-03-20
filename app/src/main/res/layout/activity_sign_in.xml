@@ -16,6 +16,7 @@
             android:layout_marginTop="120dp"
             android:fontFamily="@font/inter_18pt_bold"
             android:text="Sign In"
+            android:textColor="@color/black"
             android:textSize="25dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -26,11 +27,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Email"
-            android:textSize="12dp"
+            android:textSize="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/signinTextview"
             android:layout_marginStart="40dp"
-            android:layout_marginTop="100dp"/>
+            android:layout_marginTop="90dp"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/emailLayout"
@@ -54,7 +55,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Password"
-            android:textSize="12dp"
+            android:textSize="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/emailLayout"
             android:layout_marginStart="40dp"
@@ -68,12 +69,14 @@
             app:layout_constraintTop_toBottomOf="@id/passwordTextview"
             android:layout_marginStart="40dp"
             app:passwordToggleEnabled="true"
-            app:passwordToggleTint="@color/danzlePink">
+            app:passwordToggleTint="@color/danzlePink"
+            app:passwordToggleDrawable="@drawable/toggle_icon_status">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/password"
                     android:layout_width="320dp"
                     android:layout_height="46dp"
+                    android:inputType="textPassword"
                     android:background="@drawable/edittext_box"/>
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -94,8 +97,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Remember me"
-            android:textSize="12dp"
+            android:textSize="16dp"
             app:layout_constraintStart_toEndOf="@id/checkButton"
+            app:layout_constraintTop_toTopOf="@id/checkButton"
             app:layout_constraintBottom_toBottomOf="@id/checkButton"
             android:layout_marginStart="5dp" />
 
@@ -103,9 +107,9 @@
             android:id="@+id/forgotPasswordTextview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Forgot Password ?"
-            android:textSize="12dp"
-            app:layout_constraintStart_toEndOf="@id/rememberTextview"
+            android:text="Forgot Password?"
+            android:textSize="16dp"
+            app:layout_constraintEnd_toEndOf="@id/passwordLayout"
             app:layout_constraintBaseline_toBaselineOf="@id/rememberTextview"
             android:layout_marginStart="110dp"/>
 
@@ -120,9 +124,10 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/passwordLayout"
             android:fontFamily="@font/inter_18pt_semibold"
-            android:layout_marginTop="100dp"
+            android:layout_marginTop="120dp"
             android:text="Sign In"
             android:textColor="@color/white"
+            android:textSize="16dp"
             android:gravity="center"/>
 
         <TextView
@@ -130,7 +135,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Are you not a member?"
-            android:textSize="12dp"
+            android:textSize="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/signinButton"
@@ -141,6 +146,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Create Account"
+            android:textSize="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/contentOneTextview"
@@ -161,6 +167,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Other Sign In options"
+            android:textSize="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/line"

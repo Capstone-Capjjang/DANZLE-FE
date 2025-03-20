@@ -91,7 +91,12 @@ class CreateAccount : AppCompatActivity(), View.OnClickListener, View.OnFocusCha
 
         binding.createAccountButton.setOnClickListener {
             val createUserData = CreateAccountRequest(email, username, password1, password2, termsAccepted)
-            RetrofitCreateAccount(createUserData, this).work()
+            retrofitCreateAccount(createUserData, this)
+        }
+
+        // click SignIn button, move to SignIn page
+        binding.backToSignin.setOnClickListener {
+            startActivity(Intent(this@CreateAccount, SignIn::class.java))
         }
     }
 
@@ -256,11 +261,10 @@ class CreateAccount : AppCompatActivity(), View.OnClickListener, View.OnFocusCha
     override fun onKey(view: View?, keyCode: Int, event: KeyEvent?): Boolean {
         return false
     }
-}
 
-// about retrofit
-class RetrofitCreateAccount(private val userInfo: CreateAccountRequest, private val context: Context){
-    fun work(){
+
+    // about retrofit
+    private fun retrofitCreateAccount(userInfo: CreateAccountRequest, context: Context){
         val retrofit = RetrofitApi.getCreateAccountInstance()
         retrofit.addUser(userInfo)
             .enqueue(object : Callback<CreateAccountResponse>{
@@ -281,5 +285,8 @@ class RetrofitCreateAccount(private val userInfo: CreateAccountRequest, private 
                 }
             })
     }
+
 }
+
+
 

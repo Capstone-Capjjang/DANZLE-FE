@@ -6,7 +6,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F8F8F8"
-    tools:context=".myprofile.MyProfileMain">
+    tools:context=".MyProfileFragment2">
+
+    <Button
+        android:id="@+id/backButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/vector"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="18dp"
+        android:layout_marginStart="18dp"/>
 
     <Button
         android:id="@+id/alarmButton"
@@ -45,7 +55,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="email@email.com"
-        android:textSize="12dp"
+        android:textSize="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/usernameTextview"/>
@@ -69,7 +79,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/background"
         android:layout_marginTop="40dp"
-        android:background="@drawable/myprofile_background">
+        android:background="@drawable/shadow_background">
 
         <ImageView
             android:id="@+id/editProfileIcon"
@@ -86,7 +96,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Edit Profile"
-            android:textSize="15dp"
+            android:textSize="16dp"
             android:fontFamily="@font/inter_18pt_medium"
             app:layout_constraintStart_toEndOf="@id/editProfileIcon"
             app:layout_constraintTop_toTopOf="parent"
@@ -103,7 +113,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/editProfile"
         android:layout_marginTop="18dp"
-        android:background="@drawable/myprofile_background">
+        android:background="@drawable/shadow_background">
 
         <ImageView
             android:id="@+id/myVideoIcon"
@@ -120,7 +130,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="My Video"
-            android:textSize="15dp"
+            android:textSize="16dp"
             android:fontFamily="@font/inter_18pt_medium"
             app:layout_constraintStart_toEndOf="@id/myVideoIcon"
             app:layout_constraintTop_toTopOf="parent"
@@ -137,7 +147,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/myVideo"
         android:layout_marginTop="15dp"
-        android:background="@drawable/myprofile_background">
+        android:background="@drawable/shadow_background">
 
         <ImageView
             android:id="@+id/myScoreIcon"
@@ -171,7 +181,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/myScore"
         android:layout_marginTop="15dp"
-        android:background="@drawable/myprofile_background">
+        android:background="@drawable/shadow_background">
 
         <ImageView
             android:id="@+id/infoAppIcon"
@@ -188,7 +198,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Info App"
-            android:textSize="15dp"
+            android:textSize="16dp"
             android:fontFamily="@font/inter_18pt_medium"
             app:layout_constraintStart_toEndOf="@id/infoAppIcon"
             app:layout_constraintTop_toTopOf="parent"
@@ -205,7 +215,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/infoApp"
         android:layout_marginTop="15dp"
-        android:background="@drawable/myprofile_background">
+        android:background="@drawable/shadow_background">
 
         <ImageView
             android:id="@+id/logoutIcon"
@@ -222,7 +232,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="logout"
-            android:textSize="15dp"
+            android:textSize="16dp"
             android:fontFamily="@font/inter_18pt_medium"
             app:layout_constraintStart_toEndOf="@id/logoutIcon"
             app:layout_constraintTop_toTopOf="parent"

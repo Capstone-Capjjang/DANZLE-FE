@@ -3,8 +3,10 @@ package com.example.danzle.startPage
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -53,18 +55,22 @@ class ForgotPassword1 : AppCompatActivity() {
     }
 }
 
+
 // about retrofit
 class RetrofitForgotPassword1(private val emailInfo: ForgotPassword1Request, private val context: Context){
     fun work(){
         val retrofit = RetrofitApi.getForgotPassword1Instance()
         retrofit.changePassword(emailInfo)
             .enqueue(object : Callback<ForgotPassword1Response>{
-                override fun onFailure(call: Call<ForgotPassword1Response>, response: Throwable) {
-                    TODO("Not yet implemented")
+                override fun onResponse(call: Call<ForgotPassword1Response>, response: Response<ForgotPassword1Response>) {
+                    if (response.isSuccessful){
+
+                    }
                 }
 
-                override fun onResponse(call: Call<ForgotPassword1Response>, response: Response<ForgotPassword1Response>) {
-                    TODO("Not yet implemented")
+                override fun onFailure(call: Call<ForgotPassword1Response>, t: Throwable) {
+                    Log.d("debug", "ForgotPassoword1 / Error: ${t.message}")
+                    Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
                 }
             })
     }

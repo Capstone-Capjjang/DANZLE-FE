@@ -58,7 +58,7 @@
         android:textSize="12dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/emailLayout"
-        android:layout_marginStart="40dp" />
+        android:layout_marginStart="40dp"/>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/usernameLayout"
@@ -98,6 +98,7 @@
         app:layout_constraintTop_toBottomOf="@id/password1Textview"
         android:layout_marginStart="40dp"
         app:passwordToggleEnabled="true"
+        app:passwordToggleDrawable="@drawable/toggle_icon_status"
         app:passwordToggleTint="@color/danzlePink"
         app:errorEnabled="true">
 
@@ -105,6 +106,7 @@
             android:id="@+id/password1"
             android:layout_width="320dp"
             android:layout_height="46dp"
+            android:inputType="textPassword"
             android:background="@drawable/edittext_box"
             android:paddingHorizontal="8dp"
             android:paddingVertical="12dp"/>
@@ -130,6 +132,7 @@
         app:layout_constraintTop_toBottomOf="@id/password2Textview"
         android:layout_marginStart="40dp"
         app:passwordToggleEnabled="true"
+        app:passwordToggleDrawable="@drawable/toggle_icon_status"
         app:passwordToggleTint="@color/danzlePink"
         app:errorEnabled="true">
 
@@ -137,6 +140,7 @@
             android:id="@+id/password2"
             android:layout_width="320dp"
             android:layout_height="46dp"
+            android:inputType="textPassword"
             android:background="@drawable/edittext_box"
             android:paddingHorizontal="8dp"
             android:paddingVertical="12dp" />
@@ -184,6 +188,9 @@
         android:background="@drawable/button_round_radius"
         android:backgroundTint="@color/danzlePink"
         android:text="Create Account"
+        android:textColor="@color/white"
+        android:textSize="16dp"
+        android:fontFamily="@font/inter_18pt_semibold"
         android:gravity="center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

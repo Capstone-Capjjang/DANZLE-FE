@@ -11,6 +11,9 @@
         <item name="android:checkboxStyle">@style/Inter_Regular</item>
 
     </style>
-
+    <style name="dialogAniamtion">
+        <item name="android:windowEnterAnimation">@anim/slideup</item>
+        <item name="android:windowExitAnimation">@anim/slidedown</item>
+    </style>
     <style name="Theme.Danzle" parent="Base.Theme.Danzle" />
 </resources>

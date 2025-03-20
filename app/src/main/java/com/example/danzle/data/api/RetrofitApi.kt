@@ -1,4 +1,7 @@
 package com.example.danzle.data.api
+import com.example.danzle.myprofile.MyProfileSevice
+import com.example.danzle.myprofile.editProfile.ChangePasswordService
+import com.example.danzle.myprofile.editProfile.ChangeUsernameService
 import com.example.danzle.startPage.CreateAccount
 import com.example.danzle.startPage.CreateAccountService
 import com.example.danzle.startPage.ForgotPassword1Service
@@ -37,29 +40,47 @@ object RetrofitApi {
         .client(client)
         .build()
 
+    // SingIn
     private  val signInService: SignInsService by lazy{
         danzleRetrofit.create(SignInsService::class.java)
     }
-
     fun getSignInInstance(): SignInsService{
         return signInService
     }
 
+    // CreateAccount
     private val createAccountService: CreateAccountService by lazy{
         danzleRetrofit.create(CreateAccountService::class.java)
     }
-
     fun getCreateAccountInstance(): CreateAccountService {
         return createAccountService
     }
 
+    // ForgotPassword1
     private val forgotPassword1Service: ForgotPassword1Service by lazy {
         danzleRetrofit.create(ForgotPassword1Service::class.java)
     }
-
     fun getForgotPassword1Instance(): ForgotPassword1Service{
         return forgotPassword1Service
     }
+
+    // MyProfile, EditProfile
+    fun getMyProfileServiceInstance(): MyProfileSevice {
+        return danzleRetrofit.create(MyProfileSevice::class.java)
+    }
+
+    // ChangeUsername
+    fun getChangeUsernameInstance(): ChangeUsernameService{
+        return danzleRetrofit.create(ChangeUsernameService::class.java)
+    }
+
+    // ChangePassword
+    fun getChangePasswordInstance(): ChangePasswordService{
+        return danzleRetrofit.create(ChangePasswordService::class.java)
+    }
+
+    //
+
 }
 
 

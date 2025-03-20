@@ -19,5 +19,6 @@
         <corners android:radius="40dp" /> <solid android:color="#50CCCCCC" /> </shape> </item>
 
     <!-- Background -->
-    <item> <shape> <solid android:color="#ffffff" /> <corners android:radius="40dp" /> </shape> </item>
+    <item> <shape>
+        <solid android:color="@color/white"/><corners android:radius="40dp" /></shape> </item>
 </layer-list>

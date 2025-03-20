@@ -46,6 +46,7 @@
         android:layout_marginTop="120dp"
         android:text="Sign In"
         android:textColor="@color/white"
+        android:textSize="16dp"
         android:gravity="center"/>
 
     <Button
@@ -59,6 +60,7 @@
         android:gravity="center"
         android:text="Create Account"
         android:textColor="@color/white"
+        android:textSize="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/signinButton" />
@@ -74,6 +76,7 @@
         android:gravity="center"
         android:text="Using without Sign In"
         android:textColor="@color/white"
+        android:textSize="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/createAccountButton" />
