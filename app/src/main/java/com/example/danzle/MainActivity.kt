@@ -25,13 +25,14 @@ class MainActivity : AppCompatActivity() {
 
         // In MainActivity, it's defined start fragment as HomeFragment
         replaceFragment(HomeFragment())
+        binding.bottomNavigationView.selectedItemId = R.id.home
 
 
         // navigation
         binding.bottomNavigationView.setOnItemSelectedListener{ item ->
             when(item.itemId){
                 R.id.dance -> {
-                    replaceFragment(PracticeFragment())
+                    replaceFragment(MainPracticeFragment())
                     true
                 }
                 R.id.home -> {

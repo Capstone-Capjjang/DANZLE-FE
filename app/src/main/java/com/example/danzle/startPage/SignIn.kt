@@ -22,7 +22,6 @@ import com.example.danzle.databinding.ActivitySignInBinding
 import com.example.danzle.data.api.RetrofitApi
 import com.example.danzle.data.remote.request.auth.SignInRequest
 import com.example.danzle.data.remote.response.auth.SignInResponse
-import com.example.danzle.MyProfileFragment2
 import com.example.danzle.viewModel.SignViewModel
 import retrofit2.Call
 import retrofit2.Callback

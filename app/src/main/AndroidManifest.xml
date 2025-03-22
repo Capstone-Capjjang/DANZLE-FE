@@ -49,7 +49,7 @@
             android:name=".myprofile.editProfile.EditProfile"
             android:exported="false" />
         <activity
-            android:name=".MyProfileFragment2"
+            android:name=".MyProfileFragment"
             android:exported="false" />
         <activity
             android:name=".startPage.ForgotPassword1"

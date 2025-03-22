@@ -7,13 +7,12 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import androidx.fragment.app.Fragment
 import com.example.danzle.data.api.RetrofitApi
 import com.example.danzle.data.remote.response.auth.MyProfileResponse
 import com.example.danzle.databinding.FragmentMyProfileBinding
@@ -27,34 +26,37 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class MyProfileFragment2 : AppCompatActivity() {
+class MyProfileFragment : Fragment() {
 
-    private lateinit var binding: FragmentMyProfileBinding
+    private var _binding: FragmentMyProfileBinding? = null
+    private val binding get() = _binding!!
+
 
     var username: String = ""
     var email: String = ""
     var image: String = ""
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        binding = FragmentMyProfileBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentMyProfileBinding.inflate(inflater)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         // converting screen when clicking
         // editProfile
-        binding.editProfile.setOnClickListener { startActivity(Intent(this@MyProfileFragment2, EditProfile::class.java)) }
+        binding.editProfile.setOnClickListener { startActivity(Intent(requireContext(), EditProfile::class.java)) }
 
         // myVideo
-        binding.myVideo.setOnClickListener { startActivity(Intent(this@MyProfileFragment2, MyVideo::class.java)) }
+        binding.myVideo.setOnClickListener { startActivity(Intent(requireContext(), MyVideo::class.java)) }
 
         // myScore
-        binding.myScore.setOnClickListener { startActivity(Intent(this@MyProfileFragment2, MyScore::class.java)) }
+        binding.myScore.setOnClickListener { startActivity(Intent(requireContext(), MyScore::class.java)) }
 
         // logout
         // click button -> logout dialog -> (ok) start first
@@ -66,10 +68,9 @@ class MyProfileFragment2 : AppCompatActivity() {
     }
 
     private fun showLogoutDialog() {
-        val layoutInflater = LayoutInflater.from(this)
         val view = layoutInflater.inflate(R.layout.logout_dialog, null)
 
-        val alertDialog = AlertDialog.Builder(this)
+        val alertDialog = AlertDialog.Builder(requireContext())
             .setView(view)
             .create()
 
@@ -90,7 +91,7 @@ class MyProfileFragment2 : AppCompatActivity() {
 
         // click logoutButton
         logoutButton.setOnClickListener {
-            val intent = Intent(this@MyProfileFragment2, FirstStart::class.java)
+            val intent = Intent(requireContext(), FirstStart::class.java)
 
             // clear activity log
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -122,10 +123,15 @@ class MyProfileFragment2 : AppCompatActivity() {
 
                 override fun onFailure(call: Call<MyProfileResponse>, t: Throwable) {
                     Log.d("Debug", "MyProfile / Error: ${t.message}")
-                    Toast.makeText(this@MyProfileFragment2, "Error to retrieve data", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Error to retrieve data", Toast.LENGTH_SHORT).show()
 
                 }
             })
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 }

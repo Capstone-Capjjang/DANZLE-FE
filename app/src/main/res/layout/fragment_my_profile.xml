@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F8F8F8"
-    tools:context=".MyProfileFragment2">
+    tools:context=".MyProfileFragment">
 
     <Button
         android:id="@+id/backButton"

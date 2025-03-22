@@ -110,7 +110,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/background"
             android:layout_marginTop="40dp"
-            android:background="@drawable/shadow_background_pink">
+            android:background="@drawable/shadow_background">
 
             <ImageView
                 android:id="@+id/usernameIcon"
@@ -144,7 +144,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/username"
             android:layout_marginTop="18dp"
-            android:background="@drawable/shadow_background_pink">
+            android:background="@drawable/shadow_background">
 
             <ImageView
                 android:id="@+id/passwordIcon"
@@ -179,7 +179,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/changePassword"
             android:layout_marginTop="18dp"
-            android:background="@drawable/shadow_background_pink">
+            android:background="@drawable/shadow_background">
 
             <ImageView
                 android:id="@+id/deleteIcon"
