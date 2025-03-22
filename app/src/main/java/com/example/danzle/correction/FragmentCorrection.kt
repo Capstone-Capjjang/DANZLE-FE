@@ -1,4 +1,4 @@
-package com.example.danzle.challenge
+package com.example.danzle.correction
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,10 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.danzle.R
-import com.example.danzle.databinding.ChallengeFragmentBinding
+import com.example.danzle.databinding.CorrectionFragmentBinding
 
-class FragmentChallenge: Fragment() {
-    private var _binding : ChallengeFragmentBinding? = null
+class FragmentCorrection: Fragment() {
+    private var _binding : CorrectionFragmentBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -19,8 +19,9 @@ class FragmentChallenge: Fragment() {
         savedInstanceState: Bundle?
     ): View {
         // to show fragment view
-        _binding = ChallengeFragmentBinding.inflate(inflater, container, false)
+        _binding = CorrectionFragmentBinding.inflate(inflater, container, false)
         return binding.root
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -28,7 +29,7 @@ class FragmentChallenge: Fragment() {
 
         // root -> 특정 카드 전체를 감싸는 상위 뷰에 대해, 그걸 클릭 타겟
         binding.root.setOnClickListener{
-            val intent = Intent(requireContext(), ChallengeMusicSelect::class.java)
+            val intent = Intent(requireContext(), CorrectionMusicSelect::class.java)
             startActivity(intent)
         }
     }

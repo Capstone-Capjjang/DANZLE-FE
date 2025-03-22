@@ -1,5 +1,6 @@
 package com.example.danzle
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,10 +9,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
+import com.example.danzle.challenge.ChallengeMusicSelect
 import com.example.danzle.challenge.FragmentChallenge
-import com.example.danzle.correction.FragmentCorrect
+import com.example.danzle.correction.CorrectionMusicSelect
+import com.example.danzle.correction.FragmentCorrection
+import com.example.danzle.databinding.ChallengeFragmentBinding
+import com.example.danzle.databinding.CorrectionFragmentBinding
 import com.example.danzle.databinding.FragmentMainPracticeBinding
-import com.example.danzle.databinding.PracticeFragmentBinding
 import com.example.danzle.practice.FragmentPractice
 
 class MainPracticeFragment: Fragment() {
@@ -62,6 +66,8 @@ class MainPracticeFragment: Fragment() {
                 binding.root.setBackgroundResource(color)
             }
         })
+
+
     }
 
     override fun onDestroyView() {
@@ -87,7 +93,7 @@ class FragmentAdapter(
 //        }
         return when (position) {
             0 -> FragmentPractice()
-            1 -> FragmentCorrect()
+            1 -> FragmentCorrection()
             else -> FragmentChallenge()
         }
     }
