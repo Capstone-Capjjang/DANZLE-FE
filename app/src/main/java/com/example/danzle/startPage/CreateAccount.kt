@@ -10,7 +10,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -20,7 +19,6 @@ import com.example.danzle.data.api.RetrofitApi
 import com.example.danzle.databinding.ActivityCreateAccountBinding
 import com.example.danzle.data.remote.request.auth.CreateAccountRequest
 import com.example.danzle.data.remote.response.auth.CreateAccountResponse
-import com.example.danzle.viewModel.SignViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -36,7 +34,6 @@ class CreateAccount : AppCompatActivity(), View.OnClickListener, View.OnFocusCha
 
     // name's form => Activity(XML name)Binding
     private lateinit var binding: ActivityCreateAccountBinding
-    private val viewModel: SignViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -121,9 +118,7 @@ class CreateAccount : AppCompatActivity(), View.OnClickListener, View.OnFocusCha
 
         // print the error message
         if (errorMessage != null){
-            binding.email.apply {
-                error = errorMessage
-            }
+            binding.emailLayout.error = errorMessage
         }
 
         // No error
@@ -141,9 +136,7 @@ class CreateAccount : AppCompatActivity(), View.OnClickListener, View.OnFocusCha
 
         // print the error message
         if (errorMessage != null){
-            binding.username.apply {
-                error = errorMessage
-            }
+            binding.usernameLayout.error = errorMessage
         }
 
         // No error
@@ -161,9 +154,7 @@ class CreateAccount : AppCompatActivity(), View.OnClickListener, View.OnFocusCha
 
         // print the error message
         if (errorMessage != null){
-            binding.password1.apply {
-                error = errorMessage
-            }
+            binding.password1Layout.error = errorMessage
         }
 
         return errorMessage == null
@@ -180,9 +171,7 @@ class CreateAccount : AppCompatActivity(), View.OnClickListener, View.OnFocusCha
 
         // print the error message
         if (errorMessage != null){
-            binding.password2.apply {
-                error = errorMessage
-            }
+            binding.password2Layout.error = errorMessage
         }
 
         return errorMessage == null
@@ -201,9 +190,7 @@ class CreateAccount : AppCompatActivity(), View.OnClickListener, View.OnFocusCha
 
         // print the error message below the view
         if (errorMessage != null){
-            binding.email.apply {
-                error = errorMessage
-            }
+            binding.emailLayout.error = errorMessage
         }
 
         return errorMessage == null
@@ -270,11 +257,11 @@ class CreateAccount : AppCompatActivity(), View.OnClickListener, View.OnFocusCha
             .enqueue(object : Callback<CreateAccountResponse>{
                 override fun onResponse(call: Call<CreateAccountResponse>, response: Response<CreateAccountResponse>) {
                     if (response.isSuccessful){
-                        val createAccountResponse = response.body()
+                        // val createAccountResponse = response.body()
 
                         // changing the page / go to SignIn
-                        val intent = Intent(context, SignIn::class.java)
-                        context.startActivity(intent)
+                        startActivity(Intent(this@CreateAccount, SignIn::class.java))
+
                     } else{
                         Log.d("Debug", "CreateAccount / Response Code: ${response.code()}")
                         Toast.makeText(context, "Fail to CreateAccount: ${response.message()}", Toast.LENGTH_SHORT).show()

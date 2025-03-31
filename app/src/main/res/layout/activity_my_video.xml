@@ -67,6 +67,7 @@
             android:layout_marginStart="30dp"/>
 
         <TextView
+            android:id="@+id/practiceMore"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="more..."
@@ -110,13 +111,14 @@
             android:id="@+id/challengeTextview"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="pactice"
+            android:text="challenge"
             android:textSize="24dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginStart="30dp"/>
 
         <TextView
+            android:id="@+id/challengeMore"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="more..."

@@ -66,5 +66,11 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 
+    // ExoPlayer
+    implementation("androidx.media3:media3-exoplayer:1.6.0")
+    implementation("androidx.media3:media3-exoplayer-dash:1.6.0")
+    implementation("androidx.media3:media3-ui:1.6.0")
 
+    // Glide
+    implementation ("com.github.bumptech.glide:glide:4.16.0")
 }

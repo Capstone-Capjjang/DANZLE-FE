@@ -55,6 +55,7 @@ class MainPracticeFragment: Fragment() {
         // requireActivity()는 이 Fragment를 호스팅하고 있는 액티비티를 가져온다.
 
         // changing the background color according to viewpager card
+        // registerOnPageChangeCallback 메서드를 사용하여 페이지 변경이벤트를 확인한다.
         viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){
             override fun onPageSelected(position: Int) {
                 val color = when(position) {

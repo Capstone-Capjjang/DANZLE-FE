@@ -5,6 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:theme="@style/AppTheme"
     tools:context=".startPage.CreateAccount">
 
     <TextView
@@ -24,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Email"
-        android:textSize="12dp"
+        android:textSize="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/createAccountTextview"
         android:layout_marginStart="40dp"
@@ -34,6 +35,7 @@
         android:id="@+id/emailLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        style="@style/Widget.Danzle.TextInputLayout.OutlinedBox"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/emailTextview"
         android:layout_marginStart="40dp"
@@ -42,10 +44,9 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/email"
             android:layout_width="320dp"
-            android:layout_height="46dp"
-            android:background="@drawable/edittext_box"
-            android:paddingHorizontal="8dp"
-            android:paddingVertical="12dp"/>
+            android:layout_height="50dp"
+            android:textSize="14dp"
+            android:inputType="textEmailAddress" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -55,7 +56,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Username"
-        android:textSize="12dp"
+        android:textSize="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/emailLayout"
         android:layout_marginStart="40dp"/>
@@ -64,6 +65,7 @@
         android:id="@+id/usernameLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        style="@style/Widget.Danzle.TextInputLayout.OutlinedBox"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/usernameTextview"
         android:layout_marginStart="40dp"
@@ -73,9 +75,8 @@
             android:id="@+id/username"
             android:layout_width="320dp"
             android:layout_height="46dp"
-            android:background="@drawable/edittext_box"
-            android:paddingHorizontal="8dp"
-            android:paddingVertical="12dp"/>
+            android:textSize="14dp"
+            android:inputType="text"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -85,7 +86,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Password"
-        android:textSize="12dp"
+        android:textSize="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/usernameLayout"
         android:layout_marginStart="40dp" />
@@ -94,6 +95,7 @@
         android:id="@+id/password1Layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        style="@style/Widget.Danzle.TextInputLayout.OutlinedBox"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/password1Textview"
         android:layout_marginStart="40dp"
@@ -105,11 +107,9 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/password1"
             android:layout_width="320dp"
-            android:layout_height="46dp"
-            android:inputType="textPassword"
-            android:background="@drawable/edittext_box"
-            android:paddingHorizontal="8dp"
-            android:paddingVertical="12dp"/>
+            android:layout_height="50dp"
+            android:textSize="14dp"
+            android:inputType="textPassword" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -119,7 +119,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Confirm Password"
-        android:textSize="12dp"
+        android:textSize="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/password1Layout"
         android:layout_marginStart="40dp"/>
@@ -128,6 +128,7 @@
         android:id="@+id/password2Layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        style="@style/Widget.Danzle.TextInputLayout.OutlinedBox"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/password2Textview"
         android:layout_marginStart="40dp"
@@ -139,11 +140,9 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/password2"
             android:layout_width="320dp"
-            android:layout_height="46dp"
-            android:inputType="textPassword"
-            android:background="@drawable/edittext_box"
-            android:paddingHorizontal="8dp"
-            android:paddingVertical="12dp" />
+            android:layout_height="50dp"
+            android:textSize="14dp"
+            android:inputType="textPassword" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -206,8 +205,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/createAccountButton"
         android:layout_marginTop="5dp"/>
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

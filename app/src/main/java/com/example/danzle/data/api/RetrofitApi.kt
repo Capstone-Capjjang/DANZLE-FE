@@ -1,13 +1,12 @@
 package com.example.danzle.data.api
-import com.example.danzle.myprofile.MyProfileSevice
+import com.example.danzle.myprofile.MyProfileService
 import com.example.danzle.myprofile.editProfile.ChangePasswordService
 import com.example.danzle.myprofile.editProfile.ChangeUsernameService
-import com.example.danzle.startPage.CreateAccount
+import com.example.danzle.myprofile.myVideo.MyVideoService
+import com.example.danzle.practice.HighlightPracticeService
 import com.example.danzle.startPage.CreateAccountService
 import com.example.danzle.startPage.ForgotPassword1Service
-import com.example.danzle.startPage.SignIn
 import com.example.danzle.startPage.SignInsService
-import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
@@ -56,6 +55,11 @@ object RetrofitApi {
         return createAccountService
     }
 
+    // HighlightPractice
+    fun getHighlightPracticeInstance(): HighlightPracticeService {
+        return danzleRetrofit.create(HighlightPracticeService::class.java)
+    }
+
     // ForgotPassword1
     private val forgotPassword1Service: ForgotPassword1Service by lazy {
         danzleRetrofit.create(ForgotPassword1Service::class.java)
@@ -65,8 +69,8 @@ object RetrofitApi {
     }
 
     // MyProfile, EditProfile
-    fun getMyProfileServiceInstance(): MyProfileSevice {
-        return danzleRetrofit.create(MyProfileSevice::class.java)
+    fun getMyProfileServiceInstance(): MyProfileService {
+        return danzleRetrofit.create(MyProfileService::class.java)
     }
 
     // ChangeUsername
@@ -79,7 +83,16 @@ object RetrofitApi {
         return danzleRetrofit.create(ChangePasswordService::class.java)
     }
 
-    //
+    // video main repository
+    fun getMyVideoInstance(): MyVideoService{
+        return danzleRetrofit.create(MyVideoService::class.java)
+    }
+
+    // practice repository
+
+
+    // challenge repository
+
 
 }
 

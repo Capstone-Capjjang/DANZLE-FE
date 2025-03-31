@@ -4,7 +4,11 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!-- wake lock -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
     <application
+        android:name=".DanzleApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -49,17 +53,12 @@
             android:name=".myprofile.editProfile.EditProfile"
             android:exported="false" />
         <activity
-            android:name=".MyProfileFragment"
-            android:exported="false" />
-        <activity
             android:name=".startPage.ForgotPassword1"
             android:exported="false" />
         <activity
             android:name=".challenge.ChallengeMusicSelect"
             android:exported="false" />
-        <activity
-            android:name=".challenge.ChallengeMain"
-            android:exported="false" />
+
         <activity
             android:name=".correction.CorrectionMusicSelect"
             android:exported="false" />
@@ -67,13 +66,7 @@
             android:name=".practice.HighlightPractice"
             android:exported="false" />
         <activity
-            android:name=".PracticeMain"
-            android:exported="false" />
-        <activity
             android:name=".practice.PracticeMusicSelect"
-            android:exported="false" />
-        <activity
-            android:name=".correction.CorrectionMain"
             android:exported="false" />
         <activity
             android:name=".practice.MusicSelectPopup"
@@ -91,10 +84,10 @@
             android:name=".startPage.FirstStart"
             android:exported="false" />
         <activity
-            android:name=".startPage.SignIn"
+            android:name=".MainActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".startPage.SignIn"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

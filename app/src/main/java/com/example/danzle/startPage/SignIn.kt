@@ -11,18 +11,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.doAfterTextChanged
+import com.example.danzle.MainActivity
 import com.example.danzle.MyProfileFragment
 import com.example.danzle.R
+import com.example.danzle.data.api.DanzleSharedPreferences
 import com.example.danzle.databinding.ActivitySignInBinding
 import com.example.danzle.data.api.RetrofitApi
 import com.example.danzle.data.remote.request.auth.SignInRequest
 import com.example.danzle.data.remote.response.auth.SignInResponse
-import com.example.danzle.viewModel.SignViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -36,7 +36,6 @@ class SignIn : AppCompatActivity(), View.OnClickListener, View.OnFocusChangeList
     var password: String = ""
 
     private lateinit var binding: ActivitySignInBinding
-    private val viewModel: SignViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -109,9 +108,12 @@ class SignIn : AppCompatActivity(), View.OnClickListener, View.OnFocusChangeList
 
         // print the error message
         if (errorMessage != null){
-            binding.email.apply {
-                error = errorMessage
-            }
+            // 에러 메세지가 하단에 생성
+            binding.emailLayout.error = errorMessage
+            // 말풍선처럼 에러 메세지가 뜬다.
+//            binding.email.apply {
+//                error = errorMessage
+//            }
         }
 
         // No error
@@ -128,14 +130,13 @@ class SignIn : AppCompatActivity(), View.OnClickListener, View.OnFocusChangeList
 
         // print the error message
         if (errorMessage != null){
-            binding.password.apply {
-                error = errorMessage
-            }
+            binding.passwordLayout.error = errorMessage
         }
 
         return errorMessage == null
     }
 
+    // 사용 안 하고 있지만 지우면 오류 발생
     override fun onClick(view: View?) {
 
     }
@@ -175,13 +176,18 @@ class SignIn : AppCompatActivity(), View.OnClickListener, View.OnFocusChangeList
                         val signInResponse = response.body()
                         Log.d("Debug", "SignIn / Full Response Body: $signInResponse") // 응답 전체 확인
 
-                        val token = signInResponse?.accessToken ?: ""
+                        val accessToken = signInResponse?.accessToken
+                        val refreshToken = signInResponse?.refreshToken
+
+                        // SharedPreferences에 저장
+                        DanzleSharedPreferences.setAccessToken(accessToken)
+                        DanzleSharedPreferences.setRefreshToken(refreshToken)
+
                         Log.d("Debug", "SignIn / Token: $token")
 
                         // 로그인 성공 후 MainActivity로 이동
-                        val intent = Intent(context, MyProfileFragment::class.java)
-                        intent.putExtra("Token", token)
-                        context.startActivity(intent)
+                        startActivity(Intent(this@SignIn, MainActivity::class.java))
+                        finish()
                     } else {
                         Log.d("Debug", "SignIn / Response Code: ${response.code()}")
                         Toast.makeText(context, "Fail to SingIn: ${response.message()}", Toast.LENGTH_SHORT).show()
