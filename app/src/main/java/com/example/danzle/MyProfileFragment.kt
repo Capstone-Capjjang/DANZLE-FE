@@ -13,6 +13,7 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import com.example.danzle.data.api.DanzleSharedPreferences
 import com.example.danzle.data.api.RetrofitApi
 import com.example.danzle.data.remote.response.auth.MyProfileResponse
 import com.example.danzle.databinding.FragmentMyProfileBinding
@@ -48,6 +49,8 @@ class MyProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        retrofitMyProfileMain()
+
         // converting screen when clicking
         // editProfile
         binding.editProfile.setOnClickListener { startActivity(Intent(requireContext(), EditProfile::class.java)) }
@@ -62,6 +65,8 @@ class MyProfileFragment : Fragment() {
         // click button -> logout dialog -> (ok) start first
         binding.logout.setOnClickListener {
             showLogoutDialog()
+            // 로그아웃 시 정보 없앰
+            DanzleSharedPreferences.clear()
         }
 
 
@@ -104,6 +109,14 @@ class MyProfileFragment : Fragment() {
 
     // getting some information from server
     private fun retrofitMyProfileMain(){
+        // SharedPreferences에 저장된 토큰 가져옴
+        val token = DanzleSharedPreferences.getAccessToken()
+
+        if (token.isNullOrEmpty()){
+            Toast.makeText(requireContext(), "로그인이 필요합니다.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
        val retrofit = RetrofitApi.getMyProfileServiceInstance()
         retrofit.getMyProfile(token)
             .enqueue(object : Callback<MyProfileResponse>{

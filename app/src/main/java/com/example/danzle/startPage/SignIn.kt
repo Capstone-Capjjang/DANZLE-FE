@@ -176,6 +176,7 @@ class SignIn : AppCompatActivity(), View.OnClickListener, View.OnFocusChangeList
                         val signInResponse = response.body()
                         Log.d("Debug", "SignIn / Full Response Body: $signInResponse") // 응답 전체 확인
 
+                        // assign TOKEN
                         val accessToken = signInResponse?.accessToken
                         val refreshToken = signInResponse?.refreshToken
 
