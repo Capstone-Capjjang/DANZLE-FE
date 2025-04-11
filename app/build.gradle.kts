@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("kotlin-parcelize")
+    id("kotlin-kapt")
 }
 
 android {
@@ -48,6 +50,8 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.camera.view)
+    implementation(libs.engage.core)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -67,10 +71,22 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 
     // ExoPlayer
+    // release note (https://github.com/androidx/media/blob/release/RELEASENOTES.md)
     implementation("androidx.media3:media3-exoplayer:1.6.0")
     implementation("androidx.media3:media3-exoplayer-dash:1.6.0")
     implementation("androidx.media3:media3-ui:1.6.0")
 
     // Glide
     implementation ("com.github.bumptech.glide:glide:4.16.0")
+    kapt ("com.github.bumptech.glide:compiler:4.16.0")
+
+
+    // CameraX
+    implementation ("androidx.camera:camera-core:1.4.2")
+    implementation ("androidx.camera:camera-camera2:1.4.2")
+    implementation ("androidx.camera:camera-lifecycle:1.4.2")
+    implementation ("androidx.camera:camera-video:1.4.2")
+
+    implementation ("androidx.camera:camera-view:1.4.2")
+    implementation ("androidx.camera:camera-extensions:1.4.2")
 }

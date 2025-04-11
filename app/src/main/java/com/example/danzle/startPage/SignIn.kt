@@ -22,7 +22,9 @@ import com.example.danzle.data.api.DanzleSharedPreferences
 import com.example.danzle.databinding.ActivitySignInBinding
 import com.example.danzle.data.api.RetrofitApi
 import com.example.danzle.data.remote.request.auth.SignInRequest
+import com.example.danzle.data.remote.response.auth.MyProfileResponse
 import com.example.danzle.data.remote.response.auth.SignInResponse
+import com.example.danzle.practice.HighlightPractice
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -88,10 +90,11 @@ class SignIn : AppCompatActivity(), View.OnClickListener, View.OnFocusChangeList
         binding.signinButton.setOnClickListener {
             val userData = SignInRequest(email, password)
             Log.d("Debug", "SignIn Request - Email: $email, Password: $password")  // 디버깅 추가
-            retrofitSignIn(userData, this)
+            retrofitSignIn(userData)
         }
 
     }
+
 
     private fun validateEmail(): Boolean{
         var errorMessage: String? = null
@@ -167,39 +170,88 @@ class SignIn : AppCompatActivity(), View.OnClickListener, View.OnFocusChangeList
     }
 
     // about retrofit
-    private fun retrofitSignIn(userInfo: SignInRequest, context: Context){
+    private fun retrofitSignIn(userInfo: SignInRequest){
         val retrofit = RetrofitApi.getSignInInstance()
         retrofit.userLogin(userInfo)
             .enqueue(object : Callback<SignInResponse> {
                 override fun onResponse(call: Call<SignInResponse>, response: Response<SignInResponse>) {
                     if (response.isSuccessful) {
                         val signInResponse = response.body()
-                        Log.d("Debug", "SignIn / Full Response Body: $signInResponse") // 응답 전체 확인
+                        val bodyToken = signInResponse?.accessToken
+                        val headerToken = response.headers()["Authorization"]?.removePrefix("Bearer ")?.trim()
+                        val refreshToken = response.headers()["Refresh-Token"]
 
-                        // assign TOKEN
-                        val accessToken = signInResponse?.accessToken
-                        val refreshToken = signInResponse?.refreshToken
+                        val accessToken = bodyToken ?: headerToken
+
+                        Log.d("SignIn", "Access Token: $accessToken")
+                        Log.d("SignIn", "Refresh Token: $refreshToken")
+
 
                         // SharedPreferences에 저장
                         DanzleSharedPreferences.setAccessToken(accessToken)
                         DanzleSharedPreferences.setRefreshToken(refreshToken)
+                        //DanzleSharedPreferences.setUserId(userId)
 
-                        Log.d("Debug", "SignIn / Token: $token")
+                        Log.d("SignIn", "Raw Response: ${response.raw()}")
+                        Log.d("SignIn", "Error Body: ${response.errorBody()?.string()}")
+
+
+                        // get User information
+                        // /login 요청 -> accessToken, refreshToken 저장
+                        // accessToken으로 /user/profile 요청
+                        // 받은 MyProfileResponse에서 id, email 등을 SharedPreferences에 저장
+                        accessToken?.let { token ->
+                            val authHeader = "Bearer $token"
+                            RetrofitApi.getMyProfileServiceInstance()
+                                .getMyProfile(authHeader)
+                                .enqueue(object : Callback<MyProfileResponse>{
+                                    override fun onResponse(call: Call<MyProfileResponse>, response: Response<MyProfileResponse>
+                                    ) {
+                                        // Log about sever response
+                                        Log.d("SignIn", "Raw Body: ${response.body()}")
+                                        Log.d("SignIn", "Raw Response: ${response.raw()}")
+                                        Log.d("SignIn", "Error Body: ${response.errorBody()?.string()}")
+
+                                        if (response.isSuccessful){
+                                            val user = response.body()
+                                            user?.let {
+                                                DanzleSharedPreferences.setUserId(it.id)
+                                                DanzleSharedPreferences.setUserEmail(it.email)
+                                                Log.d("SignIn", "Save user information → userId: ${it.id}, email: ${it.email}")
+
+                                            }
+                                        } else{
+                                            Log.e("SignIn", "fail to user information response: ${response.code()}")
+                                        }
+                                    }
+
+                                    override fun onFailure(call: Call<MyProfileResponse>, t: Throwable
+                                    ) {
+                                        // Log.d: debug -> 상태 확인용
+                                        // Log.e: error -> 에러 보고용 (텍스트 색상이 빨강이다.)
+                                        Log.e("SignIn", "유저 정보 요청 실패: ${t.message}")
+                                    }
+                                })
+                        }
+
 
                         // 로그인 성공 후 MainActivity로 이동
                         startActivity(Intent(this@SignIn, MainActivity::class.java))
+                        //startActivity(Intent(this@SignIn, HighlightPractice::class.java))
                         finish()
                     } else {
                         Log.d("Debug", "SignIn / Response Code: ${response.code()}")
-                        Toast.makeText(context, "Fail to SingIn: ${response.message()}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@SignIn, "Fail to SingIn: ${response.message()}", Toast.LENGTH_SHORT).show()
                     }
                 }
 
                 override fun onFailure(call: Call<SignInResponse>, t: Throwable) {
                     Log.d("Debug", "SignIn / Error: ${t.message}")
-                    Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@SignIn, "Error", Toast.LENGTH_SHORT).show()
                 }
             })
     }
+
+
 
 }

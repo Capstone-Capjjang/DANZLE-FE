@@ -8,16 +8,16 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.danzle.MainPracticeFragment
 import com.example.danzle.R
-import com.example.danzle.databinding.ActivityFullFinishBinding
+import com.example.danzle.databinding.ActivityHighlightFinishBinding
 
-class FullFinish : AppCompatActivity() {
+class HighlightFinish : AppCompatActivity() {
 
-    private lateinit var binding: ActivityFullFinishBinding
+    private lateinit var binding: ActivityHighlightFinishBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        binding = ActivityFullFinishBinding.inflate(layoutInflater)
+        binding = ActivityHighlightFinishBinding.inflate(layoutInflater)
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -26,7 +26,7 @@ class FullFinish : AppCompatActivity() {
         }
 
         binding.tryagainButton.setOnClickListener {
-            startActivity(Intent(this, FullPractice::class.java))
+            startActivity(Intent(this, HighlightPractice::class.java))
         }
 
         binding.othersongsButton.setOnClickListener{
@@ -40,6 +40,5 @@ class FullFinish : AppCompatActivity() {
         binding.backButton.setOnClickListener {
             startActivity(Intent(this, MainPracticeFragment::class.java))
         }
-
     }
 }

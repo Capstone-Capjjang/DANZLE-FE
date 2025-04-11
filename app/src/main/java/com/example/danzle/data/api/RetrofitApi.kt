@@ -1,9 +1,14 @@
 package com.example.danzle.data.api
+import com.example.danzle.SilhouetteService
+import com.example.danzle.correction.CorrectionMusicSelectService
 import com.example.danzle.myprofile.MyProfileService
 import com.example.danzle.myprofile.editProfile.ChangePasswordService
 import com.example.danzle.myprofile.editProfile.ChangeUsernameService
+import com.example.danzle.myprofile.myVideo.ChallengeVideoRepositoryService
 import com.example.danzle.myprofile.myVideo.MyVideoService
+import com.example.danzle.myprofile.myVideo.PracticeVideoRepositoryService
 import com.example.danzle.practice.HighlightPracticeService
+import com.example.danzle.practice.PracticeMusicSelectService
 import com.example.danzle.startPage.CreateAccountService
 import com.example.danzle.startPage.ForgotPassword1Service
 import com.example.danzle.startPage.SignInsService
@@ -17,7 +22,9 @@ import java.lang.reflect.Type
 
 
 object RetrofitApi {
-    private const val BASE_URL = "http://43.200.171.252:8080"
+    private const val BASE_URL = "http://3.34.125.216:8080"
+    //private const val BASE_URL = "http://3.39.234.248:8080"
+    //private const val BASE_URL = "http://43.200.171.252:8080"
 
     private val client: OkHttpClient by lazy{
         OkHttpClient.Builder()
@@ -39,6 +46,15 @@ object RetrofitApi {
         .client(client)
         .build()
 
+    // RefreshToken
+    private val authService: AuthService by lazy {
+        danzleRetrofit.create(AuthService::class.java)
+    }
+
+    fun getAuthInstance(): AuthService{
+        return authService
+    }
+
     // SingIn
     private  val signInService: SignInsService by lazy{
         danzleRetrofit.create(SignInsService::class.java)
@@ -55,9 +71,36 @@ object RetrofitApi {
         return createAccountService
     }
 
+    // PracticeMusicSelect
+    private val practiceMusicSelectService: PracticeMusicSelectService by lazy {
+        danzleRetrofit.create(PracticeMusicSelectService::class.java)
+    }
+    fun getPracticeMusicSelectInstance(): PracticeMusicSelectService{
+        return practiceMusicSelectService
+    }
+
+    // CorrectionMusicSelect
+    private val correctionMusicSelectService: CorrectionMusicSelectService by lazy {
+        danzleRetrofit.create(CorrectionMusicSelectService::class.java)
+    }
+    fun getCorrectionMusicSelectInstance(): CorrectionMusicSelectService{
+        return correctionMusicSelectService
+    }
+
     // HighlightPractice
-    fun getHighlightPracticeInstance(): HighlightPracticeService {
-        return danzleRetrofit.create(HighlightPracticeService::class.java)
+    private val highlightPracticeService: HighlightPracticeService by lazy {
+        danzleRetrofit.create(HighlightPracticeService::class.java)
+    }
+    fun getHighlightPracticeInstance(): HighlightPracticeService{
+        return highlightPracticeService
+    }
+
+    // Silhouette
+    private val silhouetteService: SilhouetteService by lazy {
+        danzleRetrofit.create(SilhouetteService::class.java)
+    }
+    fun getSilhouetteInstance(): SilhouetteService{
+        return silhouetteService
     }
 
     // ForgotPassword1
@@ -89,9 +132,14 @@ object RetrofitApi {
     }
 
     // practice repository
-
+    fun getPracticeVideoRepositoryInstance(): PracticeVideoRepositoryService{
+        return danzleRetrofit.create(PracticeVideoRepositoryService::class.java)
+    }
 
     // challenge repository
+    fun getChallengeVideoRepositoryInstance(): ChallengeVideoRepositoryService{
+        return danzleRetrofit.create(ChallengeVideoRepositoryService::class.java)
+    }
 
 
 }
@@ -103,7 +151,7 @@ class NullOnEmptyConverterFactory  : Converter.Factory() {
         type: Type,
         annotations: Array<out Annotation>,
         retrofit: Retrofit
-    ): Converter<ResponseBody, *>? = object : Converter<ResponseBody, Any?> {
+    ): Converter<ResponseBody, *> = object : Converter<ResponseBody, Any?> {
         val nextResponseBodyConverter = retrofit.nextResponseBodyConverter<Any?>(converterFactory(), type, annotations)
         override fun convert(value: ResponseBody) = if (value.contentLength() != 0L) {
             try{

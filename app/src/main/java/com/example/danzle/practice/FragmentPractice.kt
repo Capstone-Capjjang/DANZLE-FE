@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.danzle.R
 import com.example.danzle.databinding.PracticeFragmentBinding
 
 class FragmentPractice: Fragment() {

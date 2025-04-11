@@ -11,7 +11,7 @@ interface ChangePasswordService {
     @POST("/user/profile/edit/password")
 
     fun getChangePassword(
-        @Header("X-ACCESS-TOKEN") token: String,
+        @Header("Authorization") token: String,
         @Body changePasswordRequest: ChangePasswordRequest
     ): Call<ChangePasswordResponse>
 

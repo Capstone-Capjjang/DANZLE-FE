@@ -60,18 +60,40 @@ class CreateAccount : AppCompatActivity(), View.OnClickListener, View.OnFocusCha
 
         binding.email.doAfterTextChanged {
             email = it.toString()
+            // 입력이 바뀌었을 때 화면에서 error 제거
+            if (email.isNotEmpty()){
+                binding.emailLayout.error = null
+            }
         }
 
         binding.username.doAfterTextChanged {
             username = it.toString()
+            if (username.isNotEmpty()){
+                binding.usernameLayout.error = null
+            }
         }
 
         binding.password1.doAfterTextChanged {
             password1 = it.toString()
+            if (password1.isNotEmpty()){
+                binding.password1Layout.error = null
+            }
+
+            // password2와 일치 검사 다시
+            if (password2.isNotEmpty()){
+                if (password1 != password2){
+                    binding.password2Layout.error = "Confirm password doesn't match with password"
+                } else{
+                    binding.password2Layout.error = null
+                }
+            }
         }
 
         binding.password2.doAfterTextChanged {
             password2 = it.toString()
+            if (password2.isNotEmpty()){
+                binding.password2Layout.error = null
+            }
         }
 
         binding.checkButton.doAfterTextChanged {
@@ -206,7 +228,7 @@ class CreateAccount : AppCompatActivity(), View.OnClickListener, View.OnFocusCha
             when(view.id){
                 R.id.email -> {
                     if (hasFocus){
-                        binding.email.error = null
+                        binding.emailLayout.error = null
                     }else{
                         if(validateEmail()){
                             // do validation for its uniqueness
@@ -216,28 +238,28 @@ class CreateAccount : AppCompatActivity(), View.OnClickListener, View.OnFocusCha
                 }
                 R.id.username -> {
                     if (hasFocus){
-                        binding.username.error = null
+                        binding.usernameLayout.error = null
                     }else{
                         validateUsername()
                     }
                 }
                 R.id.password1 -> {
                     if (hasFocus){
-                        binding.password1.error = null
+                        binding.password1Layout.error = null
                     }else{
                         if(validatePassword() && binding.password1.text!!.isNotEmpty()
                             && validateConfirmPassword() && validatePasswordAndConfirmPassword()){
-                            binding.password2.error = null
+                            binding.password2Layout.error = null
                         }
                     }
                 }
                 R.id.password2 -> {
                     if (hasFocus){
                         // meaning of no error
-                        binding.password2.error = null
+                        binding.password2Layout.error = null
                     }else{
                         if(validateConfirmPassword() && validatePassword() && validatePasswordAndConfirmPassword()){
-                            binding.password1.error = null
+                            binding.password1Layout.error = null
                         }
                     }
                 }

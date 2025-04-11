@@ -41,6 +41,11 @@ class EditProfile : AppCompatActivity() {
             startActivity(Intent(this@EditProfile, DeleteAccount::class.java))
         }
 
+        // back button
+        binding.backButton.setOnClickListener {
+            finish()
+        }
+
 
 
     }

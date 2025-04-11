@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="350dp"
+        android:layout_height="80dp"
+        android:orientation="vertical"
+        android:background="@drawable/shadow_background_blue"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    <TextView
+        android:id="@+id/blueSongNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2"
+        android:textSize="21dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginStart="20dp"/>
+
+    <ImageView
+        android:id="@+id/blueSongImage"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        android:src="@drawable/albumcover"
+        android:scaleType="centerCrop"
+        android:background="@drawable/songlist_background_square"
+        app:layout_constraintStart_toEndOf="@id/blueSongNumber"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginStart="20dp"/>
+
+    <TextView
+        android:id="@+id/blueSongName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Mantra"
+        android:textSize="16dp"
+        app:layout_constraintStart_toEndOf="@id/blueSongImage"
+        app:layout_constraintTop_toTopOf="@id/blueSongImage"
+        android:layout_marginStart="10dp"/>
+
+    <TextView
+        android:id="@+id/blueSinger"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Jennie"
+        android:textSize="14dp"
+        app:layout_constraintStart_toStartOf="@id/blueSongName"
+        app:layout_constraintTop_toBottomOf="@id/blueSongName"
+        app:layout_constraintBottom_toBottomOf="@id/blueSongImage"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

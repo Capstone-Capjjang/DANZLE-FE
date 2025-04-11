@@ -11,4 +11,6 @@
     <color name="lightBlue">#64E9EB</color>
     <color name="blue">#2196F3</color>
     <color name="practice_main_fragment_grayline">#D3D3D3</color>
+    <color name="challengeWord">#DEEE5E</color>
+    <color name="correctionWord">#64E9EB</color>
 </resources>

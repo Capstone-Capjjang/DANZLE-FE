@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HighlightFinish">
+    tools:context=".practice.HighlightFinish">
 
     <TextView
         android:id="@+id/highlight"
@@ -15,13 +15,13 @@
         android:textSize="22dp"
         android:textColor="@color/lightPink"
         android:fontFamily="@font/inter_18pt_bold"
-        app:layout_constraintTop_toTopOf="@id/vector"
-        app:layout_constraintBottom_toBottomOf="@id/vector"
+        app:layout_constraintTop_toTopOf="@id/backButton"
+        app:layout_constraintBottom_toBottomOf="@id/backButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
-        android:id="@+id/vector"
+        android:id="@+id/backButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/vector"

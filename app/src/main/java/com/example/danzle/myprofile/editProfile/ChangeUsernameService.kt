@@ -11,7 +11,7 @@ interface ChangeUsernameService {
     @POST("/user/profile/edit/name")
 
     fun getChangeUsername(
-        @Header("X-ACCESS-TOKEN") token: String,
+        @Header("Authorization") token: String,
         @Body changeUsernameRequest: ChangeUsernameRequest
     ): Call<ChangeUsernameResponse>
 

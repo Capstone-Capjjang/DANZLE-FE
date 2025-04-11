@@ -4,7 +4,7 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class PracticeMusicSelectResponse (
+data class CorrectionMusicSelectResponse (
     val title: String?,
     val artist: String?,
     val coverImagePath: String?

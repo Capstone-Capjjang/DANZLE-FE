@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/music_select2_background"
-    tools:context=".practice.MusicSelectPopup">
+    tools:context=".practice.PracticeMusicSelectPopup">
 
     <Button
         android:id="@+id/cancelButton"
@@ -20,7 +20,7 @@
         android:layout_marginEnd="18dp"/>
 
     <ImageView
-        android:id="@+id/image"
+        android:id="@+id/songImage"
         android:layout_width="158dp"
         android:layout_height="158dp"
         android:background="@drawable/albumcover"
@@ -39,7 +39,7 @@
         android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/image"/>
+        app:layout_constraintTop_toBottomOf="@id/songImage"/>
     
     <TextView
         android:id="@+id/artist"
@@ -52,7 +52,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/songName"
         app:layout_constraintBottom_toTopOf="@id/songTime"/>
-    
+
     <TextView
         android:id="@+id/songTime"
         android:layout_width="wrap_content"

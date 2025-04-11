@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools" >
 
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-feature android:name="android.hardware.camera.any" />
 
-    <!-- wake lock -->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- wake lock -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
 
     <application
         android:name=".DanzleApplication"
@@ -18,7 +23,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Danzle"
         android:usesCleartextTraffic="true"
-        tools:targetApi="31">
+        tools:targetApi="31" >
+        <activity
+            android:name=".correction.Correction"
+            android:exported="false" />
+        <activity
+            android:name=".correction.CorrectionFinish"
+            android:exported="false" />
+        <activity
+            android:name=".VideoPlayerActivity"
+            android:exported="false" />
         <activity
             android:name=".myprofile.myVideo.ChallengeVideoRepository"
             android:exported="false" />
@@ -35,7 +49,7 @@
             android:name=".myprofile.editProfile.ChangeUsername"
             android:exported="false" />
         <activity
-            android:name=".HighlightFinish"
+            android:name=".practice.HighlightFinish"
             android:exported="false" />
         <activity
             android:name=".practice.FullFinish"
@@ -58,7 +72,6 @@
         <activity
             android:name=".challenge.ChallengeMusicSelect"
             android:exported="false" />
-
         <activity
             android:name=".correction.CorrectionMusicSelect"
             android:exported="false" />
@@ -66,10 +79,10 @@
             android:name=".practice.HighlightPractice"
             android:exported="false" />
         <activity
-            android:name=".practice.PracticeMusicSelect"
+            android:name=".startPage.FirstStart"
             android:exported="false" />
         <activity
-            android:name=".practice.MusicSelectPopup"
+            android:name=".practice.PracticeMusicSelectPopup"
             android:exported="false" />
         <activity
             android:name=".SplashActivity"
@@ -81,14 +94,14 @@
             android:name=".startPage.CreateAccount"
             android:exported="false" />
         <activity
-            android:name=".startPage.FirstStart"
+            android:name=".startPage.SignIn"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="false" />
         <activity
-            android:name=".startPage.SignIn"
-            android:exported="true">
+            android:name=".practice.PracticeMusicSelect"
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

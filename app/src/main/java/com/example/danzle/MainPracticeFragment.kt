@@ -11,7 +11,6 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.example.danzle.challenge.ChallengeMusicSelect
 import com.example.danzle.challenge.FragmentChallenge
-import com.example.danzle.correction.CorrectionMusicSelect
 import com.example.danzle.correction.FragmentCorrection
 import com.example.danzle.databinding.ChallengeFragmentBinding
 import com.example.danzle.databinding.CorrectionFragmentBinding

@@ -72,6 +72,12 @@ class MyProfileFragment : Fragment() {
 
     }
 
+    // 사용자가 돌아올 때마다 최신 데이터 보여줌
+    override fun onResume() {
+        super.onResume()
+        retrofitMyProfileMain()
+    }
+
     private fun showLogoutDialog() {
         val view = layoutInflater.inflate(R.layout.logout_dialog, null)
 
@@ -112,13 +118,17 @@ class MyProfileFragment : Fragment() {
         // SharedPreferences에 저장된 토큰 가져옴
         val token = DanzleSharedPreferences.getAccessToken()
 
+        val authHeader = "Bearer $token"
+        //꼭 Baeare를 붙여야 한다.
+
+
         if (token.isNullOrEmpty()){
             Toast.makeText(requireContext(), "로그인이 필요합니다.", Toast.LENGTH_SHORT).show()
             return
         }
 
        val retrofit = RetrofitApi.getMyProfileServiceInstance()
-        retrofit.getMyProfile(token)
+        retrofit.getMyProfile(authHeader)
             .enqueue(object : Callback<MyProfileResponse>{
                 override fun onResponse(call: Call<MyProfileResponse>, response: Response<MyProfileResponse>) {
                     if (response.isSuccessful){
