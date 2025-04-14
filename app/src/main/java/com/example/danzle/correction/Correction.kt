@@ -124,7 +124,9 @@ class Correction : AppCompatActivity() {
         }
 
         binding.cancelButton.setOnClickListener {
-            startActivity(Intent(this@Correction, FragmentCorrection::class.java))
+            finish()
+            recording?.stop()
+
         }
         retrofitCorrection(songId, sessionId)
 
@@ -176,14 +178,14 @@ class Correction : AppCompatActivity() {
         ) == PackageManager.PERMISSION_GRANTED
     }
 
-    private fun startScoringPolling(songId: Long, sessionId: Long, authHeader: String) {
-        lifecycleScope.launch {
-            while (player.isPlaying) {
-                delay(2000) // 2초마다 점수 요청
-                fetchCurrentScore(songId, sessionId, authHeader)
-            }
-        }
-    }
+//    private fun startScoringPolling(songId: Long, sessionId: Long, authHeader: String) {
+//        lifecycleScope.launch {
+//            while (player.isPlaying) {
+//                delay(2000) // 2초마다 점수 요청
+//                fetchCurrentScore(songId, sessionId, authHeader)
+//            }
+//        }
+//    }
 
     private fun fetchCurrentScore(songId: Long, sessionId: Long, authHeader: String) {
         RetrofitApi.getCorrectionInstance().getCorrection(songId, sessionId, authHeader)
