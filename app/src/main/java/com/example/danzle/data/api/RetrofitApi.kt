@@ -1,6 +1,9 @@
 package com.example.danzle.data.api
-import com.example.danzle.SilhouetteService
+import com.example.danzle.correction.MediapipeService
+import com.example.danzle.practice.SilhouettePracticeService
 import com.example.danzle.correction.CorrectionMusicSelectService
+import com.example.danzle.correction.CorrectionService
+import com.example.danzle.correction.SilhouetteCorrectionService
 import com.example.danzle.myprofile.MyProfileService
 import com.example.danzle.myprofile.editProfile.ChangePasswordService
 import com.example.danzle.myprofile.editProfile.ChangeUsernameService
@@ -95,12 +98,36 @@ object RetrofitApi {
         return highlightPracticeService
     }
 
-    // Silhouette
-    private val silhouetteService: SilhouetteService by lazy {
-        danzleRetrofit.create(SilhouetteService::class.java)
+    // PracticeSilhouette
+    private val silhouettePracticeService: SilhouettePracticeService by lazy {
+        danzleRetrofit.create(SilhouettePracticeService::class.java)
     }
-    fun getSilhouetteInstance(): SilhouetteService{
-        return silhouetteService
+    fun getPracticeSilhouetteInstance(): SilhouettePracticeService {
+        return silhouettePracticeService
+    }
+
+    // Correction
+    private val correctionService: CorrectionService by lazy {
+        danzleRetrofit.create(CorrectionService::class.java)
+    }
+    fun getCorrectionInstance(): CorrectionService {
+        return correctionService
+    }
+
+    // SilhouetteCorrection
+    private val silhouetteCorrectionService: SilhouetteCorrectionService by lazy {
+        danzleRetrofit.create(SilhouetteCorrectionService::class.java)
+    }
+    fun getSilhouetteCorrectionInstance(): SilhouetteCorrectionService {
+        return silhouetteCorrectionService
+    }
+
+    // Mediapipe
+    private val mediapipeService: MediapipeService by lazy {
+        danzleRetrofit.create(MediapipeService::class.java)
+    }
+    fun getMediapipeInstance(): MediapipeService {
+        return mediapipeService
     }
 
     // ForgotPassword1

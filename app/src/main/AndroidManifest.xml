@@ -49,7 +49,7 @@
             android:name=".myprofile.editProfile.ChangeUsername"
             android:exported="false" />
         <activity
-            android:name=".practice.HighlightFinish"
+            android:name=".practice.HighlightPracticeFinish"
             android:exported="false" />
         <activity
             android:name=".practice.FullFinish"
@@ -94,13 +94,13 @@
             android:name=".startPage.CreateAccount"
             android:exported="false" />
         <activity
-            android:name=".startPage.SignIn"
+            android:name=".practice.PracticeMusicSelect"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="false" />
         <activity
-            android:name=".practice.PracticeMusicSelect"
+            android:name=".startPage.SignIn"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

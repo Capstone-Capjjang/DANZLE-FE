@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".practice.HighlightFinish">
+    tools:context=".practice.HighlightPracticeFinish">
 
     <TextView
         android:id="@+id/highlight"
@@ -41,7 +41,7 @@
         android:layout_marginEnd="18dp" />
     
     <ImageView
-        android:id="@+id/albumImage"
+        android:id="@+id/songImage"
         android:layout_width="260dp"
         android:layout_height="340dp"
         app:layout_constraintStart_toStartOf="parent"

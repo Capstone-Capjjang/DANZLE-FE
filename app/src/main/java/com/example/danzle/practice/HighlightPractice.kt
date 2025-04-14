@@ -2,12 +2,12 @@ package com.example.danzle.practice
 
 import android.Manifest
 import android.content.ContentValues
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
-import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -32,7 +32,7 @@ import com.example.danzle.R
 import com.example.danzle.data.api.DanzleSharedPreferences
 import com.example.danzle.data.api.RetrofitApi
 import com.example.danzle.data.remote.response.auth.HighlightPracticeResponse
-import com.example.danzle.data.remote.response.auth.SilhouetteResponse
+import com.example.danzle.data.remote.response.auth.SilhouettePracticeResponse
 import com.example.danzle.databinding.ActivityHighlightPracticeBinding
 import retrofit2.Call
 import retrofit2.Callback
@@ -73,7 +73,7 @@ class HighlightPractice : AppCompatActivity() {
         // assign player to this view
         binding.playerView.player = player
 
-        binding.playerView.alpha = 0.7f
+        binding.playerView.alpha = 0.5f
         binding.playerView.post {
             binding.playerView.bringToFront()
         }
@@ -82,6 +82,15 @@ class HighlightPractice : AppCompatActivity() {
         player.addListener(object : Player.Listener {
             override fun onPlaybackStateChanged(state: Int) {
                 Log.d("ExoPlayerState", "State changed: $state")
+
+                // 영상 끝났을 때 화면 전환
+                if (state == Player.STATE_ENDED) {
+                    Log.d("ExoPlayerState", "Video ended!")
+
+                    val intent = Intent(this@HighlightPractice, HighlightPracticeFinish::class.java)
+                    startActivity(intent)
+                }
+
             }
 
             override fun onPlayerError(error: PlaybackException) {
@@ -104,9 +113,10 @@ class HighlightPractice : AppCompatActivity() {
         }
 
         // Retrofit request
-        val songId = 13L
+        val songId = 12L
         retrofitHighlightPractice(songId)
     }
+
 
     // Implements VideoCapture use case, including start and stop capturing.
     private fun captureVideo() {
@@ -266,7 +276,7 @@ class HighlightPractice : AppCompatActivity() {
         val token = DanzleSharedPreferences.getAccessToken()
 
         val authHeader = "Bearer $token"
-        //꼭 Baeare를 붙여야 한다.
+        //꼭 Baearer를 붙여야 한다.
 
         if (token.isNullOrEmpty()) {
             Toast.makeText(this@HighlightPractice, "로그인이 필요합니다.", Toast.LENGTH_SHORT).show()
@@ -275,23 +285,19 @@ class HighlightPractice : AppCompatActivity() {
 
         val retrofit = RetrofitApi.getHighlightPracticeInstance()
         retrofit.getHighlightPractice(songId, authHeader)
-            .enqueue(object : Callback<HighlightPracticeResponse> {
+            .enqueue(object : Callback<List<HighlightPracticeResponse>> {
                 override fun onResponse(
-                    call: Call<HighlightPracticeResponse>,
-                    response: Response<HighlightPracticeResponse>
+                    call: Call<List<HighlightPracticeResponse>>,
+                    response: Response<List<HighlightPracticeResponse>>
                 ) {
                     if (response.isSuccessful) {
-                        val highlightPracticeResponse = response.body()
-                        highlightPracticeResponse?.let { data ->
-                            val songName = data.song.title
-                            startTime = data.startTime
-                            endTime = data.endTime
-                            timestamp = data.timestamp
+                        val highlightPracticeResponse = response.body()?.firstOrNull()
+                        if (highlightPracticeResponse != null) {
+                            val songName = highlightPracticeResponse.song.title
 
                             // 다음 요청: sessionId 기반으로 영상 URL 받기
                             retrofitSilhouetteVideo(authHeader, songName)
                         }
-
 
                     } else {
                         Log.e(
@@ -301,7 +307,7 @@ class HighlightPractice : AppCompatActivity() {
                     }
                 }
 
-                override fun onFailure(call: Call<HighlightPracticeResponse>, t: Throwable) {
+                override fun onFailure(call: Call<List<HighlightPracticeResponse>>, t: Throwable) {
                     Log.d("Debug", "HighlightPractice / Error: ${t.message}")
                     Toast.makeText(this@HighlightPractice, "Error", Toast.LENGTH_SHORT).show()
                 }
@@ -313,12 +319,12 @@ class HighlightPractice : AppCompatActivity() {
         Log.d("DEBUG", "authHeader = $authHeader")
 
 
-        val retrofit = RetrofitApi.getSilhouetteInstance()
-        retrofit.getSilhouette(authHeader, songName)
-            .enqueue(object : Callback<SilhouetteResponse> {
+        val retrofit = RetrofitApi.getPracticeSilhouetteInstance()
+        retrofit.getPracticeSilhouette(authHeader, songName)
+            .enqueue(object : Callback<SilhouettePracticeResponse> {
                 override fun onResponse(
-                    call: Call<SilhouetteResponse>,
-                    response: Response<SilhouetteResponse>
+                    call: Call<SilhouettePracticeResponse>,
+                    response: Response<SilhouettePracticeResponse>
                 ) {
                     Log.d("DEBUG", "Response code: ${response.code()}")
                     Log.d("DEBUG", "Response body: ${response.body()}")
@@ -328,12 +334,12 @@ class HighlightPractice : AppCompatActivity() {
                         val videoUrl = response.body()?.silhouetteVideoUrl
                         Log.d("Silhouette", "Video URL: $videoUrl")
                         videoUrl?.let {
-                            playVideo("https://danzle-s3-bucket.s3.ap-northeast-2.amazonaws.com/songs/Mantra/Mantra_silhouette.mp4", startTime, endTime)
+                            playVideo(videoUrl, startTime, endTime)
                         }
                     }
                 }
 
-                override fun onFailure(call: Call<SilhouetteResponse>, t: Throwable) {
+                override fun onFailure(call: Call<SilhouettePracticeResponse>, t: Throwable) {
                     Log.e("Silhouette", "Silhouette fetch error: ${t.message}")
                 }
             })
@@ -342,7 +348,6 @@ class HighlightPractice : AppCompatActivity() {
     private fun playVideo(url: String, startTime: String, endTime: String) {
         val mediaItem = MediaItem.fromUri(url)
         player.setMediaItem(mediaItem)
-
         player.prepare()
         player.play()
     }

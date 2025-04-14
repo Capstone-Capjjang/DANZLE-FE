@@ -58,6 +58,9 @@ class PracticeMusicSelect : AppCompatActivity(), PracticeMusicSelectRVAdapter.Re
         val intent = Intent(this, PracticeMusicSelectPopup::class.java)
 //        Log.d("MusicSelect", "전달할 데이터: $selectedSong")
         intent.putExtra("selected song", selectedSong)
+        // intent.putExtra("songID", selectedSong.)
+        // id 받아오기
+
         startActivity(intent)
 
     }
