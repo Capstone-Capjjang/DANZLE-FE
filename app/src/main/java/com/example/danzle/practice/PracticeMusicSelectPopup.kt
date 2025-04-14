@@ -60,6 +60,10 @@ class PracticeMusicSelectPopup : AppCompatActivity() {
             startActivity(Intent(this@PracticeMusicSelectPopup, HighlightPractice::class.java))
         }
 
+        binding.cancelButton.setOnClickListener {
+            startActivity(Intent(this@PracticeMusicSelectPopup, PracticeMusicSelect::class.java))
+        }
+
 
     }
 }

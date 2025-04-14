@@ -43,6 +43,10 @@ class PracticeMusicSelectRVAdapter(
     // pink -> odd
     inner class PinkViewHolder(private val binding: SelectsongPinkRecyclerviewBinding) :
         RecyclerView.ViewHolder(binding.root), View.OnClickListener {
+        init {
+            binding.root.setOnClickListener(this)
+        }
+
         fun bind(response: PracticeMusicSelectResponse, position: Int) {
             binding.pinkSongNumber.text = (position + 1).toString()
             binding.pinkSongName.text = response.title

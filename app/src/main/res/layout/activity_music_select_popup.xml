@@ -28,7 +28,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/songName"
-        android:layout_marginTop="220dp"/>
+        android:layout_marginTop="210dp"/>
 
     <TextView
         android:id="@+id/songName"
@@ -78,7 +78,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/highlight"
         app:layout_constraintTop_toBottomOf="@id/songTime"
-        android:layout_marginTop="60dp"/>
+        android:layout_marginTop="85dp"/>
 
     <Button
         android:id="@+id/highlight"
@@ -93,6 +93,6 @@
         app:layout_constraintStart_toEndOf="@id/full"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/songTime"
-        android:layout_marginTop="60dp"/>
+        android:layout_marginTop="85dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
