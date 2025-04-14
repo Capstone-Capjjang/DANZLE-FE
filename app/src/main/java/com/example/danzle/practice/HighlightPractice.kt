@@ -10,6 +10,7 @@ import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.Preview
@@ -27,11 +28,14 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.media3.common.MediaItem
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
+import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.ui.AspectRatioFrameLayout
 import com.example.danzle.R
 import com.example.danzle.data.api.DanzleSharedPreferences
 import com.example.danzle.data.api.RetrofitApi
 import com.example.danzle.data.remote.response.auth.HighlightPracticeResponse
+import com.example.danzle.data.remote.response.auth.PracticeMusicSelectResponse
 import com.example.danzle.data.remote.response.auth.SilhouettePracticeResponse
 import com.example.danzle.databinding.ActivityHighlightPracticeBinding
 import retrofit2.Call
@@ -57,6 +61,16 @@ class HighlightPractice : AppCompatActivity() {
 
     private lateinit var cameraExecutor: ExecutorService
 
+    private val selectedSong: PracticeMusicSelectResponse? by lazy {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.getParcelableExtra("selected song", PracticeMusicSelectResponse::class.java)
+        } else {
+            @Suppress("DEPRECATION")
+            intent.getParcelableExtra("selected song")
+        }
+    }
+
+    @OptIn(UnstableApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -72,8 +86,9 @@ class HighlightPractice : AppCompatActivity() {
         player = ExoPlayer.Builder(this).build()
         // assign player to this view
         binding.playerView.player = player
-
-        binding.playerView.alpha = 0.5f
+        // 실루엣 영상 화면에 꽉 채우게
+        binding.playerView.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_ZOOM
+        binding.playerView.alpha = 0.1f
         binding.playerView.post {
             binding.playerView.bringToFront()
         }
@@ -113,8 +128,13 @@ class HighlightPractice : AppCompatActivity() {
         }
 
         // Retrofit request
-        val songId = 12L
+        val songId = 14L
         retrofitHighlightPractice(songId)
+//        songId?.let {
+//            retrofitHighlightPractice(it)
+//        } ?: run {
+//            Toast.makeText(this, "선택한 곡 정보가 없습니다.", Toast.LENGTH_SHORT).show()
+//        }
     }
 
 

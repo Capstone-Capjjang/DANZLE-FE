@@ -78,8 +78,8 @@ class Correction : AppCompatActivity() {
             insets
         }
 
-        val songId = 13L
-        val sessionId = 25041402L
+        val songId = 14L
+        val sessionId = 25041401L
         val token = DanzleSharedPreferences.getAccessToken()
         val authHeader = "Bearer $token"
 
@@ -96,17 +96,20 @@ class Correction : AppCompatActivity() {
 
         player.addListener(object : Player.Listener {
             override fun onPlaybackStateChanged(state: Int) {
-                Log.d("ExoPlayerState", "State changed: $state")
+                Log.d("ExoPlayerState", "State changed: $state, isPlaying=${player.isPlaying}")
 
-                // 영상 끝났을 때 화면 전환
-                if (state == Player.STATE_ENDED) {
-                    Log.d("ExoPlayerState", "Video ended!")
-                    pollingJob?.cancel()
-                    recording?.stop()
-                    val intent = Intent(this@Correction, CorrectionFinish::class.java)
-                    startActivity(intent)
+                if (state == Player.STATE_READY && player.playWhenReady) {
+                    Log.d("Polling", "State READY & playWhenReady = true → Start polling")
+                    if (pollingJob == null) {
+                        startPolling(songId, sessionId, authHeader)
+                    }
                 }
 
+                if (state == Player.STATE_ENDED) {
+                    pollingJob?.cancel()
+                    recording?.stop()
+                    startActivity(Intent(this@Correction, CorrectionFinish::class.java))
+                }
             }
 
             override fun onPlayerError(error: PlaybackException) {
@@ -130,6 +133,16 @@ class Correction : AppCompatActivity() {
         }
         retrofitCorrection(songId, sessionId)
 
+    }
+
+    private fun startPolling(songId: Long, sessionId: Long, authHeader: String) {
+        pollingJob = lifecycleScope.launch {
+            while (player.playbackState != Player.STATE_ENDED) {
+                Log.d("Polling", "Polling fetchCurrentScore 실행")
+                fetchCurrentScore(songId, sessionId, authHeader)
+                delay(2000)
+            }
+        }
     }
 
     private fun startCamera() {
@@ -194,13 +207,11 @@ class Correction : AppCompatActivity() {
                     call: Call<List<CorrectionResponse>>,
                     response: Response<List<CorrectionResponse>>
                 ) {
+                    Log.d("Polling", "Polling fetchCurrentScore called")
                     val score = response.body()?.firstOrNull()?.score ?: return
-                    val feedback = when {
-                        score >= 95 -> "Perfect"
-                        score >= 85 -> "Good"
-                        score >= 65 -> "Ok"
-                        else -> "Miss"
-                    }
+                    val correction = response.body()
+                    Log.d("ScorePolling", "Response: $correction")
+                    val feedback = getFeedbackFromScore(score)
                     binding.scoreText.text = feedback
                 }
 
@@ -237,7 +248,6 @@ class Correction : AppCompatActivity() {
 
                     if (response.isSuccessful) {
                         val body = response.body()
-
                         // body 자체가 null이거나, 빈 리스트일 경우
                         if (body.isNullOrEmpty()) {
                             Log.w("CorrectionAPI", "응답은 성공했지만 데이터가 없습니다.")
@@ -246,17 +256,12 @@ class Correction : AppCompatActivity() {
                             return
                         }
 
-
                         val correctionResponse = response.body()?.firstOrNull()
+
                         if (correctionResponse != null) {
                             val score = correctionResponse.score
                             val songName = correctionResponse.song.title
-                            val feedback = when {
-                                score >= 95 -> "Perfect"
-                                score >= 85 -> "Good"
-                                score >= 65 -> "Ok"
-                                else -> "Miss"
-                            }
+                            val feedback = getFeedbackFromScore(score)
                             binding.scoreText.text = feedback
                             Log.d("Correction", "Score: $score, Feedback: $feedback")
 
@@ -266,6 +271,12 @@ class Correction : AppCompatActivity() {
                                 songId,
                                 sessionId
                             )
+                        } else {
+                            // body 자체가 null이거나, 빈 리스트일 경우
+                            Log.w("CorrectionAPI", "응답은 성공했지만 데이터가 없습니다.")
+                            Toast.makeText(this@Correction, "아직 분석된 결과가 없어요!", Toast.LENGTH_SHORT)
+                                .show()
+                            return
                         }
 
                     }
@@ -299,8 +310,13 @@ class Correction : AppCompatActivity() {
                     Log.d("DEBUG", "Response body: ${response.body()}")
                     Log.d("DEBUG", "Error body: ${response.errorBody()?.string()}")
 
+
+
                     if (response.isSuccessful) {
                         val videoUrl = response.body()?.silhouetteVideoUrl
+                        if (videoUrl == null) {
+                            Log.e("SilhouetteCorrection", "영상 URL이 null입니다.")
+                        }
                         Log.d("SilhouetteCorrection", "Video URL: $videoUrl")
                         videoUrl?.let {
                             playVideo(videoUrl, songId, sessionId, authHeader)
@@ -323,13 +339,6 @@ class Correction : AppCompatActivity() {
         player.play()
 
         startRecording()
-
-        pollingJob = lifecycleScope.launch {
-            while (player.isPlaying) {
-                delay(2000)
-                fetchCurrentScore(songId, sessionId, authHeader)
-            }
-        }
     }
 
     private fun startRecording() {
@@ -390,5 +399,14 @@ class Correction : AppCompatActivity() {
                     add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 }
             }.toTypedArray()
+    }
+
+    private fun getFeedbackFromScore(score: Double): String {
+        return when {
+            score >= 95 -> "Perfect"
+            score >= 85 -> "Good"
+            score >= 65 -> "Ok"
+            else -> "Miss"
+        }
     }
 }

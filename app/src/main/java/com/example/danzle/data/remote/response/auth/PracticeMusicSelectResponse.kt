@@ -5,6 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class PracticeMusicSelectResponse (
+    val id: Long?,
     val title: String?,
     val artist: String?,
     val coverImagePath: String?
