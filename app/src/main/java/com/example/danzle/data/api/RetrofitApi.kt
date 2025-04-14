@@ -10,6 +10,7 @@ import com.example.danzle.myprofile.editProfile.ChangeUsernameService
 import com.example.danzle.myprofile.myVideo.ChallengeVideoRepositoryService
 import com.example.danzle.myprofile.myVideo.MyVideoService
 import com.example.danzle.myprofile.myVideo.PracticeVideoRepositoryService
+import com.example.danzle.practice.FullPracticeService
 import com.example.danzle.practice.HighlightPracticeService
 import com.example.danzle.practice.PracticeMusicSelectService
 import com.example.danzle.startPage.CreateAccountService
@@ -96,6 +97,14 @@ object RetrofitApi {
     }
     fun getHighlightPracticeInstance(): HighlightPracticeService{
         return highlightPracticeService
+    }
+
+    // FullPractice
+    private val fullPracticeService: FullPracticeService by lazy {
+        danzleRetrofit.create(FullPracticeService::class.java)
+    }
+    fun getFullPracticeInstance(): FullPracticeService{
+        return fullPracticeService
     }
 
     // PracticeSilhouette

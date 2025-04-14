@@ -224,10 +224,11 @@ class Correction : AppCompatActivity() {
                     if (response.isSuccessful) {
                         val body = response.body()
 
-                        // ✅ body 자체가 null이거나, 빈 리스트일 경우
+                        // body 자체가 null이거나, 빈 리스트일 경우
                         if (body.isNullOrEmpty()) {
                             Log.w("CorrectionAPI", "응답은 성공했지만 데이터가 없습니다.")
-                            Toast.makeText(this@Correction, "아직 분석된 결과가 없어요!", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this@Correction, "아직 분석된 결과가 없어요!", Toast.LENGTH_SHORT)
+                                .show()
                             return
                         }
 

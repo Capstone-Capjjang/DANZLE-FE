@@ -41,7 +41,7 @@
         android:layout_marginEnd="18dp" />
 
     <ImageView
-        android:id="@+id/albumImage"
+        android:id="@+id/songImage"
         android:layout_width="260dp"
         android:layout_height="340dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -59,7 +59,7 @@
         android:fontFamily="@font/inter_18pt_medium"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/albumImage"
+        app:layout_constraintTop_toBottomOf="@id/songImage"
         android:layout_marginTop="40dp"/>
 
     <TextView
