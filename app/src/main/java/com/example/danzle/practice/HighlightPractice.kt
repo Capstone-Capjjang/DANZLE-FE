@@ -16,6 +16,8 @@ import androidx.camera.core.CameraSelector
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.video.MediaStoreOutputOptions
+import androidx.camera.video.Quality
+import androidx.camera.video.QualitySelector
 import androidx.camera.video.Recorder
 import androidx.camera.video.Recording
 import androidx.camera.video.VideoCapture
@@ -98,14 +100,18 @@ class HighlightPractice : AppCompatActivity() {
             override fun onPlaybackStateChanged(state: Int) {
                 Log.d("ExoPlayerState", "State changed: $state")
 
-                // 영상 끝났을 때 화면 전환
+                if (state == Player.STATE_READY && player.playWhenReady) {
+                    Log.d("HighlightPractice", "영상 시작됨 → 녹화 시작")
+                    startRecording()
+                }
+
                 if (state == Player.STATE_ENDED) {
-                    Log.d("ExoPlayerState", "Video ended!")
+                    Log.d("HighlightPractice", "영상 끝남 → 녹화 중지 및 화면 전환")
+                    stopRecording()
 
                     val intent = Intent(this@HighlightPractice, HighlightPracticeFinish::class.java)
                     startActivity(intent)
                 }
-
             }
 
             override fun onPlayerError(error: PlaybackException) {
@@ -122,10 +128,6 @@ class HighlightPractice : AppCompatActivity() {
             )
         }
 
-        // recording button
-        binding.videoCaptureButton.setOnClickListener {
-            captureVideo()
-        }
 
         // Retrofit request
         val songId = 14L
@@ -138,79 +140,6 @@ class HighlightPractice : AppCompatActivity() {
     }
 
 
-    // Implements VideoCapture use case, including start and stop capturing.
-    private fun captureVideo() {
-        val videoCapture = this.videoCapture ?: return
-
-        binding.videoCaptureButton.isEnabled = false
-
-        val curRecording = recording
-        if (curRecording != null) {
-            // Stop the current recording session
-            curRecording.stop()
-            recording = null
-            return
-        }
-
-        // create and start a new recording session
-        val name = SimpleDateFormat(FILENAME_FORMAT, Locale.US)
-            .format(System.currentTimeMillis())
-        val contentValues = ContentValues().apply {
-            put(MediaStore.MediaColumns.DISPLAY_NAME, name)
-            put(MediaStore.MediaColumns.MIME_TYPE, "video/mp4")
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
-                put(MediaStore.Video.Media.RELATIVE_PATH, "Movies/CameraX-Video")
-            }
-        }
-
-        val mediaStoreOutputOptions = MediaStoreOutputOptions
-            .Builder(contentResolver, MediaStore.Video.Media.EXTERNAL_CONTENT_URI)
-            .setContentValues(contentValues)
-            .build()
-        recording = videoCapture.output
-            .prepareRecording(this, mediaStoreOutputOptions)
-            .apply {
-                if (PermissionChecker.checkSelfPermission(
-                        this@HighlightPractice,
-                        Manifest.permission.RECORD_AUDIO
-                    ) ==
-                    PermissionChecker.PERMISSION_GRANTED
-                ) {
-                    withAudioEnabled()
-                }
-            }
-            .start(ContextCompat.getMainExecutor(this)) { recordEvent ->
-                when (recordEvent) {
-                    is VideoRecordEvent.Start -> {
-                        binding.videoCaptureButton.apply {
-                            text = getString(R.string.stop_capture)
-                            isEnabled = true
-                        }
-                    }
-
-                    is VideoRecordEvent.Finalize -> {
-                        if (!recordEvent.hasError()) {
-                            val msg = "Video capture succeeded: " +
-                                    "${recordEvent.outputResults.outputUri}"
-                            Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT)
-                                .show()
-                            Log.d(TAG, msg)
-                        } else {
-                            recording?.close()
-                            recording = null
-                            Log.e(
-                                TAG, "Video capture ends with error: " +
-                                        "${recordEvent.error}"
-                            )
-                        }
-                        binding.videoCaptureButton.apply {
-                            text = getString(R.string.start_capture)
-                            isEnabled = true
-                        }
-                    }
-                }
-            }
-    }
 
     // 필요한 권한 요청
     // 앱이 카메라를 열려면 사용자의 권한이 필요하고 오디오를 녹음하려면 마이크 권한도 필요하다.
@@ -247,6 +176,13 @@ class HighlightPractice : AppCompatActivity() {
                 .also {
                     it.setSurfaceProvider(binding.previewView.surfaceProvider)
                 }
+
+            // 녹화용 Recorder + VideoCapture 설정
+            val recorder = Recorder.Builder()
+                .setQualitySelector(QualitySelector.from(Quality.HD))
+                .build()
+            videoCapture = VideoCapture.withOutput(recorder)
+
 
             // Select back camera as a default
             val cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
@@ -370,6 +306,54 @@ class HighlightPractice : AppCompatActivity() {
         player.setMediaItem(mediaItem)
         player.prepare()
         player.play()
+    }
+
+    private fun startRecording() {
+        val videoCapture = this.videoCapture ?: return
+
+        val name = "highlight_practice_${System.currentTimeMillis()}.mp4"
+        val contentValues = ContentValues().apply {
+            put(MediaStore.MediaColumns.DISPLAY_NAME, name)
+            put(MediaStore.MediaColumns.MIME_TYPE, "video/mp4")
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                put(MediaStore.Video.Media.RELATIVE_PATH, "Movies/Danzle")
+            }
+        }
+
+        val outputOptions = MediaStoreOutputOptions.Builder(
+            contentResolver, MediaStore.Video.Media.EXTERNAL_CONTENT_URI
+        ).setContentValues(contentValues).build()
+
+        recording = videoCapture.output
+            .prepareRecording(this, outputOptions)
+            .apply {
+                if (ContextCompat.checkSelfPermission(
+                        this@HighlightPractice,
+                        Manifest.permission.RECORD_AUDIO
+                    ) == PackageManager.PERMISSION_GRANTED
+                ) {
+                    withAudioEnabled()
+                }
+            }
+            .start(ContextCompat.getMainExecutor(this)) { event ->
+                when (event) {
+                    is VideoRecordEvent.Start -> {
+                        Log.d("Recording", "녹화 시작됨")
+                    }
+                    is VideoRecordEvent.Finalize -> {
+                        if (!event.hasError()) {
+                            Log.d("Recording", "녹화 완료: ${event.outputResults.outputUri}")
+                        } else {
+                            Log.e("Recording", "녹화 오류: ${event.error}")
+                        }
+                    }
+                }
+            }
+    }
+
+    private fun stopRecording() {
+        recording?.stop()
+        recording = null
     }
 
     companion object {
