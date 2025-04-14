@@ -1,6 +1,5 @@
 package com.example.danzle
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,17 +8,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
-import com.example.danzle.challenge.ChallengeMusicSelect
 import com.example.danzle.challenge.FragmentChallenge
 import com.example.danzle.correction.FragmentCorrection
-import com.example.danzle.databinding.ChallengeFragmentBinding
-import com.example.danzle.databinding.CorrectionFragmentBinding
 import com.example.danzle.databinding.FragmentMainPracticeBinding
 import com.example.danzle.practice.FragmentPractice
 
-class MainPracticeFragment: Fragment() {
+class MainPracticeFragment : Fragment() {
 
-    private var _binding : FragmentMainPracticeBinding? = null
+    private var _binding: FragmentMainPracticeBinding? = null
     private val binding get() = _binding!!
 
 
@@ -50,14 +46,14 @@ class MainPracticeFragment: Fragment() {
         viewPager.setPageTransformer { page, position ->
             page.translationX = position * -offsetPx
         }
-        viewPager.adapter = FragmentAdapter(requireActivity(),3)
+        viewPager.adapter = FragmentAdapter(requireActivity(), 3)
         // requireActivity()는 이 Fragment를 호스팅하고 있는 액티비티를 가져온다.
 
         // changing the background color according to viewpager card
         // registerOnPageChangeCallback 메서드를 사용하여 페이지 변경이벤트를 확인한다.
-        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){
+        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
-                val color = when(position) {
+                val color = when (position) {
                     0 -> R.drawable.practice_background_color
                     1 -> R.drawable.correction_background_color
                     else -> R.drawable.challenge_background_color
@@ -81,7 +77,7 @@ class MainPracticeFragment: Fragment() {
 class FragmentAdapter(
     fragmentActivity: FragmentActivity,
     private val tabCount: Int
-): FragmentStateAdapter(fragmentActivity) {
+) : FragmentStateAdapter(fragmentActivity) {
 
     override fun getItemCount(): Int {
         return tabCount

@@ -67,7 +67,7 @@ class Correction : AppCompatActivity() {
         }
 
         val songId = 13L
-        val sessionId = 1L
+        val sessionId = 25041402L
         val token = DanzleSharedPreferences.getAccessToken()
         val authHeader = "Bearer $token"
 
@@ -80,14 +80,6 @@ class Correction : AppCompatActivity() {
         binding.playerView.post {
             binding.playerView.bringToFront()
         }
-
-        pollingJob = lifecycleScope.launch {
-            while (player.isPlaying) {
-                delay(2000)
-                fetchCurrentScore(songId, sessionId, authHeader)
-            }
-        }
-
 
 
         player.addListener(object : Player.Listener {
@@ -208,19 +200,38 @@ class Correction : AppCompatActivity() {
         val token = DanzleSharedPreferences.getAccessToken()
         val authHeader = "Bearer $token"
 
+        Log.d("CorrectionAPI", "Sending request to /accuracy-session/full")
+        Log.d("CorrectionAPI", "songId = $songId, sessionId = $sessionId")
+        Log.d("CorrectionAPI", "authHeader = $authHeader")
+
         if (token.isNullOrEmpty()) {
             Toast.makeText(this@Correction, "로그인이 필요합니다.", Toast.LENGTH_SHORT).show()
             return
         }
 
         val retrofit = RetrofitApi.getCorrectionInstance()
-        retrofit.getCorrection(songId,sessionId, authHeader)
+        retrofit.getCorrection(songId, sessionId, authHeader)
             .enqueue(object : Callback<List<CorrectionResponse>> {
                 override fun onResponse(
                     call: Call<List<CorrectionResponse>>,
                     response: Response<List<CorrectionResponse>>
                 ) {
+                    Log.d("CorrectionAPI", "response.isSuccessful = ${response.isSuccessful}")
+                    Log.d("CorrectionAPI", "response.code = ${response.code()}")
+                    Log.d("CorrectionAPI", "response.body = ${response.body()}")
+
+
                     if (response.isSuccessful) {
+                        val body = response.body()
+
+                        // ✅ body 자체가 null이거나, 빈 리스트일 경우
+                        if (body.isNullOrEmpty()) {
+                            Log.w("CorrectionAPI", "응답은 성공했지만 데이터가 없습니다.")
+                            Toast.makeText(this@Correction, "아직 분석된 결과가 없어요!", Toast.LENGTH_SHORT).show()
+                            return
+                        }
+
+
                         val correctionResponse = response.body()?.firstOrNull()
                         if (correctionResponse != null) {
                             val score = correctionResponse.score
@@ -234,7 +245,12 @@ class Correction : AppCompatActivity() {
                             binding.scoreText.text = feedback
                             Log.d("Correction", "Score: $score, Feedback: $feedback")
 
-                            retrofitSilhouetteCorrectionVideo(authHeader, songName, songId, sessionId)
+                            retrofitSilhouetteCorrectionVideo(
+                                authHeader,
+                                songName,
+                                songId,
+                                sessionId
+                            )
                         }
 
                     }
@@ -293,9 +309,11 @@ class Correction : AppCompatActivity() {
 
         startRecording()
 
-        lifecycleScope.launch {
-            delay(3000)
-            startScoringPolling(songId, sessionId, authHeader)
+        pollingJob = lifecycleScope.launch {
+            while (player.isPlaying) {
+                delay(2000)
+                fetchCurrentScore(songId, sessionId, authHeader)
+            }
         }
     }
 

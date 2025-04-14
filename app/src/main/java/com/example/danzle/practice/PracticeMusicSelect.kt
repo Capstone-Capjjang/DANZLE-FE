@@ -27,7 +27,8 @@ class PracticeMusicSelect : AppCompatActivity(), PracticeMusicSelectRVAdapter.Re
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        binding = ActivityPracticeMusicSelectBinding.inflate(LayoutInflater.from(this@PracticeMusicSelect))
+        binding =
+            ActivityPracticeMusicSelectBinding.inflate(LayoutInflater.from(this@PracticeMusicSelect))
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -66,33 +67,44 @@ class PracticeMusicSelect : AppCompatActivity(), PracticeMusicSelectRVAdapter.Re
     }
 
     // recyclerview adapter
-    private fun setMusicRecyclerviewAdapter(list: ArrayList<PracticeMusicSelectResponse>){
+    private fun setMusicRecyclerviewAdapter(list: ArrayList<PracticeMusicSelectResponse>) {
         val adapter = PracticeMusicSelectRVAdapter(list, this)
         binding.songListRecyclerView.adapter = adapter
     }
 
     // about retrofit
-    private fun retrofitPracticeMusicSelect(){
+    private fun retrofitPracticeMusicSelect() {
         val retrofit = RetrofitApi.getPracticeMusicSelectInstance()
         retrofit.getPracticeMusicSelect()
-            .enqueue(object : Callback<List<PracticeMusicSelectResponse>>{
-                override fun onResponse(call: Call<List<PracticeMusicSelectResponse>>, response: Response<List<PracticeMusicSelectResponse>>) {
-                    if (response.isSuccessful){
-                        musicList = ArrayList(response.body()?: emptyList())
+            .enqueue(object : Callback<List<PracticeMusicSelectResponse>> {
+                override fun onResponse(
+                    call: Call<List<PracticeMusicSelectResponse>>,
+                    response: Response<List<PracticeMusicSelectResponse>>
+                ) {
+                    if (response.isSuccessful) {
+                        musicList = ArrayList(response.body() ?: emptyList())
 //                        Log.d("MusicSelect", "MusicSelect / Full Response Body: $musicList")
 
                         // recyclerview에 어댑터 장착
                         setMusicRecyclerviewAdapter(musicList)
 
-                    } else{
+                    } else {
 //                        Log.d("MusicSelect", "MusicSelect / Response Code ${response.code()}")
-                        Toast.makeText(this@PracticeMusicSelect, "Fail to MusicSelect: ${response.message()}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            this@PracticeMusicSelect,
+                            "Fail to MusicSelect: ${response.message()}",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
 
-                override fun onFailure(call: Call<List<PracticeMusicSelectResponse>>, t: Throwable) {
+                override fun onFailure(
+                    call: Call<List<PracticeMusicSelectResponse>>,
+                    t: Throwable
+                ) {
 //                    Log.d("MusicSelect", "MusicSelect / Error: ${t.message}")
-                    Toast.makeText(this@PracticeMusicSelect, "Error", Toast.LENGTH_SHORT).show()                }
+                    Toast.makeText(this@PracticeMusicSelect, "Error", Toast.LENGTH_SHORT).show()
+                }
             })
     }
 

@@ -78,6 +78,7 @@ class MyProfileFragment : Fragment() {
         retrofitMyProfileMain()
     }
 
+    // dialog 화면
     private fun showLogoutDialog() {
         val view = layoutInflater.inflate(R.layout.logout_dialog, null)
 
@@ -119,7 +120,7 @@ class MyProfileFragment : Fragment() {
         val token = DanzleSharedPreferences.getAccessToken()
 
         val authHeader = "Bearer $token"
-        //꼭 Baeare를 붙여야 한다.
+        //꼭 Baearer를 붙여야 한다.
 
 
         if (token.isNullOrEmpty()){
@@ -135,7 +136,7 @@ class MyProfileFragment : Fragment() {
                         val myProfileResponse = response.body()
 
                         username = myProfileResponse!!.username
-                        email = myProfileResponse!!.email
+                        email = myProfileResponse.email
 
                         // about account information
                         binding.usernameTextview.text = username
