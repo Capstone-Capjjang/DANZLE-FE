@@ -20,7 +20,6 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-
 class MyVideo : AppCompatActivity() {
 
     private lateinit var binding: ActivityMyVideoBinding
@@ -38,7 +37,7 @@ class MyVideo : AppCompatActivity() {
 
         // changing activity
         binding.practiceMore.setOnClickListener {
-            startActivity(Intent(this@MyVideo,PracticeVideoRepository::class.java))
+            startActivity(Intent(this@MyVideo, PracticeVideoRepository::class.java))
         }
         binding.challengeMore.setOnClickListener {
             startActivity(Intent(this@MyVideo, ChallengeVideoRepository::class.java))
@@ -65,7 +64,7 @@ class MyVideo : AppCompatActivity() {
     }
 
     //about retrofit
-    private fun retrofitMyVideo(){
+    private fun retrofitMyVideo() {
         val token = DanzleSharedPreferences.getAccessToken()
         val authHeader = "Bearer $token"
         val userId = DanzleSharedPreferences.getUserId()
@@ -81,7 +80,10 @@ class MyVideo : AppCompatActivity() {
         val retrofit = RetrofitApi.getMyVideoInstance()
         retrofit.getMyVideo(authHeader, userId)
             .enqueue(object : Callback<List<MyVideoResponse>> {
-                override fun onResponse(call: Call<List<MyVideoResponse>>, response: Response<List<MyVideoResponse>>) {
+                override fun onResponse(
+                    call: Call<List<MyVideoResponse>>,
+                    response: Response<List<MyVideoResponse>>
+                ) {
                     if (response.isSuccessful) {
                         val myVideoList = response.body() ?: emptyList()
                         Log.d("MyVideo", "MyVideo / Full Response Body: $myVideoList") // 응답 전체 확인
@@ -89,8 +91,8 @@ class MyVideo : AppCompatActivity() {
 
                         // separate data
                         // enum class로 선언되어 있어서 아래와 같이 VideoMode.PRACTICE로 불러와야 된다.
-                        val practiceList = myVideoList.filter { it.mode == VideoMode.PRACTICE}
-                        val challengeList = myVideoList.filter { it.mode == VideoMode.CHALLENGE}
+                        val practiceList = myVideoList.filter { it.mode == VideoMode.PRACTICE }
+                        val challengeList = myVideoList.filter { it.mode == VideoMode.CHALLENGE }
 
                         // connecting to adapter
                         setPracticeAdapter(ArrayList(practiceList))
@@ -98,7 +100,11 @@ class MyVideo : AppCompatActivity() {
 
                     } else {
                         Log.d("MyVideo", "MyVideo / Response Code: ${response.code()}")
-                        Toast.makeText(this@MyVideo, "Fail to MyVideo: ${response.message()}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            this@MyVideo,
+                            "Fail to MyVideo: ${response.message()}",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
 

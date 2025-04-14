@@ -28,9 +28,8 @@ class FragmentCorrection: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // root -> 특정 카드 전체를 감싸는 상위 뷰에 대해, 그걸 클릭 타겟
-        // 임시로 바로 정확도 모드로 넘어감
         binding.root.setOnClickListener{
-            val intent = Intent(requireContext(), Correction::class.java)
+            val intent = Intent(requireContext(), CorrectionMusicSelect::class.java)
             startActivity(intent)
         }
     }

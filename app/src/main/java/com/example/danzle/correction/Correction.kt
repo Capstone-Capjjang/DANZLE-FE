@@ -34,7 +34,9 @@ import androidx.media3.exoplayer.ExoPlayer
 import com.example.danzle.R
 import com.example.danzle.data.api.DanzleSharedPreferences
 import com.example.danzle.data.api.RetrofitApi
+import com.example.danzle.data.remote.response.auth.CorrectionMusicSelectResponse
 import com.example.danzle.data.remote.response.auth.CorrectionResponse
+import com.example.danzle.data.remote.response.auth.PracticeMusicSelectResponse
 import com.example.danzle.data.remote.response.auth.SilhouetteCorrectionResponse
 import com.example.danzle.databinding.ActivityCorrectionBinding
 import kotlinx.coroutines.Job
@@ -54,6 +56,16 @@ class Correction : AppCompatActivity() {
     private var recording: Recording? = null
 
     private var pollingJob: Job? = null
+
+    // 나중에 서버 수정하고 서버에서 songId 데이터 받아서 넣어주기
+    private val selectedSong: CorrectionMusicSelectResponse? by lazy {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.getParcelableExtra("selected song", CorrectionMusicSelectResponse::class.java)
+        } else {
+            @Suppress("DEPRECATION")
+            intent.getParcelableExtra("selected song")
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -53,24 +53,32 @@ class ChallengeVideoRepository : AppCompatActivity() {
         val token = DanzleSharedPreferences.getAccessToken()
         val userId = DanzleSharedPreferences.getUserId()
 
-        if (token.isNullOrEmpty() || userId == null){
-            Toast.makeText(this@ChallengeVideoRepository, "You have to sign in.", Toast.LENGTH_SHORT).show()
+        if (token.isNullOrEmpty() || userId == null) {
+            Toast.makeText(
+                this@ChallengeVideoRepository,
+                "You have to sign in.",
+                Toast.LENGTH_SHORT
+            ).show()
             return
         }
 
         val retrofit = RetrofitApi.getChallengeVideoRepositoryInstance()
         retrofit.getChallengeVideo(token, userId)
-            .enqueue(object : Callback<List<MyVideoResponse>>{
-                override fun onResponse(call: Call<List<MyVideoResponse>>, response: Response<List<MyVideoResponse>>) {
-                    if (response.isSuccessful){
-                        val challengeList = response.body()?.filter { it.mode == VideoMode.CHALLENGE }
+            .enqueue(object : Callback<List<MyVideoResponse>> {
+                override fun onResponse(
+                    call: Call<List<MyVideoResponse>>,
+                    response: Response<List<MyVideoResponse>>
+                ) {
+                    if (response.isSuccessful) {
+                        val challengeList =
+                            response.body()?.filter { it.mode == VideoMode.CHALLENGE }
                         setChallengeAdapter(ArrayList(challengeList))
                         Log.d(
                             "Debug",
                             "PracticeVideoRepository / Full Response Body: $challengeList"
                         ) // 응답 전체 확인
                         Log.d("Debug", "PracticeVideoRepository / Token: $token")
-                    } else{
+                    } else {
                         Log.d(
                             "Debug",
                             "PracticeVideoRepository / Response Code: ${response.code()}"

@@ -52,14 +52,18 @@ class PracticeVideoRepository : AppCompatActivity() {
         val userId = DanzleSharedPreferences.getUserId()
 
         if (token.isNullOrEmpty() || userId == null) {
-            Toast.makeText(this@PracticeVideoRepository, "You have to sign in.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this@PracticeVideoRepository, "You have to sign in.", Toast.LENGTH_SHORT)
+                .show()
             return
         }
 
         val retrofit = RetrofitApi.getPracticeVideoRepositoryInstance()
         retrofit.getPracticeVideo(token, userId)
-            .enqueue(object : Callback<List<MyVideoResponse>>{
-                override fun onResponse(call: Call<List<MyVideoResponse>>, response: Response<List<MyVideoResponse>>) {
+            .enqueue(object : Callback<List<MyVideoResponse>> {
+                override fun onResponse(
+                    call: Call<List<MyVideoResponse>>,
+                    response: Response<List<MyVideoResponse>>
+                ) {
                     if (response.isSuccessful) {
                         val practiceList =
                             response.body()?.filter { it.mode == VideoMode.PRACTICE } ?: emptyList()
@@ -88,7 +92,7 @@ class PracticeVideoRepository : AppCompatActivity() {
                     Toast.makeText(this@PracticeVideoRepository, "Error", Toast.LENGTH_SHORT)
                         .show()
                 }
-                }
+            }
             )
 
     }

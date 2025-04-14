@@ -47,11 +47,11 @@ class FullFinish : AppCompatActivity() {
             startActivity(Intent(this, FullPractice::class.java))
         }
 
-        binding.othersongsButton.setOnClickListener{
+        binding.othersongsButton.setOnClickListener {
             startActivity(Intent(this, PracticeMusicSelect::class.java))
         }
 
-        binding.quitButton.setOnClickListener{
+        binding.quitButton.setOnClickListener {
             startActivity(Intent(this, MainPracticeFragment::class.java))
         }
 
