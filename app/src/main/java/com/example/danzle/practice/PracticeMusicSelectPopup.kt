@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.camera.core.processing.SurfaceProcessorNode.In
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
@@ -52,12 +53,16 @@ class PracticeMusicSelectPopup : AppCompatActivity() {
 
         // click <full> button -> FullPractice activity
         binding.full.setOnClickListener {
-            startActivity(Intent(this@PracticeMusicSelectPopup, FullPractice::class.java))
+            val intent = Intent(this@PracticeMusicSelectPopup, FullPractice::class.java)
+            intent.putExtra("selected song", selectedSong)
+            startActivity(intent)
         }
 
         // click <highlight> button -> Highlight activity
         binding.highlight.setOnClickListener {
-            startActivity(Intent(this@PracticeMusicSelectPopup, HighlightPractice::class.java))
+            val intent = Intent(this@PracticeMusicSelectPopup, HighlightPractice::class.java)
+            intent.putExtra("selected song", selectedSong)
+            startActivity(intent)
         }
 
         binding.cancelButton.setOnClickListener {

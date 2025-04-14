@@ -47,8 +47,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/highlight"
-        android:layout_marginTop="90dp"
-        android:background="@drawable/albumcover"/>
+        android:layout_marginTop="80dp"
+        android:background="@android:color/transparent"/>
     
     <TextView
         android:id="@+id/songName"

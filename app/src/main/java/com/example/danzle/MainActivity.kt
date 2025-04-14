@@ -1,5 +1,7 @@
 package com.example.danzle
 
+import android.app.ComponentCaller
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -62,4 +64,14 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction().replace(R.id.frame_layout, fragment).commit()
     }
 
+    override fun onNewIntent(intent: Intent, caller: ComponentCaller) {
+        super.onNewIntent(intent, caller)
+        val navigateTo = intent?.getStringExtra("navigate_to")
+        if (navigateTo == "practice") {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.frame_layout, MainPracticeFragment())
+                .commit()
+            binding.bottomNavigationView.selectedItemId = R.id.dance
+        }
+    }
 }

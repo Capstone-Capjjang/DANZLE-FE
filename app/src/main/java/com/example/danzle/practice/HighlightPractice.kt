@@ -60,6 +60,7 @@ class HighlightPractice : AppCompatActivity() {
 
     private var videoCapture: VideoCapture<Recorder>? = null
     private var recording: Recording? = null
+    private var activeRecording: Recording? = null
 
     private lateinit var cameraExecutor: ExecutorService
 
@@ -110,6 +111,7 @@ class HighlightPractice : AppCompatActivity() {
                     stopRecording()
 
                     val intent = Intent(this@HighlightPractice, HighlightPracticeFinish::class.java)
+                    intent.putExtra("selected song", selectedSong)
                     startActivity(intent)
                 }
             }
@@ -309,6 +311,12 @@ class HighlightPractice : AppCompatActivity() {
     }
 
     private fun startRecording() {
+        // 이미 녹화 중이면 아무것도 하지 않음
+        if (recording != null) {
+            Log.w("Recording", "녹화 이미 진행 중이므로 startRecording 무시됨")
+            return
+        }
+
         val videoCapture = this.videoCapture ?: return
 
         val name = "highlight_practice_${System.currentTimeMillis()}.mp4"
@@ -346,6 +354,8 @@ class HighlightPractice : AppCompatActivity() {
                         } else {
                             Log.e("Recording", "녹화 오류: ${event.error}")
                         }
+                        // Finalize 후 녹화 인스턴스 정리
+                        recording = null
                     }
                 }
             }
