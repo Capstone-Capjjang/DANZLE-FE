@@ -43,7 +43,7 @@
         app:layout_constraintTop_toBottomOf="@+id/danzleTextView"
         app:layout_constraintBottom_toTopOf="@+id/createAccountButton"
         android:fontFamily="@font/inter_18pt_semibold"
-        android:layout_marginTop="120dp"
+        android:layout_marginTop="130dp"
         android:text="Sign In"
         android:textColor="@color/white"
         android:textSize="16dp"

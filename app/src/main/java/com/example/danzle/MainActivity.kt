@@ -24,8 +24,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         // In MainActivity, it's defined start fragment as HomeFragment
-        replaceFragment(HomeFragment())
-        binding.bottomNavigationView.selectedItemId = R.id.home
+        // 일단 임시로 practice를 시작으로 설정해줌
+        replaceFragment(MainPracticeFragment())
+        binding.bottomNavigationView.selectedItemId = R.id.dance
 
 
         // navigation
@@ -51,6 +52,13 @@ class MainActivity : AppCompatActivity() {
 
     // changing the view method
     fun replaceFragment(fragment: Fragment){
+        // frame_layout이 들어오는 영역에 입력해준 fragment가 할당된다.
+        // FragmentManager는 앱 프래그먼트에서 프래그먼트를 추가, 삭제, 교체하고 백스택에 추가하는 작업을 실행하는 클래스
+        // Activity에서 접근하기 위해서 supportFragmentManager를 써야한다.
+
+        // FragmentTransaction
+        // FragmentManager를 사용하여 Fragment를 추가, 제거, 교체 등의 작업을 수행하는 일련의 과정을 의미한다.
+        // 데이터베이스에서와 같이 일련의 작업들을 묶어 처리하는 개념으로 Fragment 관련 작업을 한 번에 처리하고 성공적으로 완료되면 commit 할 수 있다.
         supportFragmentManager.beginTransaction().replace(R.id.frame_layout, fragment).commit()
     }
 
