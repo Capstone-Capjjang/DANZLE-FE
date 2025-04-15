@@ -1,8 +1,10 @@
 package com.example.danzle.data.api
+
 import com.example.danzle.correction.MediapipeService
 import com.example.danzle.practice.SilhouettePracticeService
 import com.example.danzle.correction.CorrectionMusicSelectService
 import com.example.danzle.correction.CorrectionService
+import com.example.danzle.correction.PoseAnalysis
 import com.example.danzle.correction.SilhouetteCorrectionService
 import com.example.danzle.myprofile.MyProfileService
 import com.example.danzle.myprofile.editProfile.ChangePasswordService
@@ -30,7 +32,9 @@ object RetrofitApi {
     //private const val BASE_URL = "http://3.39.234.248:8080"
     //private const val BASE_URL = "http://43.200.171.252:8080"
 
-    private val client: OkHttpClient by lazy{
+    //private const val FLASK_BASE_URL = ""
+
+    private val client: OkHttpClient by lazy {
         OkHttpClient.Builder()
             .addInterceptor(
                 HttpLoggingInterceptor().apply {
@@ -50,27 +54,36 @@ object RetrofitApi {
         .client(client)
         .build()
 
+//    private val danzleFlaskRetrofit = Retrofit.Builder()
+//        .baseUrl(FLASK_BASE_URL)
+//        .addConverterFactory(NullOnEmptyConverterFactory())
+//        .addConverterFactory(GsonConverterFactory.create())
+//        .client(client)
+//        .build()
+
     // RefreshToken
     private val authService: AuthService by lazy {
         danzleRetrofit.create(AuthService::class.java)
     }
 
-    fun getAuthInstance(): AuthService{
+    fun getAuthInstance(): AuthService {
         return authService
     }
 
     // SingIn
-    private  val signInService: SignInsService by lazy{
+    private val signInService: SignInsService by lazy {
         danzleRetrofit.create(SignInsService::class.java)
     }
-    fun getSignInInstance(): SignInsService{
+
+    fun getSignInInstance(): SignInsService {
         return signInService
     }
 
     // CreateAccount
-    private val createAccountService: CreateAccountService by lazy{
+    private val createAccountService: CreateAccountService by lazy {
         danzleRetrofit.create(CreateAccountService::class.java)
     }
+
     fun getCreateAccountInstance(): CreateAccountService {
         return createAccountService
     }
@@ -79,7 +92,8 @@ object RetrofitApi {
     private val practiceMusicSelectService: PracticeMusicSelectService by lazy {
         danzleRetrofit.create(PracticeMusicSelectService::class.java)
     }
-    fun getPracticeMusicSelectInstance(): PracticeMusicSelectService{
+
+    fun getPracticeMusicSelectInstance(): PracticeMusicSelectService {
         return practiceMusicSelectService
     }
 
@@ -87,7 +101,8 @@ object RetrofitApi {
     private val correctionMusicSelectService: CorrectionMusicSelectService by lazy {
         danzleRetrofit.create(CorrectionMusicSelectService::class.java)
     }
-    fun getCorrectionMusicSelectInstance(): CorrectionMusicSelectService{
+
+    fun getCorrectionMusicSelectInstance(): CorrectionMusicSelectService {
         return correctionMusicSelectService
     }
 
@@ -95,7 +110,8 @@ object RetrofitApi {
     private val highlightPracticeService: HighlightPracticeService by lazy {
         danzleRetrofit.create(HighlightPracticeService::class.java)
     }
-    fun getHighlightPracticeInstance(): HighlightPracticeService{
+
+    fun getHighlightPracticeInstance(): HighlightPracticeService {
         return highlightPracticeService
     }
 
@@ -103,7 +119,8 @@ object RetrofitApi {
     private val fullPracticeService: FullPracticeService by lazy {
         danzleRetrofit.create(FullPracticeService::class.java)
     }
-    fun getFullPracticeInstance(): FullPracticeService{
+
+    fun getFullPracticeInstance(): FullPracticeService {
         return fullPracticeService
     }
 
@@ -111,6 +128,7 @@ object RetrofitApi {
     private val silhouettePracticeService: SilhouettePracticeService by lazy {
         danzleRetrofit.create(SilhouettePracticeService::class.java)
     }
+
     fun getPracticeSilhouetteInstance(): SilhouettePracticeService {
         return silhouettePracticeService
     }
@@ -119,6 +137,7 @@ object RetrofitApi {
     private val correctionService: CorrectionService by lazy {
         danzleRetrofit.create(CorrectionService::class.java)
     }
+
     fun getCorrectionInstance(): CorrectionService {
         return correctionService
     }
@@ -127,14 +146,25 @@ object RetrofitApi {
     private val silhouetteCorrectionService: SilhouetteCorrectionService by lazy {
         danzleRetrofit.create(SilhouetteCorrectionService::class.java)
     }
+
     fun getSilhouetteCorrectionInstance(): SilhouetteCorrectionService {
         return silhouetteCorrectionService
+    }
+
+    // sending pose information
+    private val poseAnalysisService: PoseAnalysis by lazy {
+        danzleRetrofit.create(PoseAnalysis::class.java)
+    }
+
+    fun getPoseAnalysisInstance(): PoseAnalysis {
+        return poseAnalysisService
     }
 
     // Mediapipe
     private val mediapipeService: MediapipeService by lazy {
         danzleRetrofit.create(MediapipeService::class.java)
     }
+
     fun getMediapipeInstance(): MediapipeService {
         return mediapipeService
     }
@@ -143,7 +173,8 @@ object RetrofitApi {
     private val forgotPassword1Service: ForgotPassword1Service by lazy {
         danzleRetrofit.create(ForgotPassword1Service::class.java)
     }
-    fun getForgotPassword1Instance(): ForgotPassword1Service{
+
+    fun getForgotPassword1Instance(): ForgotPassword1Service {
         return forgotPassword1Service
     }
 
@@ -153,50 +184,51 @@ object RetrofitApi {
     }
 
     // ChangeUsername
-    fun getChangeUsernameInstance(): ChangeUsernameService{
+    fun getChangeUsernameInstance(): ChangeUsernameService {
         return danzleRetrofit.create(ChangeUsernameService::class.java)
     }
 
     // ChangePassword
-    fun getChangePasswordInstance(): ChangePasswordService{
+    fun getChangePasswordInstance(): ChangePasswordService {
         return danzleRetrofit.create(ChangePasswordService::class.java)
     }
 
     // video main repository
-    fun getMyVideoInstance(): MyVideoService{
+    fun getMyVideoInstance(): MyVideoService {
         return danzleRetrofit.create(MyVideoService::class.java)
     }
 
     // practice repository
-    fun getPracticeVideoRepositoryInstance(): PracticeVideoRepositoryService{
+    fun getPracticeVideoRepositoryInstance(): PracticeVideoRepositoryService {
         return danzleRetrofit.create(PracticeVideoRepositoryService::class.java)
     }
 
     // challenge repository
-    fun getChallengeVideoRepositoryInstance(): ChallengeVideoRepositoryService{
+    fun getChallengeVideoRepositoryInstance(): ChallengeVideoRepositoryService {
         return danzleRetrofit.create(ChallengeVideoRepositoryService::class.java)
     }
-
 
 }
 
 
-class NullOnEmptyConverterFactory  : Converter.Factory() {
+class NullOnEmptyConverterFactory : Converter.Factory() {
     fun converterFactory() = this
     override fun responseBodyConverter(
         type: Type,
         annotations: Array<out Annotation>,
         retrofit: Retrofit
     ): Converter<ResponseBody, *> = object : Converter<ResponseBody, Any?> {
-        val nextResponseBodyConverter = retrofit.nextResponseBodyConverter<Any?>(converterFactory(), type, annotations)
+        val nextResponseBodyConverter =
+            retrofit.nextResponseBodyConverter<Any?>(converterFactory(), type, annotations)
+
         override fun convert(value: ResponseBody) = if (value.contentLength() != 0L) {
-            try{
+            try {
                 nextResponseBodyConverter.convert(value)
-            }catch (e:Exception){
+            } catch (e: Exception) {
                 e.printStackTrace()
                 null
             }
-        } else{
+        } else {
             null
         }
     }
