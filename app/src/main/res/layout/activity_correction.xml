@@ -37,7 +37,6 @@
         android:id="@+id/scoreText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Excellent"
         android:textColor="@color/danzlePink"
         android:textSize="34dp"
         android:fontFamily="@font/inter_18pt_bold"
