@@ -35,7 +35,7 @@
         android:id="@+id/line2"
         android:layout_width="350dp"
         android:layout_height="3dp"
-        android:background="@color/black"
+        android:background="@color/grayText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/viewPager"

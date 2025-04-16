@@ -297,11 +297,20 @@ class Correction : AppCompatActivity() {
                         // 🎯 여기에 점수 기반 피드백 출력
                         val result = response.body()
                         val score = result?.score
+                        val feedback = result?.feedback
                         if (score != null) {
-                            val feedback = getFeedbackFromScore(score)
                             Log.d("AnalyzeFrame", "Score: $score → Feedback: $feedback")
                             runOnUiThread {
                                 binding.scoreText.text = feedback
+                                val colorRes = when (feedback) {
+                                    "Perfect" -> R.color.scorePerfectText
+                                    "Good" -> R.color.scoreGoodText
+                                    "Normal" -> R.color.scoreNormalText
+                                    "Bad" -> R.color.scoreBadText
+                                    else -> R.color.grayText
+                                }
+
+                                binding.scoreText.setTextColor(ContextCompat.getColor(this@Correction, colorRes))
                             }
                         }
                     }
@@ -389,10 +398,6 @@ class Correction : AppCompatActivity() {
                             currentSessionId = correctionResponse.sessionId
                             Log.d("SessionCheck", "Received sessionId = $currentSessionId from /full")
                             val songName = correctionResponse.song_title // 기존: correctionResponse.song.title
-                            val feedback = correctionResponse.message
-                            binding.scoreText.text = feedback
-                            Log.d("Correction", "Feedback: $feedback")
-
 
                             // 🎯 세션 받자마자 첫 프레임 전송!
                             binding.previewView.bitmap?.let {
@@ -522,13 +527,13 @@ class Correction : AppCompatActivity() {
         }.toTypedArray()
     }
 
-    private fun getFeedbackFromScore(score: Double): String {
-        return when {
-            score >= 95 -> "Perfect"
-            score >= 85 -> "Good"
-            score >= 65 -> "Ok"
-            else -> "Miss"
-        }
-    }
+//    private fun getFeedbackFromScore(score: Double): String {
+//        return when {
+//            score >= 95 -> "Perfect"
+//            score >= 85 -> "Good"
+//            score >= 65 -> "Ok"
+//            else -> "Miss"
+//        }
+//    }
 
 }
