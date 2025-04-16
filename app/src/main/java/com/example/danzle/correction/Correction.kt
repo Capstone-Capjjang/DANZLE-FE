@@ -48,6 +48,7 @@ import com.example.danzle.data.remote.response.auth.CorrectionResponse
 import com.example.danzle.data.remote.response.auth.PoseAnalysisResponse
 import com.example.danzle.data.remote.response.auth.SilhouetteCorrectionResponse
 import com.example.danzle.databinding.ActivityCorrectionBinding
+import com.google.gson.Gson
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -72,6 +73,9 @@ class Correction : AppCompatActivity() {
 
     private var lastSentTime = 0L
 
+    private var currentSessionId: Long? = null
+    private lateinit var authHeader: String
+
     // 나중에 서버 수정하고 서버에서 songId 데이터 받아서 넣어주기
     private val selectedSong: CorrectionMusicSelectResponse? by lazy {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -94,9 +98,9 @@ class Correction : AppCompatActivity() {
         }
 
         val songId = 14L
-        val sessionId = 450L
         val token = DanzleSharedPreferences.getAccessToken()
-        val authHeader = "Bearer $token"
+        authHeader = "Bearer $token"
+
 
         // initialize exoplayer
         player = ExoPlayer.Builder(this).build()
@@ -116,7 +120,7 @@ class Correction : AppCompatActivity() {
                 if (state == Player.STATE_READY && player.playWhenReady) {
                     Log.d("Polling", "State READY & playWhenReady = true → Start polling")
                     if (pollingJob == null) {
-                        startPolling(songId, sessionId, authHeader)
+                        //startPolling(songId, authHeader)
                     }
                 }
 
@@ -146,19 +150,33 @@ class Correction : AppCompatActivity() {
             recording?.stop()
 
         }
-        retrofitCorrection(songId, sessionId)
+        retrofitCorrection(songId)
 
     }
 
-    private fun startPolling(songId: Long, sessionId: Long, authHeader: String) {
-        pollingJob = lifecycleScope.launch {
-            while (player.playbackState != Player.STATE_ENDED) {
-                Log.d("Polling", "Polling fetchCurrentScore 실행")
-                fetchCurrentScore(songId, sessionId, authHeader)
-                delay(1000) // 음답 요청 속도
-            }
+    override fun onPause() {
+        super.onPause()
+        if (::player.isInitialized) {
+            player.pause()
         }
     }
+
+    override fun onDestroy() {
+        if (::player.isInitialized) {
+            player.release()
+        }
+        super.onDestroy()
+    }
+
+//    private fun startPolling(songId: Long, authHeader: String) {
+//        pollingJob = lifecycleScope.launch {
+//            while (player.playbackState != Player.STATE_ENDED) {
+//                Log.d("Polling", "Polling fetchCurrentScore 실행")
+//                fetchCurrentScore(songId, authHeader)
+//                delay(1000) // 음답 요청 속도
+//            }
+//        }
+//    }
 
     private fun startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
@@ -207,7 +225,7 @@ class Correction : AppCompatActivity() {
         val currentTime = System.currentTimeMillis()
 
         // 1초마다 한 번만 전송
-        if (currentTime - lastSentTime >= 1000) {
+        if (currentTime - lastSentTime >= 800) {
             try {
                 val bitmap = imageProxyToBitmap(imageProxy)
                 sendFrameToServer(bitmap)
@@ -242,54 +260,59 @@ class Correction : AppCompatActivity() {
     }
 
     private fun sendFrameToServer(bitmap: Bitmap) {
-        val stream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, stream)
-        val byteArray = stream.toByteArray()
-
-        val requestBody = byteArray.toRequestBody("image/jpeg".toMediaTypeOrNull())
-        val imagePart = MultipartBody.Part.createFormData("image", "frame.jpg", requestBody)
-
-        Log.d("DEBUG", "image size = ${byteArray.size}")
-
-        val token = DanzleSharedPreferences.getAccessToken()
-        val authHeader = "Bearer $token"
-
-        // ✅ songId와 sessionId는 실제 값으로 설정
-//        val songIdBody = "14".toRequestBody("text/plain".toMediaTypeOrNull())
-//        val sessionIdBody = "25041401".toRequestBody("text/plain".toMediaTypeOrNull())
-
         val songId = 14L
-        val sessionId = 25041402L
 
-        RetrofitApi.getPoseAnalysisInstance()
+        // 서버에서 받아온 sessionId 사용. 아직 받아오지 않았다면 전송하지 않음.
+        val sessionId = currentSessionId ?: run {
+            Log.e("AnalyzeFrame", "현재 sessionId가 없습니다. /accuracy-session/full API 호출 실패?")
+            return
+        }
+        Log.d("SessionCheck", "Sending frame with sessionId = $sessionId")
+
+        val stream = ByteArrayOutputStream().apply {
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, this)
+        }.toByteArray()
+
+        val imageRequestBody = stream.toRequestBody("image/jpeg".toMediaTypeOrNull())
+        val imagePart = MultipartBody.Part.createFormData("frame", "frame.jpg", imageRequestBody)
+
+
+        // ✅ RequestBody 변환 다 제거! 그대로 Long 넘겨주기
+        // /analyze 요청을 보내도록 변경 (기존 uploadFrame 대신 analyzeFrame 사용)
+        RetrofitApi.getPoseAnalysisInstance()  // getAnalysisInstance()는 AnalysisApiService를 반환하는 메서드로 구현
             .uploadFrame(authHeader, imagePart, songId, sessionId)
             .enqueue(object : Callback<PoseAnalysisResponse> {
                 override fun onResponse(
                     call: Call<PoseAnalysisResponse>,
                     response: Response<PoseAnalysisResponse>
                 ) {
-                    if (response.isSuccessful) {
-                        val result = response.body()
-                        result?.let {
-                            Log.d("PoseFrame", "Score: ${it.score}, Feedback: ${it.feedback}")
-                            runOnUiThread {
-                                binding.scoreText.text = it.feedback
-                            }
+                    if (!response.isSuccessful) {
+                        Log.e("AnalyzeFrame", "서버 응답 실패: ${response.code()}")
+                        response.errorBody()?.let { errorBody ->
+                            val errorMessage = errorBody.string()
+                            Log.e("AnalyzeFrame", "에러 상세내용: $errorMessage")
                         }
                     } else {
-                        Log.e("PoseFrame", "서버 응답 실패: ${response.code()}")
-                        // ✅ 400 에러 본문 출력
-                        val errorBody = response.errorBody()?.string()
-                        Log.e("PoseFrame", "에러 바디 내용: $errorBody")
+                        // 서버로부터 성공 응답이 오면 추가 처리를 여기에 구현 (예: UI 업데이트 등)
+                        // 🎯 여기에 점수 기반 피드백 출력
+                        val result = response.body()
+                        val score = result?.score
+                        if (score != null) {
+                            val feedback = getFeedbackFromScore(score)
+                            Log.d("AnalyzeFrame", "Score: $score → Feedback: $feedback")
+                            runOnUiThread {
+                                binding.scoreText.text = feedback
+                            }
+                        }
                     }
                 }
 
                 override fun onFailure(call: Call<PoseAnalysisResponse>, t: Throwable) {
-                    Log.e("PoseFrame", "전송 실패: ${t.message}")
+                    Log.e("AnalyzeFrame", "전송 실패: ${t.message}")
                 }
             })
+    }
 
-        }
 
     private fun allPermissionGranted() = REQUIRED_PERMISSIONS.all {
         ContextCompat.checkSelfPermission(
@@ -306,33 +329,33 @@ class Correction : AppCompatActivity() {
 //        }
 //    }
 
-    private fun fetchCurrentScore(songId: Long, sessionId: Long, authHeader: String) {
-        RetrofitApi.getCorrectionInstance().getCorrection(songId, sessionId, authHeader)
-            .enqueue(object : Callback<List<CorrectionResponse>> {
-                override fun onResponse(
-                    call: Call<List<CorrectionResponse>>,
-                    response: Response<List<CorrectionResponse>>
-                ) {
-                    Log.d("Polling", "Polling fetchCurrentScore called")
-                    val score = response.body()?.firstOrNull()?.score ?: return
-                    val correction = response.body()
-                    Log.d("ScorePolling", "Response: $correction")
-                    val feedback = getFeedbackFromScore(score)
-                    binding.scoreText.text = feedback
-                }
+//    private fun fetchCurrentScore(songId: Long, authHeader: String) {
+//        RetrofitApi.getCorrectionInstance().getCorrection(songId, authHeader)
+//            .enqueue(object : Callback<CorrectionResponse> {
+//                override fun onResponse(
+//                    call: Call<CorrectionResponse>,
+//                    response: Response<CorrectionResponse>
+//                ) {
+//                    Log.d("Polling", "Polling fetchCurrentScore called")
+//
+//
+//                    Log.d("Polling", "Polling fetchCurrentScore called")
+//                    val feedback = response.body()?.message ?: return
+//                    binding.scoreText.text = feedback
+//                }
+//
+//                override fun onFailure(call: Call<CorrectionResponse>, t: Throwable) {
+//                    Log.e("Score", "실시간 점수 업데이트 실패: ${t.message}")
+//                }
+//            })
+//    }
 
-                override fun onFailure(call: Call<List<CorrectionResponse>>, t: Throwable) {
-                    Log.e("Score", "실시간 점수 업데이트 실패: ${t.message}")
-                }
-            })
-    }
-
-    private fun retrofitCorrection(songId: Long, sessionId: Long) {
+    private fun retrofitCorrection(songId: Long) {
         val token = DanzleSharedPreferences.getAccessToken()
         val authHeader = "Bearer $token"
 
         Log.d("CorrectionAPI", "Sending request to /accuracy-session/full")
-        Log.d("CorrectionAPI", "songId = $songId, sessionId = $sessionId")
+        Log.d("CorrectionAPI", "songId = $songId")
         Log.d("CorrectionAPI", "authHeader = $authHeader")
 
         if (token.isNullOrEmpty()) {
@@ -341,38 +364,43 @@ class Correction : AppCompatActivity() {
         }
 
         val retrofit = RetrofitApi.getCorrectionInstance()
-        retrofit.getCorrection(songId, sessionId, authHeader)
-            .enqueue(object : Callback<List<CorrectionResponse>> {
+        retrofit.getCorrection(songId, authHeader)
+            .enqueue(object : Callback<CorrectionResponse> {
                 override fun onResponse(
-                    call: Call<List<CorrectionResponse>>,
-                    response: Response<List<CorrectionResponse>>
+                    call: Call<CorrectionResponse>,
+                    response: Response<CorrectionResponse>
                 ) {
                     Log.d("CorrectionAPI", "response.isSuccessful = ${response.isSuccessful}")
                     Log.d("CorrectionAPI", "response.code = ${response.code()}")
                     Log.d("CorrectionAPI", "response.body = ${response.body()}")
 
 
-                    if (response.isSuccessful) {
-                        val body = response.body()
-                        // body 자체가 null이거나, 빈 리스트일 경우
-                        if (body.isNullOrEmpty()) {
-                            Log.w("CorrectionAPI", "응답은 성공했지만 데이터가 없습니다.")
-                            Toast.makeText(this@Correction, "아직 분석된 결과가 없어요!", Toast.LENGTH_SHORT)
-                                .show()
-                            return
-                        }
+                    if (response.body() == null) {
+                        Log.w("CorrectionAPI", "body is NULL!")
+                        Log.d("CorrectionAPI", "response.raw = ${response.raw()}")
+                        Log.d("CorrectionAPI", "response.errorBody = ${response.errorBody()?.string()}")
+                    }
 
-                        val correctionResponse = response.body()?.firstOrNull()
+                    if (response.isSuccessful) {
+                        val correctionResponse = response.body()
+                        // body 자체가 null이거나, 빈 리스트일 경우
 
                         if (correctionResponse != null) {
-                            val score = correctionResponse.score
-                            val songName = correctionResponse.song.title
-                            val feedback = getFeedbackFromScore(score)
+                            currentSessionId = correctionResponse.sessionId
+                            Log.d("SessionCheck", "Received sessionId = $currentSessionId from /full")
+                            val songName = correctionResponse.song_title // 기존: correctionResponse.song.title
+                            val feedback = correctionResponse.message
                             binding.scoreText.text = feedback
-                            Log.d("Correction", "Score: $score, Feedback: $feedback")
+                            Log.d("Correction", "Feedback: $feedback")
+
+
+                            // 🎯 세션 받자마자 첫 프레임 전송!
+                            binding.previewView.bitmap?.let {
+                                sendFrameToServer(it)
+                            }
 
                             retrofitSilhouetteCorrectionVideo(
-                                authHeader, songName, songId, sessionId
+                                authHeader, songName, songId, currentSessionId!!
                             )
                         } else {
                             // body 자체가 null이거나, 빈 리스트일 경우
@@ -385,7 +413,7 @@ class Correction : AppCompatActivity() {
                     }
                 }
 
-                override fun onFailure(call: Call<List<CorrectionResponse>>, t: Throwable) {
+                override fun onFailure(call: Call<CorrectionResponse>, t: Throwable) {
                     Log.d("Debug", "HighlightPractice / Error: ${t.message}")
                     Toast.makeText(this@Correction, "Error", Toast.LENGTH_SHORT).show()
                 }
@@ -502,4 +530,5 @@ class Correction : AppCompatActivity() {
             else -> "Miss"
         }
     }
+
 }

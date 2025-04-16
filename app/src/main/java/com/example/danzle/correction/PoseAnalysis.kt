@@ -15,7 +15,7 @@ interface PoseAnalysis {
     @POST("accuracy-session/analyze")
     fun uploadFrame(
         @Header("Authorization") token: String,
-        @Part image: MultipartBody.Part,
+        @Part frame: MultipartBody.Part,
         @Query("songId") songId: Long,
         @Query("sessionId") sessionId: Long
     ): Call<PoseAnalysisResponse>

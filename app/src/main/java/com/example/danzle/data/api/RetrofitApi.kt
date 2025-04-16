@@ -25,10 +25,12 @@ import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.lang.reflect.Type
+import java.util.concurrent.TimeUnit
 
 
 object RetrofitApi {
-    private const val BASE_URL = "http://3.34.125.216:8080"
+    private const val BASE_URL = "http://3.39.23.134:8080"
+    //private const val BASE_URL = "http://3.34.125.216:8080"
     //private const val BASE_URL = "http://3.39.234.248:8080"
     //private const val BASE_URL = "http://43.200.171.252:8080"
 
@@ -36,6 +38,9 @@ object RetrofitApi {
 
     private val client: OkHttpClient by lazy {
         OkHttpClient.Builder()
+//            .connectTimeout(100, TimeUnit.SECONDS) // 연결 타임아웃
+//            .readTimeout(100, TimeUnit.SECONDS)    // 응답 타임아웃
+//            .writeTimeout(100, TimeUnit.SECONDS)   // 전송 타임아웃
             .addInterceptor(
                 HttpLoggingInterceptor().apply {
                     level = HttpLoggingInterceptor.Level.BODY

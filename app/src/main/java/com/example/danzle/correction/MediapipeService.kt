@@ -12,7 +12,7 @@ interface MediapipeService {
     @POST("/accuracy-session/analyze")
 
     fun getMediapipe(
-        @Part("sontId")songId: Long,
+        @Part("songId")songId: Long,
         @Part("videoPath")videoPath: String,
         @Part("sessionId")sessionId: Long,
         @Header("Authorization")token: String
