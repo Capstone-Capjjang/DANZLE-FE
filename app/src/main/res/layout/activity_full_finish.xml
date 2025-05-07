@@ -11,116 +11,134 @@
         android:id="@+id/highlight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="full"
-        android:textSize="22dp"
-        android:textColor="@color/lightPink"
         android:fontFamily="@font/inter_18pt_bold"
-        app:layout_constraintTop_toTopOf="@id/backButton"
+        android:text="full"
+        android:textColor="@color/lightPink"
+        android:textSize="22sp"
         app:layout_constraintBottom_toBottomOf="@id/backButton"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toTopOf="@id/backButton" />
 
     <Button
         android:id="@+id/backButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="18dp"
         android:background="@drawable/vector"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginStart="18dp"
-        android:layout_marginTop="18dp"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/alarm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="18dp"
         android:background="@drawable/alarm"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="18dp"
-        android:layout_marginEnd="18dp" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.15" />
 
     <ImageView
         android:id="@+id/songImage"
         android:layout_width="260dp"
         android:layout_height="340dp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:background="@android:color/transparent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/highlight"
-        android:layout_marginTop="90dp"
-        android:background="@drawable/albumcover"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/guidelineImage" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.55" />
 
     <TextView
         android:id="@+id/songName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Mantra"
-        android:textSize="25dp"
         android:fontFamily="@font/inter_18pt_medium"
-        app:layout_constraintStart_toStartOf="parent"
+        android:text="Mantra"
+        android:textSize="25sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/songImage"
-        android:layout_marginTop="40dp"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/guidelineText" />
 
     <TextView
         android:id="@+id/artist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Jennie"
-        android:textSize="16dp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/songName"
-        android:layout_marginTop="10dp"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/songName" />
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.67" />
 
     <Button
-        android:id="@+id/tryagainButton"
-        android:layout_width="304dp"
-        android:layout_height="40dp"
-        android:text="Try Again"
-        android:textColor="@color/white"
-        android:textSize="17dp"
-        android:fontFamily="@font/inter_18pt_semibold"
-        android:gravity="center"
+        android:id="@+id/tryAgainButton"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
         android:background="@drawable/button_round_radius"
         android:backgroundTint="@color/lightPink"
-        app:layout_constraintStart_toStartOf="parent"
+        android:fontFamily="@font/inter_18pt_semibold"
+        android:gravity="center"
+        android:text="Try Again"
+        android:textColor="@color/white"
+        android:textSize="17sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/artist"
-        android:layout_marginTop="30dp"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/guidelineButton"
+        app:layout_constraintWidth_percent="0.8" />
 
     <Button
         android:id="@+id/othersongsButton"
-        android:layout_width="304dp"
-        android:layout_height="40dp"
-        android:text="Other Songs"
-        android:textColor="@color/white"
-        android:textSize="17dp"
-        android:fontFamily="@font/inter_18pt_semibold"
-        android:gravity="center"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/button_round_radius"
         android:backgroundTint="@color/lightBlue"
-        app:layout_constraintStart_toStartOf="parent"
+        android:fontFamily="@font/inter_18pt_semibold"
+        android:gravity="center"
+        android:text="Other Songs"
+        android:textColor="@color/white"
+        android:textSize="17sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tryagainButton"
-        android:layout_marginTop="20dp"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tryAgainButton"
+        app:layout_constraintWidth_percent="0.8" />
 
     <Button
         android:id="@+id/quitButton"
-        android:layout_width="304dp"
-        android:layout_height="40dp"
-        android:text="Quit"
-        android:textColor="@color/white"
-        android:textSize="17dp"
-        android:fontFamily="@font/inter_18pt_semibold"
-        android:gravity="center"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/button_round_radius"
         android:backgroundTint="@color/black"
-        app:layout_constraintStart_toStartOf="parent"
+        android:fontFamily="@font/inter_18pt_semibold"
+        android:gravity="center"
+        android:text="Quit"
+        android:textColor="@color/white"
+        android:textSize="17sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/othersongsButton"
-        android:layout_marginTop="20dp"/>
-
+        app:layout_constraintWidth_percent="0.8" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

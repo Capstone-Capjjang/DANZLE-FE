@@ -40,6 +40,7 @@ import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.AspectRatioFrameLayout
+import com.example.danzle.MainActivity
 import com.example.danzle.R
 import com.example.danzle.data.api.DanzleSharedPreferences
 import com.example.danzle.data.api.RetrofitApi
@@ -107,7 +108,7 @@ class Correction : AppCompatActivity() {
         // assign player to this view
         binding.playerView.player = player
         binding.playerView.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_ZOOM
-        binding.playerView.alpha = 0.5f
+        binding.playerView.alpha = 0.3f
         binding.playerView.post {
             binding.playerView.bringToFront()
         }
@@ -146,7 +147,12 @@ class Correction : AppCompatActivity() {
         }
 
         binding.cancelButton.setOnClickListener {
-            finish()
+            Intent(this, MainActivity::class.java).apply {
+                putExtra("navigate_to", "practice")
+                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            }.also {
+                startActivity(it)
+            }
             recording?.stop()
 
         }

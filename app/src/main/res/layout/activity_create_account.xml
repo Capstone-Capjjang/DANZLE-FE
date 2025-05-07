@@ -8,45 +8,57 @@
     android:theme="@style/AppTheme"
     tools:context=".startPage.CreateAccount">
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineVertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.1" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineHorizontalTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.1" />
+
     <TextView
         android:id="@+id/createAccountTextview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="40dp"
-        android:layout_marginTop="120dp"
         android:fontFamily="@font/inter_18pt_bold"
         android:text="Create Account"
-        android:textSize="25dp"
+        android:textSize="25sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@id/guidelineHorizontalTitle" />
 
     <TextView
         android:id="@+id/emailTextview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
         android:text="Email"
-        android:textSize="16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/createAccountTextview"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="30dp"/>
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@id/guidelineVertical"
+        app:layout_constraintTop_toBottomOf="@id/createAccountTextview" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/emailLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         style="@style/Widget.Danzle.TextInputLayout.OutlinedBox"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:errorEnabled="true"
+        app:layout_constraintStart_toStartOf="@id/guidelineVertical"
         app:layout_constraintTop_toBottomOf="@id/emailTextview"
-        android:layout_marginStart="40dp"
-        app:errorEnabled="true">
+        app:layout_constraintWidth_percent="0.8">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/email"
-            android:layout_width="320dp"
+            android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:textSize="14dp"
-            android:inputType="textEmailAddress" />
+            android:inputType="textEmailAddress"
+            android:textSize="14dp" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -56,27 +68,27 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Username"
-        android:textSize="16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/emailLayout"
-        android:layout_marginStart="40dp"/>
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@id/guidelineVertical"
+        app:layout_constraintTop_toBottomOf="@id/emailLayout" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/usernameLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         style="@style/Widget.Danzle.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        app:errorEnabled="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/usernameTextview"
-        android:layout_marginStart="40dp"
-        app:errorEnabled="true">
+        app:layout_constraintWidth_percent="0.8">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/username"
-            android:layout_width="320dp"
+            android:layout_width="match_parent"
             android:layout_height="46dp"
-            android:textSize="14dp"
-            android:inputType="text"/>
+            android:inputType="text"
+            android:textSize="14dp" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -86,30 +98,30 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Password"
-        android:textSize="16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/usernameLayout"
-        android:layout_marginStart="40dp" />
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@id/guidelineVertical"
+        app:layout_constraintTop_toBottomOf="@id/usernameLayout" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/password1Layout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         style="@style/Widget.Danzle.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        app:errorEnabled="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/password1Textview"
-        android:layout_marginStart="40dp"
-        app:passwordToggleEnabled="true"
+        app:layout_constraintWidth_percent="0.8"
         app:passwordToggleDrawable="@drawable/toggle_icon_status"
-        app:passwordToggleTint="@color/danzlePink"
-        app:errorEnabled="true">
+        app:passwordToggleEnabled="true"
+        app:passwordToggleTint="@color/danzlePink">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/password1"
-            android:layout_width="320dp"
+            android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:textSize="14dp"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:textSize="14dp" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -119,30 +131,30 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Confirm Password"
-        android:textSize="16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/password1Layout"
-        android:layout_marginStart="40dp"/>
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@id/guidelineVertical"
+        app:layout_constraintTop_toBottomOf="@id/password1Layout" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/password2Layout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         style="@style/Widget.Danzle.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        app:errorEnabled="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/password2Textview"
-        android:layout_marginStart="40dp"
-        app:passwordToggleEnabled="true"
+        app:layout_constraintWidth_percent="0.8"
         app:passwordToggleDrawable="@drawable/toggle_icon_status"
-        app:passwordToggleTint="@color/danzlePink"
-        app:errorEnabled="true">
+        app:passwordToggleEnabled="true"
+        app:passwordToggleTint="@color/danzlePink">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/password2"
-            android:layout_width="320dp"
+            android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:textSize="14dp"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:textSize="14dp" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -150,61 +162,66 @@
         android:id="@+id/checkButton"
         android:layout_width="15dp"
         android:layout_height="15dp"
+        android:layout_marginTop="15dp"
         android:background="@drawable/custom_checkbox_createaccount"
         android:button="@null"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password2Layout"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="15dp"/>
+        app:layout_constraintStart_toStartOf="@id/guidelineVertical"
+        app:layout_constraintTop_toBottomOf="@+id/password2Layout" />
 
     <TextView
         android:id="@+id/acceptText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
         android:text="I accept the "
         android:textSize="12dp"
-        app:layout_constraintStart_toEndOf="@id/checkButton"
         app:layout_constraintBottom_toBottomOf="@id/checkButton"
-        android:layout_marginStart="5dp"
-        />
+        app:layout_constraintStart_toEndOf="@id/checkButton" />
 
 
     <TextView
         android:id="@+id/termsconditions"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Terms and Conditions"
-        android:textSize="12dp"
         android:fontFamily="@font/inter_18pt_semibold"
+        android:text="Terms and Conditions"
         android:textColor="@color/blue"
-        app:layout_constraintStart_toEndOf="@id/acceptText"
-        app:layout_constraintBaseline_toBaselineOf="@id/acceptText"/>
+        android:textSize="12dp"
+        app:layout_constraintBaseline_toBaselineOf="@id/acceptText"
+        app:layout_constraintStart_toEndOf="@id/acceptText" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.7" />
 
     <Button
         android:id="@+id/createAccountButton"
-        android:layout_width="304dp"
-        android:layout_height="40dp"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
         android:background="@drawable/button_round_radius"
         android:backgroundTint="@color/danzlePink"
-        android:text="Create Account"
-        android:textColor="@color/white"
-        android:textSize="16dp"
         android:fontFamily="@font/inter_18pt_semibold"
         android:gravity="center"
-        app:layout_constraintStart_toStartOf="parent"
+        android:text="Create Account"
+        android:textColor="@color/white"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password2Layout"
-        android:layout_marginTop="80dp"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/guidelineButton"
+        app:layout_constraintWidth_percent="0.8" />
 
     <TextView
         android:id="@+id/backToSignin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:text="Sign In"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/createAccountButton"
-        android:layout_marginTop="5dp"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/createAccountButton" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

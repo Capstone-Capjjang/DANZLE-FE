@@ -12,196 +12,204 @@
         android:id="@+id/backButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="18dp"
         android:background="@drawable/vector"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="18dp"
-        android:layout_marginStart="18dp"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/alarmButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="18dp"
         android:background="@drawable/alarm"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="18dp"
-        android:layout_marginEnd="18dp" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineVerticalTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.1" />
 
     <ImageView
         android:id="@+id/profileIconImageView"
         android:layout_width="30dp"
         android:layout_height="30dp"
+        android:layout_marginTop="40dp"
         android:background="@drawable/profile2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/backButton"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="40dp"/>
+        app:layout_constraintStart_toStartOf="@id/guidelineVerticalTitle"
+        app:layout_constraintTop_toBottomOf="@id/backButton" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Edit Profile"
-        android:textSize="22dp"
+        android:layout_marginStart="15dp"
         android:fontFamily="@font/inter_18pt_medium"
-        app:layout_constraintStart_toEndOf="@id/profileIconImageView"
+        android:text="Edit Profile"
+        android:textSize="22sp"
         app:layout_constraintBottom_toBottomOf="@id/profileIconImageView"
-        android:layout_marginStart="15dp"/>
+        app:layout_constraintStart_toEndOf="@id/profileIconImageView" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineForProfileImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.15" />
+
+    <ImageView
         android:id="@+id/profileImage"
         android:layout_width="120dp"
         android:layout_height="120dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/profileIconImageView"
-        android:layout_marginTop="30dp">
-
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <ImageView
-        android:id="@+id/profileImageImageview"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
         android:background="@drawable/userpic"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/profileIconImageView"
-        android:layout_marginTop="30dp"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/guidelineForProfileImage" />
 
     <TextView
         android:id="@+id/originUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="username"
-        android:textSize="22dp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textSize="22sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/profileImage"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/profileImage" />
 
     <TextView
         android:id="@+id/originEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="email@email.com"
-        android:textSize="16dp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/originUsername"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/originUsername" />
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineForContent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.38" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/background"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:id="@+id/background"
-        app:layout_constraintTop_toBottomOf="@id/originEmail"
-        android:layout_marginTop="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@drawable/custom_radius_background"
         android:backgroundTint="@color/white"
-        android:background="@drawable/custom_radius_background">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="@id/guidelineForContent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/username"
-            android:layout_width="350dp"
+            android:layout_width="0dp"
             android:layout_height="70dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/background"
             android:layout_marginTop="40dp"
-            android:background="@drawable/shadow_background">
+            android:background="@drawable/shadow_background"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/background"
+            app:layout_constraintWidth_percent="0.85">
 
             <ImageView
                 android:id="@+id/usernameIcon"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
+                android:layout_marginStart="30dp"
                 android:background="@drawable/editprofileicon"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginStart="30dp"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/usernameTextview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Username"
-                android:textSize="16dp"
+                android:layout_marginStart="15dp"
                 android:fontFamily="@font/inter_18pt_medium"
-                app:layout_constraintStart_toEndOf="@id/usernameIcon"
-                app:layout_constraintTop_toTopOf="parent"
+                android:text="Username"
+                android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginStart="15dp"/>
+                app:layout_constraintStart_toEndOf="@id/usernameIcon"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/changePassword"
-            android:layout_width="350dp"
+            android:layout_width="0dp"
             android:layout_height="70dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/username"
             android:layout_marginTop="18dp"
-            android:background="@drawable/shadow_background">
+            android:background="@drawable/shadow_background"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/username"
+            app:layout_constraintWidth_percent="0.85">
 
             <ImageView
                 android:id="@+id/passwordIcon"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
+                android:layout_marginStart="30dp"
                 android:background="@drawable/passwordicon"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginStart="30dp"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/changePasswordTextview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Change Password"
-                android:textSize="16dp"
+                android:layout_marginStart="15dp"
                 android:fontFamily="@font/inter_18pt_medium"
-                app:layout_constraintStart_toEndOf="@id/passwordIcon"
-                app:layout_constraintTop_toTopOf="parent"
+                android:text="Change Password"
+                android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginStart="15dp"/>
+                app:layout_constraintStart_toEndOf="@id/passwordIcon"
+                app:layout_constraintTop_toTopOf="parent" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/delteAccount"
-            android:layout_width="350dp"
+            android:layout_width="0dp"
             android:layout_height="70dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/changePassword"
             android:layout_marginTop="18dp"
-            android:background="@drawable/shadow_background">
+            android:background="@drawable/shadow_background"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/changePassword"
+            app:layout_constraintWidth_percent="0.85">
 
             <ImageView
                 android:id="@+id/deleteIcon"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
+                android:layout_marginStart="30dp"
                 android:background="@drawable/deleteicon"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginStart="30dp"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/delteAccountTextview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Delete Account"
-                android:textSize="16dp"
+                android:layout_marginStart="15dp"
                 android:fontFamily="@font/inter_18pt_medium"
-                app:layout_constraintStart_toEndOf="@id/deleteIcon"
-                app:layout_constraintTop_toTopOf="parent"
+                android:text="Delete Account"
+                android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginStart="15dp"/>
+                app:layout_constraintStart_toEndOf="@id/deleteIcon"
+                app:layout_constraintTop_toTopOf="parent" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,65 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/custom_radius_background"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:background="@drawable/custom_radius_background">
 
-        <TextView
-            android:id="@+id/text1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Are you sure?"
-            android:textSize="30dp"
-            android:fontFamily="@font/inter_18pt_medium"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="30dp"/>
+    <TextView
+        android:id="@+id/text1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:fontFamily="@font/inter_18pt_medium"
+        android:text="Are you sure?"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/text2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Are you sure you want to logout from this account?\nYou can login back easily."
-            android:gravity="center"
-            android:textColor="@color/lightGray"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/text1"
-            android:layout_marginTop="10dp"/>
+    <TextView
+        android:id="@+id/text2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:text="Are you sure you want to logout from this account?\nYou can login back easily."
+        android:textColor="@color/lightGray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text1" />
 
-        <Button
-            android:id="@+id/cancelButton"
-            android:layout_width="304dp"
-            android:layout_height="48dp"
-            android:background="@drawable/button_round_radius"
-            android:backgroundTint="@color/danzlePink"
-            android:text="Cancel"
-            android:textSize="16dp"
-            android:textColor="@color/white"
-            android:fontFamily="@font/inter_18pt_medium"
-            android:gravity="center"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/text2"
-            android:layout_marginTop="20dp" />
+    <Button
+        android:id="@+id/cancelButton"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/button_round_radius"
+        android:backgroundTint="@color/danzlePink"
+        android:fontFamily="@font/inter_18pt_medium"
+        android:gravity="center"
+        android:text="Cancel"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text2"
+        app:layout_constraintWidth_percent="0.8" />
 
-        <Button
-            android:id="@+id/logoutButton"
-            android:layout_width="304dp"
-            android:layout_height="52dp"
-            android:background="@drawable/shadow_background_pink"
-            android:text="Logout"
-            android:textSize="16dp"
-            android:textColor="#F00303"
-            android:fontFamily="@font/inter_18pt_medium"
-            android:gravity="center"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cancelButton"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="20dp"/>
+    <Button
+        android:id="@+id/logoutButton"
+        android:layout_width="0dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/shadow_background"
+        android:fontFamily="@font/inter_18pt_medium"
+        android:gravity="center"
+        android:text="Logout"
+        android:textColor="#F00303"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cancelButton"
+        app:layout_constraintWidth_percent="0.8" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

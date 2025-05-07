@@ -12,45 +12,47 @@
         android:id="@+id/dancing"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Dancing"
+        android:layout_marginTop="100dp"
         android:fontFamily="@font/inter_18pt_bold"
-        android:textSize="38dp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:text="Dancing"
+        android:textSize="38sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="100dp"/>
-    
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <View
         android:id="@+id/line1"
-        android:layout_width="350dp"
+        android:layout_width="0dp"
         android:layout_height="3dp"
-        android:background="@color/grayText"
         android:layout_marginTop="30dp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:background="@color/grayText"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/dancing"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/dancing"
+        app:layout_constraintWidth_percent="0.85" />
 
 
     <View
         android:id="@+id/line2"
-        android:layout_width="350dp"
+        android:layout_width="0dp"
         android:layout_height="3dp"
+        android:layout_marginTop="30dp"
         android:background="@color/grayText"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/viewPager"
-        android:layout_marginTop ="30dp"/>
+        app:layout_constraintWidth_percent="0.85" />
 
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:clipToPadding="false"
+        android:layout_marginTop="30dp"
         android:clipChildren="false"
-        app:layout_constraintStart_toStartOf="parent"
+        android:clipToPadding="false"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/line1"
-        android:layout_marginTop="30dp"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/line1" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -29,28 +29,17 @@ import java.util.concurrent.TimeUnit
 
 
 object RetrofitApi {
-    private const val BASE_URL = "http://3.39.23.134:8080"
-    //private const val BASE_URL = "http://3.34.125.216:8080"
-    //private const val BASE_URL = "http://3.39.234.248:8080"
-    //private const val BASE_URL = "http://43.200.171.252:8080"
 
-    //private const val FLASK_BASE_URL = ""
+    private const val BASE_URL = "http://43.201.71.95:8080"
 
     private val client: OkHttpClient by lazy {
         OkHttpClient.Builder()
-//            .connectTimeout(100, TimeUnit.SECONDS) // 연결 타임아웃
-//            .readTimeout(100, TimeUnit.SECONDS)    // 응답 타임아웃
-//            .writeTimeout(100, TimeUnit.SECONDS)   // 전송 타임아웃
             .addInterceptor(
                 HttpLoggingInterceptor().apply {
                     level = HttpLoggingInterceptor.Level.BODY
                 }
             ).build()
     }
-
-//    private val gson = GsonBuilder()
-//        .setLenient()
-//        .create()
 
     private val danzleRetrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)

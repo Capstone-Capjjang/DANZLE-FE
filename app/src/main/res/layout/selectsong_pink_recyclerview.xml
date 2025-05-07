@@ -9,25 +9,25 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:background="@drawable/shadow_background_blue"
+        android:background="@drawable/shadow_background_pink"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/blueSongNumber"
+            android:id="@+id/pinkSongNumber"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:text="2"
+            android:text="1"
             android:textSize="21sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/blueSongImage"
+            android:id="@+id/pinkSongImage"
             android:layout_width="52dp"
             android:layout_height="52dp"
             android:layout_marginStart="20dp"
@@ -35,28 +35,29 @@
             android:scaleType="centerCrop"
             android:src="@drawable/albumcover"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/blueSongNumber"
+            app:layout_constraintStart_toEndOf="@id/pinkSongNumber"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/blueSongName"
+            android:id="@+id/pinkSongName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:text="Mantra"
             android:textSize="16sp"
-            app:layout_constraintStart_toEndOf="@id/blueSongImage"
-            app:layout_constraintTop_toTopOf="@id/blueSongImage" />
+            app:layout_constraintStart_toEndOf="@id/pinkSongImage"
+            app:layout_constraintTop_toTopOf="@id/pinkSongImage" />
 
         <TextView
-            android:id="@+id/blueSinger"
+            android:id="@+id/pinkSinger"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Jennie"
             android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="@id/blueSongImage"
-            app:layout_constraintStart_toStartOf="@id/blueSongName"
-            app:layout_constraintTop_toBottomOf="@id/blueSongName" />
+            app:layout_constraintBottom_toBottomOf="@id/pinkSongImage"
+            app:layout_constraintStart_toStartOf="@id/pinkSongName"
+            app:layout_constraintTop_toBottomOf="@id/pinkSongName" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

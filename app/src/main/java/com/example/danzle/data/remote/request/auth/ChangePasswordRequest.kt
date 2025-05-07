@@ -1,6 +1,5 @@
 package com.example.danzle.data.remote.request.auth
 
-import com.example.danzle.startPage.FirstStart
 import com.google.gson.annotations.SerializedName
 
 data class ChangePasswordRequest(

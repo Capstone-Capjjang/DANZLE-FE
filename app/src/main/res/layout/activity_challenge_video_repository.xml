@@ -11,61 +11,61 @@
         android:id="@+id/backButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="18dp"
         android:background="@drawable/vector"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="18dp"
-        android:layout_marginStart="18dp"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/alarm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="18dp"
         android:background="@drawable/alarm"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="18dp"
-        android:layout_marginEnd="18dp" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/scoreIcon"
         android:layout_width="30dp"
         android:layout_height="30dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="40dp"
         android:background="@drawable/video2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/vector"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="40dp"/>
+        app:layout_constraintTop_toBottomOf="@id/backButton" />
 
     <TextView
         android:id="@+id/challengeTitleTextview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="challenge"
-        android:textSize="24dp"
+        android:layout_marginStart="15dp"
         android:fontFamily="@font/inter_18pt_medium"
-        app:layout_constraintStart_toEndOf="@id/scoreIcon"
+        android:text="challenge"
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="@id/scoreIcon"
-        android:layout_marginStart="15dp"/>
+        app:layout_constraintStart_toEndOf="@id/scoreIcon" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/challengeVideo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/challengeTitleTextview"
-        android:layout_marginTop="25dp">
+        android:layout_marginTop="25dp"
+        app:layout_constraintTop_toBottomOf="@id/challengeTitleTextview">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/challengeVideoRecyclerview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            app:spanCount="3"
             android:layout_margin="10dp"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:spanCount="3" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

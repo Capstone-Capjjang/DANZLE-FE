@@ -91,7 +91,7 @@ class HighlightPractice : AppCompatActivity() {
         binding.playerView.player = player
         // 실루엣 영상 화면에 꽉 채우게
         binding.playerView.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_ZOOM
-        binding.playerView.alpha = 0.1f
+        binding.playerView.alpha = 0.3f
         binding.playerView.post {
             binding.playerView.bringToFront()
         }

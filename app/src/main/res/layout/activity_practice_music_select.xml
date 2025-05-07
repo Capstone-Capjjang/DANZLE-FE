@@ -11,71 +11,81 @@
         android:id="@+id/practice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="practice"
-        android:textSize="22dp"
-        android:textColor="@color/lightPink"
+        android:layout_marginTop="10dp"
         android:fontFamily="@font/inter_18pt_bold"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/backButton"
+        android:text="practice"
+        android:textColor="@color/lightPink"
+        android:textSize="22sp"
         app:layout_constraintEnd_toStartOf="@+id/alarm"
-        android:layout_marginTop="10dp"/>
+        app:layout_constraintStart_toEndOf="@+id/backButton"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/backButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/vector"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/practice"
+        android:layout_marginStart="18dp"
         android:layout_marginTop="18dp"
-        android:layout_marginStart="18dp"/>
+        android:background="@drawable/vector"
+        app:layout_constraintBottom_toBottomOf="@id/practice"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/alarm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="18dp"
         android:background="@drawable/alarm"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="18dp"
-        android:layout_marginEnd="18dp" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineVertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.1" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/searchBar"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="45dp"
-        android:orientation="horizontal"
+        android:layout_marginStart="17dp"
+        android:layout_marginTop="35dp"
+        android:layout_marginEnd="17dp"
         android:background="@drawable/search_background"
         android:backgroundTint="#FFE2FC"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/practice"
-        android:layout_marginTop="35dp"
-        android:layout_marginStart="17dp"
-        android:layout_marginEnd="17dp">
+        app:layout_constraintWidth_percent="0.9">
 
         <EditText
             android:id="@+id/searchSong"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:background="@null"
             android:hint="Find Playlist"
             android:textColorHint="@color/grayText"
             android:textSize="13dp"
-            android:background="@null"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="@id/searchImage"
-            android:layout_marginStart="15dp" />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <ImageView
             android:id="@+id/searchImage"
             android:layout_width="18dp"
             android:layout_height="18dp"
-            android:background="@drawable/search_icon"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginStart="10dp"
-            android:layout_marginEnd="16dp"
             android:layout_marginTop="15dp"
-            android:layout_marginBottom="15dp"/>
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/search_icon"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -83,45 +93,44 @@
         android:id="@+id/imageBanner"
         android:layout_width="350dp"
         android:layout_height="130dp"
+        android:layout_marginTop="30dp"
         android:src="@drawable/bannerimage"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/searchBar"
-        android:layout_marginTop="30dp"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/searchBar" />
 
     <TextView
         android:id="@+id/textMusic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="35dp"
         android:text="music"
-        android:textSize="22dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageBanner"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="30dp"/>
+        android:textSize="22sp"
+        app:layout_constraintStart_toStartOf="@id/guidelineVertical"
+        app:layout_constraintTop_toBottomOf="@+id/imageBanner" />
 
     <View
         android:id="@+id/line"
         android:layout_width="365dp"
         android:layout_height="2dp"
+        android:layout_marginStart="17dp"
+        android:layout_marginTop="8dp"
         android:background="@color/gray"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textMusic"
-        android:layout_marginStart="17dp"
-        android:layout_marginTop="8dp"/>
+        app:layout_constraintTop_toBottomOf="@id/textMusic" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/songListRecyclerViewLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/line"
+        android:layout_marginTop="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginTop="10dp">
+        app:layout_constraintTop_toBottomOf="@id/line">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/songListRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
