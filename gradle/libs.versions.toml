@@ -11,8 +11,8 @@ activity = "1.10.1"
 constraintlayout = "2.2.1"
 cameraView = "1.4.2"
 engageCore = "1.5.8"
-girdLayout = "1.0.0"
-media3 = "1.6.0"
+gridLayout = "1.1.0"
+media3 = "1.6.1"
 glide = "4.16.0"
 retrofit2 = "2.11.0"
 okhttp3 = "4.12.0"
@@ -35,21 +35,21 @@ androidx-camera-lifecycle = { group = "androidx.camera", name = "camera-lifecycl
 androidx-camera-video = { group = "androidx.camera", name = "camera-video", version.ref = "cameraView" }
 
 engage-core = { group = "com.google.android.engage", name = "engage-core", version.ref = "engageCore" }
-androidx-gridlayout = {group = "androidx.gridlayout", name = "gridlayout", version = "gridLayout"}
+androidx-gridlayout = {group = "androidx.gridlayout", name = "gridlayout", version.ref = "gridLayout"}
 
-androidx-media3-exoplayer = {group = "androidx.media3", name = "media3-explayer", version = "media3"}
-androidx-media3-dash = {group ="androidx.media3", name = "media3-expoplayer-dash", version = "media3"}
-androidx-media3-ui = {group = "androidx.media3", name = "media3-ui", version = "media3"}
+androidx-media3-exoplayer = {group = "androidx.media3", name = "media3-explayer", version.ref = "media3"}
+androidx-media3-dash = {group ="androidx.media3", name = "media3-expoplayer-dash", version.ref = "media3"}
+androidx-media3-ui = {group = "androidx.media3", name = "media3-ui", version.ref = "media3"}
 
-glide = {group = "com.github.bumptech.glide", name = "glide", version = "glide"}
-glide-compiler = {group = "com.github.bumptech.glide", name = "compiler", version = "glide"}
+glide = {group = "com.github.bumptech.glide", name = "glide", version.ref = "glide"}
+glide-compiler = {group = "com.github.bumptech.glide", name = "compiler", version.ref = "glide"}
 
-retrofit2 = {group = "com.squareup.retrofit2", name = "retrofit", version = "retrofit2"}
-retrofit2-converter-gson = {group = "com.squareup.retrofit2", name = "converter-gson", version = "retrofit2"}
-retrofit2-adapter-rxjava = {group = "com.squareup.retrofit2", name = "adapter-rxjava", version = "retrofit2"}
+retrofit2 = {group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit2"}
+retrofit2-converter-gson = {group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit2"}
+retrofit2-adapter-rxjava = {group = "com.squareup.retrofit2", name = "adapter-rxjava", version.ref = "retrofit2"}
 
-okhttp3 = {group = "com.squareup.okhttp3", name = "okhttp", version = "okhttp3"}
-okhttp3-logging-interceptor = {group = "com.squareup.okhttp3", name = "logging-interceptor", version = "okhttp3"}
+okhttp3 = {group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp3"}
+okhttp3-logging-interceptor = {group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp3"}
 
 
 [plugins]
