@@ -65,37 +65,34 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-    // including the function of DialogFragment
-    implementation("com.google.android.material:material:1.13.0-alpha11")
-
-    // GridLayout
-    implementation ("androidx.gridlayout:gridlayout:1.0.0")
+    implementation(libs.androidx.gridlayout)
 
     // 서버 통신
-    implementation ("com.squareup.retrofit2:retrofit:2.11.0")
-    implementation ("com.squareup.retrofit2:converter-gson:2.11.0")
-    implementation ("com.squareup.retrofit2:adapter-rxjava2:2.9.0")
-
-    implementation("com.squareup.okhttp3:okhttp:4.12.0")
-    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+    implementation(libs.retrofit2)
+    implementation(libs.retrofit2.converter.gson)
+    implementation(libs.retrofit2.adapter.rxjava)
+    implementation(libs.okhttp3)
+    implementation(libs.okhttp3.logging.interceptor)
 
     // ExoPlayer
     // release note (https://github.com/androidx/media/blob/release/RELEASENOTES.md)
-    implementation("androidx.media3:media3-exoplayer:1.6.0")
-    implementation("androidx.media3:media3-exoplayer-dash:1.6.0")
-    implementation("androidx.media3:media3-ui:1.6.0")
+    implementation(libs.androidx.media3.exoplayer)
+    implementation(libs.androidx.media3.dash)
+    implementation(libs.androidx.media3.ui)
 
     // Glide
-    implementation ("com.github.bumptech.glide:glide:4.16.0")
-    kapt ("com.github.bumptech.glide:compiler:4.16.0")
-
+    implementation(libs.glide)
+    kapt(libs.glide.compiler)
 
     // CameraX
-    implementation ("androidx.camera:camera-core:1.4.2")
-    implementation ("androidx.camera:camera-camera2:1.4.2")
-    implementation ("androidx.camera:camera-lifecycle:1.4.2")
-    implementation ("androidx.camera:camera-video:1.4.2")
+    implementation(libs.androidx.camera.view)
+    implementation(libs.androidx.camera.extensions)
+    implementation(libs.androidx.camera.core)
+    implementation(libs.androidx.camera.camera)
+    implementation(libs.androidx.camera.lifecycle)
+    implementation(libs.androidx.camera.video)
 
-    implementation ("androidx.camera:camera-view:1.4.2")
-    implementation ("androidx.camera:camera-extensions:1.4.2")
+//    implementation ("com.amazonaws:aws-android-sdk-mobile-client:2.13.5")
+//    implementation ("com.amazonaws:aws-android-sdk-cognito:2.13.5")
+//    implementation ("com.amazonaws:aws-android-sdk-s3:2.13.5")
 }

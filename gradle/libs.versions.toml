@@ -1,16 +1,21 @@
 [versions]
 agp = "8.7.3"
-kotlin = "1.9.24"
-coreKtx = "1.15.0"
+kotlin = "2.1.20"
+coreKtx = "1.16.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 appcompat = "1.7.0"
 material = "1.12.0"
-activity = "1.9.3"
-constraintlayout = "2.2.0"
+activity = "1.10.1"
+constraintlayout = "2.2.1"
 cameraView = "1.4.2"
-engageCore = "1.5.7"
+engageCore = "1.5.8"
+girdLayout = "1.0.0"
+media3 = "1.6.0"
+glide = "4.16.0"
+retrofit2 = "2.11.0"
+okhttp3 = "4.12.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -21,8 +26,31 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+
 androidx-camera-view = { group = "androidx.camera", name = "camera-view", version.ref = "cameraView" }
+androidx-camera-extensions = { group = "androidx.camera", name = "camera-extensions", version.ref = "cameraView" }
+androidx-camera-core = { group = "androidx.camera", name = "camera-core", version.ref = "cameraView" }
+androidx-camera-camera = { group = "androidx.camera", name = "camera-camera", version.ref = "cameraView" }
+androidx-camera-lifecycle = { group = "androidx.camera", name = "camera-lifecycle", version.ref = "cameraView" }
+androidx-camera-video = { group = "androidx.camera", name = "camera-video", version.ref = "cameraView" }
+
 engage-core = { group = "com.google.android.engage", name = "engage-core", version.ref = "engageCore" }
+androidx-gridlayout = {group = "androidx.gridlayout", name = "gridlayout", version = "gridLayout"}
+
+androidx-media3-exoplayer = {group = "androidx.media3", name = "media3-explayer", version = "media3"}
+androidx-media3-dash = {group ="androidx.media3", name = "media3-expoplayer-dash", version = "media3"}
+androidx-media3-ui = {group = "androidx.media3", name = "media3-ui", version = "media3"}
+
+glide = {group = "com.github.bumptech.glide", name = "glide", version = "glide"}
+glide-compiler = {group = "com.github.bumptech.glide", name = "compiler", version = "glide"}
+
+retrofit2 = {group = "com.squareup.retrofit2", name = "retrofit", version = "retrofit2"}
+retrofit2-converter-gson = {group = "com.squareup.retrofit2", name = "converter-gson", version = "retrofit2"}
+retrofit2-adapter-rxjava = {group = "com.squareup.retrofit2", name = "adapter-rxjava", version = "retrofit2"}
+
+okhttp3 = {group = "com.squareup.okhttp3", name = "okhttp", version = "okhttp3"}
+okhttp3-logging-interceptor = {group = "com.squareup.okhttp3", name = "logging-interceptor", version = "okhttp3"}
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
