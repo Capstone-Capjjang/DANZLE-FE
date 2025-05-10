@@ -46,7 +46,7 @@ class HighlightPracticeFinish : AppCompatActivity() {
             .load(selectedSong?.coverImagePath)
             .into(binding.songImage)
 
-        binding.tryagainButton.setOnClickListener {
+        binding.tryAgainButton.setOnClickListener {
             startActivity(Intent(this, HighlightPractice::class.java))
             intent.putExtra("selected song", selectedSong)
             startActivity(intent)

@@ -43,7 +43,7 @@ class FullFinish : AppCompatActivity() {
             .load(selectedSong?.coverImagePath)
             .into(binding.songImage)
 
-        binding.tryagainButton.setOnClickListener {
+        binding.tryAgainButton.setOnClickListener {
             startActivity(Intent(this, FullPractice::class.java))
         }
 

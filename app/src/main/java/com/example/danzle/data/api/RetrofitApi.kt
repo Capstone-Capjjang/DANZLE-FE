@@ -29,8 +29,8 @@ import java.lang.reflect.Type
 
 object RetrofitApi {
 
-    private const val BASE_URL = "http://43.201.71.95:8080"
-
+    private const val BASE_URL = "http://54.180.117.41:8080"
+    //54.180.117.41
     private val client: OkHttpClient by lazy {
         OkHttpClient.Builder()
             .addInterceptor(
