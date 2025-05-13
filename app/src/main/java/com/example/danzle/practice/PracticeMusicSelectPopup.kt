@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.camera.core.processing.SurfaceProcessorNode.In
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
@@ -38,11 +37,6 @@ class PracticeMusicSelectPopup : AppCompatActivity() {
             insets
         }
 
-//        Log.d("popup", selectedSong.toString())
-
-        // check log
-//        Log.d("Popup", "제목: ${selectedSong?.title}, 아티스트: ${selectedSong?.artist}")
-
         // getting some data from PracticeMusicSelect
         binding.songName.text = selectedSong?.title
         binding.artist.text = selectedSong?.artist
@@ -68,7 +62,5 @@ class PracticeMusicSelectPopup : AppCompatActivity() {
         binding.cancelButton.setOnClickListener {
             startActivity(Intent(this@PracticeMusicSelectPopup, PracticeMusicSelect::class.java))
         }
-
-
     }
 }

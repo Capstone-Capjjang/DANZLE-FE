@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
@@ -42,7 +43,6 @@ import com.example.danzle.databinding.ActivityHighlightPracticeBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.concurrent.ExecutorService
 
 
 class HighlightPractice : AppCompatActivity() {
@@ -53,13 +53,12 @@ class HighlightPractice : AppCompatActivity() {
 
     private lateinit var binding: ActivityHighlightPracticeBinding
 
+    // ExoPlayer는 Google이 만든 Android용 미디어 플레이어
+    // player는 ExoPlayer 객체를 가리킨다.
     lateinit var player: ExoPlayer
 
     private var videoCapture: VideoCapture<Recorder>? = null
     private var recording: Recording? = null
-    private var activeRecording: Recording? = null
-
-    private lateinit var cameraExecutor: ExecutorService
 
     private val selectedSong: PracticeMusicSelectResponse? by lazy {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -127,21 +126,23 @@ class HighlightPractice : AppCompatActivity() {
             )
         }
 
-
-        // Retrofit request
-        val songId = 14L
-        retrofitHighlightPractice(songId)
-//        songId?.let {
-//            retrofitHighlightPractice(it)
-//        } ?: run {
-//            Toast.makeText(this, "선택한 곡 정보가 없습니다.", Toast.LENGTH_SHORT).show()
-//        }
+        selectedSong?.songId?.let { songId ->
+            retrofitHighlightPractice(songId)
+        } ?: run {
+            Toast.makeText(this, "선택한 곡 정보가 없습니다.", Toast.LENGTH_SHORT).show()
+        }
     }
 
-
+    private fun allPermissionGranted() = REQUIRED_PERMISSIONS.all {
+        ContextCompat.checkSelfPermission(
+            baseContext, it
+        ) == PackageManager.PERMISSION_GRANTED
+    }
 
     // 필요한 권한 요청
     // 앱이 카메라를 열려면 사용자의 권한이 필요하고 오디오를 녹음하려면 마이크 권한도 필요하다.
+    // 자동 호출되는 콜백 함수
+    // 시스템이 권한을 요청 -> 사용자가 응답 -> 자동으로 onRequestPermissionsResult 호출
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<String>, grantResults: IntArray
     ) {
@@ -165,6 +166,7 @@ class HighlightPractice : AppCompatActivity() {
     private fun startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
 
+        // 카메라 준비 완료시 실행할 콜백 등록
         cameraProviderFuture.addListener({
             // Used to bind the lifecycle of cameras to the lifecycle owner
             val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
@@ -183,7 +185,7 @@ class HighlightPractice : AppCompatActivity() {
             videoCapture = VideoCapture.withOutput(recorder)
 
 
-            // Select back camera as a default
+            // Select front camera as a default
             val cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
 
             try {
@@ -192,7 +194,7 @@ class HighlightPractice : AppCompatActivity() {
 
                 // Bind use cases to camera
                 cameraProvider.bindToLifecycle(
-                    this, cameraSelector, preview
+                    this, cameraSelector, preview, videoCapture
                 )
 
             } catch (exc: Exception) {
@@ -200,12 +202,6 @@ class HighlightPractice : AppCompatActivity() {
             }
 
         }, ContextCompat.getMainExecutor(this))
-    }
-
-    private fun allPermissionGranted() = REQUIRED_PERMISSIONS.all {
-        ContextCompat.checkSelfPermission(
-            baseContext, it
-        ) == PackageManager.PERMISSION_GRANTED
     }
 
     override fun onStart() {
@@ -217,7 +213,13 @@ class HighlightPractice : AppCompatActivity() {
         super.onStop()
         player.playWhenReady = false
     }
+/*
+    player.playWhenReady = true
+    - 재생 준비(버퍼링 등)가 완료되면 자동으로 플레이를 시작해라
 
+    player.playWhenReady = false
+    - 준비가 되어도 자동으로 재생하지 말고 대기 상태로 있어라
+ */
     override fun onDestroy() {
         super.onDestroy()
         player.release()
@@ -272,7 +274,6 @@ class HighlightPractice : AppCompatActivity() {
     private fun retrofitSilhouetteVideo(authHeader: String, songName: String) {
         Log.d("DEBUG", "Sending request to silhouette API")
         Log.d("DEBUG", "authHeader = $authHeader")
-
 
         val retrofit = RetrofitApi.getPracticeSilhouetteInstance()
         retrofit.getPracticeSilhouette(authHeader, songName)
@@ -347,6 +348,8 @@ class HighlightPractice : AppCompatActivity() {
                     }
                     is VideoRecordEvent.Finalize -> {
                         if (!event.hasError()) {
+                            val videoUri = event.outputResults.outputUri
+                            uploadVideoToServer(videoUri)
                             Log.d("Recording", "녹화 완료: ${event.outputResults.outputUri}")
                         } else {
                             Log.e("Recording", "녹화 오류: ${event.error}")
@@ -377,4 +380,8 @@ class HighlightPractice : AppCompatActivity() {
                 }
             }.toTypedArray()
     }
+}
+
+private fun HighlightPractice.uploadVideoToServer(videoUri: Uri) {
+
 }

@@ -14,6 +14,7 @@ import com.example.danzle.myprofile.myVideo.PracticeVideoRepositoryService
 import com.example.danzle.practice.FullPracticeService
 import com.example.danzle.practice.HighlightPracticeService
 import com.example.danzle.practice.PracticeMusicSelectService
+import com.example.danzle.practice.SaveVideoService
 import com.example.danzle.practice.SilhouettePracticeService
 import com.example.danzle.startPage.CreateAccountService
 import com.example.danzle.startPage.ForgotPassword1Service
@@ -30,6 +31,7 @@ import java.lang.reflect.Type
 object RetrofitApi {
 
     private const val BASE_URL = "http://54.180.117.41:8080"
+
     //54.180.117.41
     private val client: OkHttpClient by lazy {
         OkHttpClient.Builder()
@@ -162,6 +164,15 @@ object RetrofitApi {
         return mediapipeService
     }
 
+    // save videio
+    private val saveVideoService: SaveVideoService by lazy {
+        danzleRetrofit.create(SaveVideoService::class.java)
+    }
+
+    fun getSaveVideoInstance(): SaveVideoService {
+        return saveVideoService
+    }
+
     // ForgotPassword1
     private val forgotPassword1Service: ForgotPassword1Service by lazy {
         danzleRetrofit.create(ForgotPassword1Service::class.java)
@@ -172,38 +183,57 @@ object RetrofitApi {
     }
 
     // MyProfile, EditProfile
+    private val myProfileService: MyProfileService by lazy {
+        danzleRetrofit.create(MyProfileService::class.java)
+    }
+
     fun getMyProfileServiceInstance(): MyProfileService {
-        return danzleRetrofit.create(MyProfileService::class.java)
+        return myProfileService
     }
 
     // ChangeUsername
+    private val changeUserNameService: ChangeUsernameService by lazy {
+        danzleRetrofit.create(ChangeUsernameService::class.java)
+    }
+
     fun getChangeUsernameInstance(): ChangeUsernameService {
-        return danzleRetrofit.create(ChangeUsernameService::class.java)
+        return changeUserNameService
     }
 
     // ChangePassword
-    fun getChangePasswordInstance(): ChangePasswordService {
-        return danzleRetrofit.create(ChangePasswordService::class.java)
+    private val changePasswordService: ChangePasswordService by lazy {
+        danzleRetrofit.create(ChangePasswordService::class.java)
     }
 
-    // save videio
-//    fun getSaveVideoInstance(): SaveVideoService {
-//        return danzleRetrofit.create(SaveVideoService::class.java)
-//    }
+    fun getChangePasswordInstance(): ChangePasswordService {
+        return changePasswordService
+    }
 
     // video main repository
+    private val myVideoService: MyVideoService by lazy {
+        danzleRetrofit.create(MyVideoService::class.java)
+    }
+
     fun getMyVideoInstance(): MyVideoService {
-        return danzleRetrofit.create(MyVideoService::class.java)
+        return myVideoService
     }
 
     // practice repository
+    private val practiceVideoRepositoryService: PracticeVideoRepositoryService by lazy {
+        danzleRetrofit.create(PracticeVideoRepositoryService::class.java)
+    }
+
     fun getPracticeVideoRepositoryInstance(): PracticeVideoRepositoryService {
-        return danzleRetrofit.create(PracticeVideoRepositoryService::class.java)
+        return practiceVideoRepositoryService
     }
 
     // challenge repository
+    private val challengeVideoRepositoryService: ChallengeVideoRepositoryService by lazy {
+        danzleRetrofit.create(ChallengeVideoRepositoryService::class.java)
+    }
+
     fun getChallengeVideoRepositoryInstance(): ChallengeVideoRepositoryService {
-        return danzleRetrofit.create(ChallengeVideoRepositoryService::class.java)
+        return challengeVideoRepositoryService
     }
 
 }

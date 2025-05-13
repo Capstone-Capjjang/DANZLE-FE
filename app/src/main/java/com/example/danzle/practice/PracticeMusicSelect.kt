@@ -54,16 +54,12 @@ class PracticeMusicSelect : AppCompatActivity(), PracticeMusicSelectRVAdapter.Re
 
 
     override fun onItemClick(position: Int) {
-
         val selectedSong = musicList[position]
         val intent = Intent(this, PracticeMusicSelectPopup::class.java)
-//        Log.d("MusicSelect", "전달할 데이터: $selectedSong")
+
+        // selecteSong으로 객체 전체를 전달
         intent.putExtra("selected song", selectedSong)
-        // intent.putExtra("songID", selectedSong.)
-        // id 받아오기
-
         startActivity(intent)
-
     }
 
     // recyclerview adapter

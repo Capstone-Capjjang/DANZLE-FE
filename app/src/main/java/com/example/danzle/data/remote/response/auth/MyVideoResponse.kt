@@ -11,5 +11,6 @@ data class MyVideoResponse (
 
 enum class VideoMode{
     PRACTICE,
+    ACCURACY,
     CHALLENGE
 }
