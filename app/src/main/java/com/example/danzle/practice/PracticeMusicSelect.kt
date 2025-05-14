@@ -11,7 +11,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.danzle.R
 import com.example.danzle.data.api.RetrofitApi
-import com.example.danzle.data.remote.response.auth.PracticeMusicSelectResponse
+import com.example.danzle.data.remote.response.auth.MusicSelectResponse
 import com.example.danzle.databinding.ActivityPracticeMusicSelectBinding
 import retrofit2.Call
 import retrofit2.Callback
@@ -20,9 +20,7 @@ import retrofit2.Response
 class PracticeMusicSelect : AppCompatActivity(), PracticeMusicSelectRVAdapter.RecyclerViewEvent {
 
     private lateinit var binding: ActivityPracticeMusicSelectBinding
-    private lateinit var musicList: ArrayList<PracticeMusicSelectResponse>
-
-    var songs: String = ""
+    private lateinit var musicList: ArrayList<MusicSelectResponse>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,19 +61,19 @@ class PracticeMusicSelect : AppCompatActivity(), PracticeMusicSelectRVAdapter.Re
     }
 
     // recyclerview adapter
-    private fun setMusicRecyclerviewAdapter(list: ArrayList<PracticeMusicSelectResponse>) {
+    private fun setMusicRecyclerviewAdapter(list: ArrayList<MusicSelectResponse>) {
         val adapter = PracticeMusicSelectRVAdapter(list, this)
         binding.songListRecyclerView.adapter = adapter
     }
 
     // about retrofit
     private fun retrofitPracticeMusicSelect() {
-        val retrofit = RetrofitApi.getPracticeMusicSelectInstance()
-        retrofit.getPracticeMusicSelect()
-            .enqueue(object : Callback<List<PracticeMusicSelectResponse>> {
+        val retrofit = RetrofitApi.getMusicSelectInstance()
+        retrofit.getMusicSelect()
+            .enqueue(object : Callback<List<MusicSelectResponse>> {
                 override fun onResponse(
-                    call: Call<List<PracticeMusicSelectResponse>>,
-                    response: Response<List<PracticeMusicSelectResponse>>
+                    call: Call<List<MusicSelectResponse>>,
+                    response: Response<List<MusicSelectResponse>>
                 ) {
                     if (response.isSuccessful) {
                         musicList = ArrayList(response.body() ?: emptyList())
@@ -95,7 +93,7 @@ class PracticeMusicSelect : AppCompatActivity(), PracticeMusicSelectRVAdapter.Re
                 }
 
                 override fun onFailure(
-                    call: Call<List<PracticeMusicSelectResponse>>,
+                    call: Call<List<MusicSelectResponse>>,
                     t: Throwable
                 ) {
 //                    Log.d("MusicSelect", "MusicSelect / Error: ${t.message}")

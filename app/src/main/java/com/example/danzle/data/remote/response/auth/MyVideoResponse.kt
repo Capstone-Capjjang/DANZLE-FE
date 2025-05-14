@@ -1,5 +1,7 @@
 package com.example.danzle.data.remote.response.auth
 
+import com.example.danzle.enum.VideoMode
+
 data class MyVideoResponse (
     val videoId: Long,
     val songTitle: String,
@@ -8,9 +10,3 @@ data class MyVideoResponse (
     val songImgPath: String,
     val videoPath: String
 )
-
-enum class VideoMode{
-    PRACTICE,
-    ACCURACY,
-    CHALLENGE
-}

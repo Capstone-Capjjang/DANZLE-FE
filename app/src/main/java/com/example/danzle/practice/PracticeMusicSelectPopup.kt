@@ -10,16 +10,17 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
 import com.example.danzle.R
-import com.example.danzle.data.remote.response.auth.PracticeMusicSelectResponse
+import com.example.danzle.data.remote.response.auth.MusicSelectResponse
 import com.example.danzle.databinding.ActivityMusicSelectPopupBinding
+import com.example.danzle.enum.PracticeMode
 
 class PracticeMusicSelectPopup : AppCompatActivity() {
 
     private lateinit var binding: ActivityMusicSelectPopupBinding
 
-    private val selectedSong: PracticeMusicSelectResponse? by lazy {
+    private val selectedSong: MusicSelectResponse? by lazy {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            intent.getParcelableExtra("selected song", PracticeMusicSelectResponse::class.java)
+            intent.getParcelableExtra("selected song", MusicSelectResponse::class.java)
         } else {
             @Suppress("DEPRECATION")
             intent.getParcelableExtra("selected song")
@@ -45,17 +46,17 @@ class PracticeMusicSelectPopup : AppCompatActivity() {
             .into(binding.songImage)
 
 
-        // click <full> button -> FullPractice activity
         binding.full.setOnClickListener {
-            val intent = Intent(this@PracticeMusicSelectPopup, FullPractice::class.java)
+            val intent = Intent(this@PracticeMusicSelectPopup, PracticeMain::class.java)
             intent.putExtra("selected song", selectedSong)
+            intent.putExtra("mode", PracticeMode.FULL.name)
             startActivity(intent)
         }
 
-        // click <highlight> button -> Highlight activity
         binding.highlight.setOnClickListener {
-            val intent = Intent(this@PracticeMusicSelectPopup, HighlightPractice::class.java)
+            val intent = Intent(this@PracticeMusicSelectPopup, PracticeMain::class.java)
             intent.putExtra("selected song", selectedSong)
+            intent.putExtra("mode", PracticeMode.HIGHLIGHT.name)
             startActivity(intent)
         }
 

@@ -5,14 +5,14 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".practice.FullFinish">
+    tools:context=".practice.PracticeFinish">
 
     <TextView
-        android:id="@+id/highlight"
+        android:id="@+id/titlePracticeFinish"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/inter_18pt_bold"
-        android:text="full"
+        android:text="highlight"
         android:textColor="@color/lightPink"
         android:textSize="22sp"
         app:layout_constraintBottom_toBottomOf="@id/backButton"

@@ -1,21 +1,18 @@
 package com.example.danzle.data.api
 
-import com.example.danzle.correction.CorrectionMusicSelectService
+import com.example.danzle.commonService.MusicSelectService
+import com.example.danzle.commonService.SilhouetteService
+import com.example.danzle.correction.CorrectionFinish
 import com.example.danzle.correction.CorrectionService
-import com.example.danzle.correction.MediapipeService
 import com.example.danzle.correction.PoseAnalysis
-import com.example.danzle.correction.SilhouetteCorrectionService
 import com.example.danzle.myprofile.MyProfileService
 import com.example.danzle.myprofile.editProfile.ChangePasswordService
 import com.example.danzle.myprofile.editProfile.ChangeUsernameService
 import com.example.danzle.myprofile.myVideo.ChallengeVideoRepositoryService
 import com.example.danzle.myprofile.myVideo.MyVideoService
 import com.example.danzle.myprofile.myVideo.PracticeVideoRepositoryService
-import com.example.danzle.practice.FullPracticeService
-import com.example.danzle.practice.HighlightPracticeService
-import com.example.danzle.practice.PracticeMusicSelectService
-import com.example.danzle.practice.SaveVideoService
-import com.example.danzle.practice.SilhouettePracticeService
+import com.example.danzle.practice.PracticeService
+import com.example.danzle.commonService.SaveVideoService
 import com.example.danzle.startPage.CreateAccountService
 import com.example.danzle.startPage.ForgotPassword1Service
 import com.example.danzle.startPage.SignInsService
@@ -83,49 +80,23 @@ object RetrofitApi {
         return createAccountService
     }
 
-    // PracticeMusicSelect
-    private val practiceMusicSelectService: PracticeMusicSelectService by lazy {
-        danzleRetrofit.create(PracticeMusicSelectService::class.java)
+    // MusicSelect
+    private val musicSelectService: MusicSelectService by lazy {
+        danzleRetrofit.create(MusicSelectService::class.java)
     }
 
-    fun getPracticeMusicSelectInstance(): PracticeMusicSelectService {
-        return practiceMusicSelectService
+    fun getMusicSelectInstance(): MusicSelectService {
+        return musicSelectService
     }
 
-    // CorrectionMusicSelect
-    private val correctionMusicSelectService: CorrectionMusicSelectService by lazy {
-        danzleRetrofit.create(CorrectionMusicSelectService::class.java)
+
+    // Practice
+    private val practiceService: PracticeService by lazy {
+        danzleRetrofit.create(PracticeService::class.java)
     }
 
-    fun getCorrectionMusicSelectInstance(): CorrectionMusicSelectService {
-        return correctionMusicSelectService
-    }
-
-    // HighlightPractice
-    private val highlightPracticeService: HighlightPracticeService by lazy {
-        danzleRetrofit.create(HighlightPracticeService::class.java)
-    }
-
-    fun getHighlightPracticeInstance(): HighlightPracticeService {
-        return highlightPracticeService
-    }
-
-    // FullPractice
-    private val fullPracticeService: FullPracticeService by lazy {
-        danzleRetrofit.create(FullPracticeService::class.java)
-    }
-
-    fun getFullPracticeInstance(): FullPracticeService {
-        return fullPracticeService
-    }
-
-    // PracticeSilhouette
-    private val silhouettePracticeService: SilhouettePracticeService by lazy {
-        danzleRetrofit.create(SilhouettePracticeService::class.java)
-    }
-
-    fun getPracticeSilhouetteInstance(): SilhouettePracticeService {
-        return silhouettePracticeService
+    fun getPracticeInstance(): PracticeService {
+        return practiceService
     }
 
     // Correction
@@ -137,13 +108,13 @@ object RetrofitApi {
         return correctionService
     }
 
-    // SilhouetteCorrection
-    private val silhouetteCorrectionService: SilhouetteCorrectionService by lazy {
-        danzleRetrofit.create(SilhouetteCorrectionService::class.java)
+    // Silhouette
+    private val SilhouetteService: SilhouetteService by lazy {
+        danzleRetrofit.create(SilhouetteService::class.java)
     }
 
-    fun getSilhouetteCorrectionInstance(): SilhouetteCorrectionService {
-        return silhouetteCorrectionService
+    fun getSilhouetteInstance(): SilhouetteService {
+        return SilhouetteService
     }
 
     // sending pose information
@@ -155,15 +126,6 @@ object RetrofitApi {
         return poseAnalysisService
     }
 
-    // Mediapipe
-    private val mediapipeService: MediapipeService by lazy {
-        danzleRetrofit.create(MediapipeService::class.java)
-    }
-
-    fun getMediapipeInstance(): MediapipeService {
-        return mediapipeService
-    }
-
     // save videio
     private val saveVideoService: SaveVideoService by lazy {
         danzleRetrofit.create(SaveVideoService::class.java)
@@ -171,6 +133,15 @@ object RetrofitApi {
 
     fun getSaveVideoInstance(): SaveVideoService {
         return saveVideoService
+    }
+
+    // detail feedback
+    private val correctionDetailFeedback: CorrectionService by lazy {
+        danzleRetrofit.create(CorrectionFinish::class.java)
+    }
+
+    fun getCorrectionDetailFeedbackInstance(): CorrectionService {
+        return correctionDetailFeedback
     }
 
     // ForgotPassword1

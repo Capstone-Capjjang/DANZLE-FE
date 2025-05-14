@@ -1,6 +1,5 @@
 package com.example.danzle.startPage
 
-import android.content.Context
 import android.content.Intent
 import android.graphics.Paint
 import android.os.Bundle
@@ -16,7 +15,6 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.doAfterTextChanged
 import com.example.danzle.MainActivity
-import com.example.danzle.MyProfileFragment
 import com.example.danzle.R
 import com.example.danzle.data.api.DanzleSharedPreferences
 import com.example.danzle.databinding.ActivitySignInBinding
@@ -24,7 +22,6 @@ import com.example.danzle.data.api.RetrofitApi
 import com.example.danzle.data.remote.request.auth.SignInRequest
 import com.example.danzle.data.remote.response.auth.MyProfileResponse
 import com.example.danzle.data.remote.response.auth.SignInResponse
-import com.example.danzle.practice.HighlightPractice
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

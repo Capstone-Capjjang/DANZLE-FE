@@ -27,6 +27,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.MediaItem
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
@@ -36,22 +37,29 @@ import androidx.media3.ui.AspectRatioFrameLayout
 import com.example.danzle.R
 import com.example.danzle.data.api.DanzleSharedPreferences
 import com.example.danzle.data.api.RetrofitApi
-import com.example.danzle.data.remote.response.auth.HighlightPracticeResponse
-import com.example.danzle.data.remote.response.auth.PracticeMusicSelectResponse
-import com.example.danzle.data.remote.response.auth.SilhouettePracticeResponse
-import com.example.danzle.databinding.ActivityHighlightPracticeBinding
+import com.example.danzle.data.remote.response.auth.MusicSelectResponse
+import com.example.danzle.data.remote.response.auth.PracticeResponse
+import com.example.danzle.data.remote.response.auth.SilhouetteResponse
+import com.example.danzle.databinding.ActivityMainPracticeBinding
+import com.example.danzle.enum.PracticeMode
+import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.File
+import java.io.FileOutputStream
 
 
-class HighlightPractice : AppCompatActivity() {
+class PracticeMain : AppCompatActivity() {
 
     var startTime: String = ""
     var endTime: String = ""
     var timestamp: String = ""
 
-    private lateinit var binding: ActivityHighlightPracticeBinding
+    private lateinit var binding: ActivityMainPracticeBinding
 
     // ExoPlayer는 Google이 만든 Android용 미디어 플레이어
     // player는 ExoPlayer 객체를 가리킨다.
@@ -59,21 +67,24 @@ class HighlightPractice : AppCompatActivity() {
 
     private var videoCapture: VideoCapture<Recorder>? = null
     private var recording: Recording? = null
+    private var highlightSessionId: Long? = null
 
-    private val selectedSong: PracticeMusicSelectResponse? by lazy {
+    private val selectedSong: MusicSelectResponse? by lazy {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            intent.getParcelableExtra("selected song", PracticeMusicSelectResponse::class.java)
+            intent.getParcelableExtra("selected song", MusicSelectResponse::class.java)
         } else {
             @Suppress("DEPRECATION")
             intent.getParcelableExtra("selected song")
         }
     }
 
+    val mode = intent.getStringExtra("mode")?.let { PracticeMode.valueOf(it) } ?: PracticeMode.FULL
+
     @OptIn(UnstableApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        binding = ActivityHighlightPracticeBinding.inflate(layoutInflater)
+        binding = ActivityMainPracticeBinding.inflate(layoutInflater)
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -106,8 +117,9 @@ class HighlightPractice : AppCompatActivity() {
                     Log.d("HighlightPractice", "영상 끝남 → 녹화 중지 및 화면 전환")
                     stopRecording()
 
-                    val intent = Intent(this@HighlightPractice, HighlightPracticeFinish::class.java)
+                    val intent = Intent(this@PracticeMain, PracticeFinish::class.java)
                     intent.putExtra("selected song", selectedSong)
+                    intent.putExtra("mode", mode)
                     startActivity(intent)
                 }
             }
@@ -122,12 +134,12 @@ class HighlightPractice : AppCompatActivity() {
             startCamera()
         } else {
             ActivityCompat.requestPermissions(
-                this@HighlightPractice, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS
+                this@PracticeMain, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS
             )
         }
 
         selectedSong?.songId?.let { songId ->
-            retrofitHighlightPractice(songId)
+            retrofitPractice(songId, mode)
         } ?: run {
             Toast.makeText(this, "선택한 곡 정보가 없습니다.", Toast.LENGTH_SHORT).show()
         }
@@ -213,7 +225,8 @@ class HighlightPractice : AppCompatActivity() {
         super.onStop()
         player.playWhenReady = false
     }
-/*
+
+    /*
     player.playWhenReady = true
     - 재생 준비(버퍼링 등)가 완료되면 자동으로 플레이를 시작해라
 
@@ -223,82 +236,6 @@ class HighlightPractice : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         player.release()
-    }
-
-    //about retrofit
-    // actity 내부에서 호출할 때는 context 없이 this로 호출해도 충분하다.
-    // Fragment, Adapter 등에서 호출할 때는 requireContext() 또는 전달된 context 필요하다.
-    private fun retrofitHighlightPractice(songId: Long) {
-        // SharedPreferences에 저장된 토큰 가져옴
-        val token = DanzleSharedPreferences.getAccessToken()
-
-        val authHeader = "Bearer $token"
-        //꼭 Baearer를 붙여야 한다.
-
-        if (token.isNullOrEmpty()) {
-            Toast.makeText(this@HighlightPractice, "로그인이 필요합니다.", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        val retrofit = RetrofitApi.getHighlightPracticeInstance()
-        retrofit.getHighlightPractice(songId, authHeader)
-            .enqueue(object : Callback<List<HighlightPracticeResponse>> {
-                override fun onResponse(
-                    call: Call<List<HighlightPracticeResponse>>,
-                    response: Response<List<HighlightPracticeResponse>>
-                ) {
-                    if (response.isSuccessful) {
-                        val highlightPracticeResponse = response.body()?.firstOrNull()
-                        if (highlightPracticeResponse != null) {
-                            val songName = highlightPracticeResponse.song.title
-
-                            // 다음 요청: sessionId 기반으로 영상 URL 받기
-                            retrofitSilhouetteVideo(authHeader, songName)
-                        }
-
-                    } else {
-                        Log.e(
-                            "HighlightPractice",
-                            "Fail to call fetchSilhouetteVideo: ${response.code()}"
-                        )
-                    }
-                }
-
-                override fun onFailure(call: Call<List<HighlightPracticeResponse>>, t: Throwable) {
-                    Log.d("Debug", "HighlightPractice / Error: ${t.message}")
-                    Toast.makeText(this@HighlightPractice, "Error", Toast.LENGTH_SHORT).show()
-                }
-            })
-    }
-
-    private fun retrofitSilhouetteVideo(authHeader: String, songName: String) {
-        Log.d("DEBUG", "Sending request to silhouette API")
-        Log.d("DEBUG", "authHeader = $authHeader")
-
-        val retrofit = RetrofitApi.getPracticeSilhouetteInstance()
-        retrofit.getPracticeSilhouette(authHeader, songName)
-            .enqueue(object : Callback<SilhouettePracticeResponse> {
-                override fun onResponse(
-                    call: Call<SilhouettePracticeResponse>,
-                    response: Response<SilhouettePracticeResponse>
-                ) {
-                    Log.d("DEBUG", "Response code: ${response.code()}")
-                    Log.d("DEBUG", "Response body: ${response.body()}")
-                    Log.d("DEBUG", "Error body: ${response.errorBody()?.string()}")
-
-                    if (response.isSuccessful) {
-                        val videoUrl = response.body()?.silhouetteVideoUrl
-                        Log.d("Silhouette", "Video URL: $videoUrl")
-                        videoUrl?.let {
-                            playVideo(videoUrl, startTime, endTime)
-                        }
-                    }
-                }
-
-                override fun onFailure(call: Call<SilhouettePracticeResponse>, t: Throwable) {
-                    Log.e("Silhouette", "Silhouette fetch error: ${t.message}")
-                }
-            })
     }
 
     private fun playVideo(url: String, startTime: String, endTime: String) {
@@ -334,7 +271,7 @@ class HighlightPractice : AppCompatActivity() {
             .prepareRecording(this, outputOptions)
             .apply {
                 if (ContextCompat.checkSelfPermission(
-                        this@HighlightPractice,
+                        this@PracticeMain,
                         Manifest.permission.RECORD_AUDIO
                     ) == PackageManager.PERMISSION_GRANTED
                 ) {
@@ -346,6 +283,7 @@ class HighlightPractice : AppCompatActivity() {
                     is VideoRecordEvent.Start -> {
                         Log.d("Recording", "녹화 시작됨")
                     }
+
                     is VideoRecordEvent.Finalize -> {
                         if (!event.hasError()) {
                             val videoUri = event.outputResults.outputUri
@@ -380,8 +318,121 @@ class HighlightPractice : AppCompatActivity() {
                 }
             }.toTypedArray()
     }
-}
 
-private fun HighlightPractice.uploadVideoToServer(videoUri: Uri) {
+    private fun uploadVideoToServer(videoUri: Uri) {
+        lifecycleScope.launch {
+            try {
+                //val inputStream = contentResolver.openInputStream(videoUri) ?: return
+                val tempFile = File(cacheDir, "upload_${System.currentTimeMillis()}.mp4")
+                val outputStream = FileOutputStream(tempFile)
+
+                //inputStream.copyTo(outputStream)
+                //inputStream.close()
+                outputStream.close()
+
+                // File → MultipartBody.Part 변환
+                val requestFile = tempFile.asRequestBody("video/mp4".toMediaTypeOrNull())
+                val body = MultipartBody.Part.createFormData("file", tempFile.name, requestFile)
+
+                val sessionId = highlightSessionId ?: return@launch
+                val videoMode = "HIGHLIGHT"
+                //val recordedAt = java.time.LocalDateTime.now().toString()
+                val duration = 10
+
+                val saveVideoService = RetrofitApi.getSaveVideoInstance()
+
+//                saveVideoService.getSaveVideo(
+//                    file = filePart,
+//                    sessionId = sessionIdPart,
+//                    videoMode = videoModePart,
+//                    recordedAt = recordedAtPart,
+//                    duration = durationPart
+//                ).let { }
+            } catch (e: Exception) {
+                Log.e("Upload", "파일 변환/업로드 실패", e)
+            }
+
+        }
+    }
+
+    //about retrofit
+    // actity 내부에서 호출할 때는 context 없이 this로 호출해도 충분하다.
+    // Fragment, Adapter 등에서 호출할 때는 requireContext() 또는 전달된 context 필요하다.
+    private fun retrofitPractice(songId: Long, mode: PracticeMode) {
+        // SharedPreferences에 저장된 토큰 가져옴
+        val token = DanzleSharedPreferences.getAccessToken()
+
+        val authHeader = "Bearer $token"
+        //꼭 Baearer를 붙여야 한다.
+
+        if (token.isNullOrEmpty()) {
+            Toast.makeText(this@PracticeMain, "로그인이 필요합니다.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val retrofit = RetrofitApi.getPracticeInstance()
+        when (mode) {
+            PracticeMode.FULL -> retrofit.getFullPractice(songId, authHeader)
+            PracticeMode.HIGHLIGHT -> retrofit.getHighlightPractice(songId, authHeader)
+        }.enqueue(object : Callback<List<PracticeResponse>> {
+            override fun onResponse(
+                call: Call<List<PracticeResponse>>,
+                response: Response<List<PracticeResponse>>
+            ) {
+                if (response.isSuccessful) {
+                    val practiceResponse = response.body()?.firstOrNull()
+                    if (practiceResponse != null) {
+                        val songName = practiceResponse.song.title
+                        highlightSessionId =
+                            practiceResponse.song.id // sessioinId 추가하면 sessionId로 받기로
+
+                        // 다음 요청: sessionId 기반으로 영상 URL 받기
+                        retrofitSilhouetteVideo(authHeader, songName)
+                    }
+
+                } else {
+                    Log.e(
+                        "HighlightPractice",
+                        "Fail to call fetchSilhouetteVideo: ${response.code()}"
+                    )
+                }
+            }
+
+            override fun onFailure(call: Call<List<PracticeResponse>>, t: Throwable) {
+                Log.d("Debug", "HighlightPractice / Error: ${t.message}")
+                Toast.makeText(this@PracticeMain, "Error", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun retrofitSilhouetteVideo(authHeader: String, songName: String) {
+        Log.d("DEBUG", "Sending request to silhouette API")
+        Log.d("DEBUG", "authHeader = $authHeader")
+
+        val retrofit = RetrofitApi.getSilhouetteInstance()
+        retrofit.getSilhouette(authHeader, songName)
+            .enqueue(object : Callback<SilhouetteResponse> {
+                override fun onResponse(
+                    call: Call<SilhouetteResponse>,
+                    response: Response<SilhouetteResponse>
+                ) {
+                    Log.d("DEBUG", "Response code: ${response.code()}")
+                    Log.d("DEBUG", "Response body: ${response.body()}")
+                    Log.d("DEBUG", "Error body: ${response.errorBody()?.string()}")
+
+                    if (response.isSuccessful) {
+                        val videoUrl = response.body()?.silhouetteVideoUrl
+                        Log.d("Silhouette", "Video URL: $videoUrl")
+                        videoUrl?.let {
+                            playVideo(videoUrl, startTime, endTime)
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<SilhouetteResponse>, t: Throwable) {
+                    Log.e("Silhouette", "Silhouette fetch error: ${t.message}")
+                }
+            })
+    }
 
 }

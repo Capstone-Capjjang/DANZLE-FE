@@ -1,7 +1,7 @@
 package com.example.danzle.data.remote.response.auth
 
 
-data class HighlightPracticeResponse(
+data class PracticeResponse(
     val song: Song,
     val mode: String,
     val startTime: String,

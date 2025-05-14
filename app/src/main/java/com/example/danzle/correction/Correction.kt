@@ -33,7 +33,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.MediaItem
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
@@ -44,15 +43,12 @@ import com.example.danzle.MainActivity
 import com.example.danzle.R
 import com.example.danzle.data.api.DanzleSharedPreferences
 import com.example.danzle.data.api.RetrofitApi
-import com.example.danzle.data.remote.response.auth.CorrectionMusicSelectResponse
 import com.example.danzle.data.remote.response.auth.CorrectionResponse
+import com.example.danzle.data.remote.response.auth.MusicSelectResponse
 import com.example.danzle.data.remote.response.auth.PoseAnalysisResponse
-import com.example.danzle.data.remote.response.auth.SilhouetteCorrectionResponse
+import com.example.danzle.data.remote.response.auth.SilhouetteResponse
 import com.example.danzle.databinding.ActivityCorrectionBinding
-import com.google.gson.Gson
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -78,9 +74,9 @@ class Correction : AppCompatActivity() {
     private lateinit var authHeader: String
 
     // 나중에 서버 수정하고 서버에서 songId 데이터 받아서 넣어주기
-    private val selectedSong: CorrectionMusicSelectResponse? by lazy {
+    private val selectedSong: MusicSelectResponse? by lazy {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            intent.getParcelableExtra("selected song", CorrectionMusicSelectResponse::class.java)
+            intent.getParcelableExtra("selected song", MusicSelectResponse::class.java)
         } else {
             @Suppress("DEPRECATION") intent.getParcelableExtra("selected song")
         }
@@ -97,11 +93,6 @@ class Correction : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
-        val songId = 14L
-        val token = DanzleSharedPreferences.getAccessToken()
-        authHeader = "Bearer $token"
-
 
         // initialize exoplayer
         player = ExoPlayer.Builder(this).build()
@@ -156,8 +147,11 @@ class Correction : AppCompatActivity() {
             recording?.stop()
 
         }
-        retrofitCorrection(songId)
-
+        selectedSong?.songId?.let { songId ->
+            retrofitCorrection(songId)
+        } ?: run {
+            Toast.makeText(this, "선택한 곡 정보가 없습니다.", Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onPause() {
@@ -283,7 +277,7 @@ class Correction : AppCompatActivity() {
         val imagePart = MultipartBody.Part.createFormData("frame", "frame.jpg", imageRequestBody)
 
 
-        // ✅ RequestBody 변환 다 제거! 그대로 Long 넘겨주기
+        // RequestBody 변환 다 제거! 그대로 Long 넘겨주기
         // /analyze 요청을 보내도록 변경 (기존 uploadFrame 대신 analyzeFrame 사용)
         RetrofitApi.getPoseAnalysisInstance()  // getAnalysisInstance()는 AnalysisApiService를 반환하는 메서드로 구현
             .uploadFrame(authHeader, imagePart, songId, sessionId)
@@ -335,35 +329,6 @@ class Correction : AppCompatActivity() {
         ) == PackageManager.PERMISSION_GRANTED
     }
 
-//    private fun startScoringPolling(songId: Long, sessionId: Long, authHeader: String) {
-//        lifecycleScope.launch {
-//            while (player.isPlaying) {
-//                delay(2000) // 2초마다 점수 요청
-//                fetchCurrentScore(songId, sessionId, authHeader)
-//            }
-//        }
-//    }
-
-//    private fun fetchCurrentScore(songId: Long, authHeader: String) {
-//        RetrofitApi.getCorrectionInstance().getCorrection(songId, authHeader)
-//            .enqueue(object : Callback<CorrectionResponse> {
-//                override fun onResponse(
-//                    call: Call<CorrectionResponse>,
-//                    response: Response<CorrectionResponse>
-//                ) {
-//                    Log.d("Polling", "Polling fetchCurrentScore called")
-//
-//
-//                    Log.d("Polling", "Polling fetchCurrentScore called")
-//                    val feedback = response.body()?.message ?: return
-//                    binding.scoreText.text = feedback
-//                }
-//
-//                override fun onFailure(call: Call<CorrectionResponse>, t: Throwable) {
-//                    Log.e("Score", "실시간 점수 업데이트 실패: ${t.message}")
-//                }
-//            })
-//    }
 
     private fun retrofitCorrection(songId: Long) {
         val token = DanzleSharedPreferences.getAccessToken()
@@ -402,10 +367,10 @@ class Correction : AppCompatActivity() {
 
                         if (correctionResponse != null) {
                             currentSessionId = correctionResponse.sessionId
-                            Log.d("SessionCheck", "Received sessionId = $currentSessionId from /full")
-                            val songName = correctionResponse.song_title // 기존: correctionResponse.song.title
+                            Log.d("SessionCheck", "Received sessionId = $currentSessionId")
+                            val songName = correctionResponse.song.title
 
-                            // 🎯 세션 받자마자 첫 프레임 전송!
+                            // 세션 받자마자 첫 프레임 전송!
                             binding.previewView.bitmap?.let {
                                 sendFrameToServer(it)
                             }
@@ -438,12 +403,12 @@ class Correction : AppCompatActivity() {
         Log.d("DEBUG", "Sending request to silhouette API")
         Log.d("DEBUG", "authHeader = $authHeader")
 
-        val retrofit = RetrofitApi.getSilhouetteCorrectionInstance()
-        retrofit.getCorrectionSilhouette(authHeader, songName)
-            .enqueue(object : Callback<SilhouetteCorrectionResponse> {
+        val retrofit = RetrofitApi.getSilhouetteInstance()
+        retrofit.getSilhouette(authHeader, songName)
+            .enqueue(object : Callback<SilhouetteResponse> {
                 override fun onResponse(
-                    call: Call<SilhouetteCorrectionResponse>,
-                    response: Response<SilhouetteCorrectionResponse>
+                    call: Call<SilhouetteResponse>,
+                    response: Response<SilhouetteResponse>
                 ) {
                     Log.d("DEBUG", "Response code: ${response.code()}")
                     Log.d("DEBUG", "Response body: ${response.body()}")
@@ -463,7 +428,7 @@ class Correction : AppCompatActivity() {
                     }
                 }
 
-                override fun onFailure(call: Call<SilhouetteCorrectionResponse>, t: Throwable) {
+                override fun onFailure(call: Call<SilhouetteResponse>, t: Throwable) {
                     Log.e("Silhouette", "Silhouette fetch error: ${t.message}")
                 }
             })

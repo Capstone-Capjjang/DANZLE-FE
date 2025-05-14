@@ -1,17 +1,15 @@
-package com.example.danzle.correction
+package com.example.danzle.commonService
 
-import com.example.danzle.data.remote.response.auth.SilhouetteCorrectionResponse
+import com.example.danzle.data.remote.response.auth.SilhouetteResponse
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Query
 
-interface SilhouetteCorrectionService {
+interface SilhouetteService {
     @GET("/accuracy-session/video-paths")
-
-    fun getCorrectionSilhouette(
+    fun getSilhouette(
         @Header("Authorization") token: String,
         @Query("songName") songName: String
-    ): Call<SilhouetteCorrectionResponse>
-
+    ): Call<SilhouetteResponse>
 }

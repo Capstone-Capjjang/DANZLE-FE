@@ -5,12 +5,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.danzle.data.remote.response.auth.CorrectionMusicSelectResponse
+import com.example.danzle.data.remote.response.auth.MusicSelectResponse
 import com.example.danzle.databinding.SelectsongBlueRecyclerviewBinding
 import com.example.danzle.databinding.SelectsongPinkRecyclerviewBinding
 
 class CorrectionMusicSelectRVAdapter(
-    private val info: ArrayList<CorrectionMusicSelectResponse>,
+    private val info: ArrayList<MusicSelectResponse>,
     private val listener: RecyclerViewEvent
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     inner class BlueViewHolder(private val binding: SelectsongBlueRecyclerviewBinding) :
@@ -19,7 +19,7 @@ class CorrectionMusicSelectRVAdapter(
             binding.root.setOnClickListener(this)
         }
 
-        fun bind(response: CorrectionMusicSelectResponse, position: Int) {
+        fun bind(response: MusicSelectResponse, position: Int) {
             binding.blueSongNumber.text = (position + 1).toString()
             binding.blueSongName.text = response.title
             binding.blueSinger.text = response.artist
@@ -43,7 +43,7 @@ class CorrectionMusicSelectRVAdapter(
             binding.root.setOnClickListener(this)
         }
 
-        fun bind(response: CorrectionMusicSelectResponse, position: Int) {
+        fun bind(response: MusicSelectResponse, position: Int) {
             binding.pinkSongNumber.text = (position + 1).toString()
             binding.pinkSongName.text = response.title
             binding.pinkSinger.text = response.artist

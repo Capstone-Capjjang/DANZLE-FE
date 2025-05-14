@@ -1,4 +1,4 @@
-package com.example.danzle.practice
+package com.example.danzle.commonService
 
 import com.example.danzle.data.remote.response.auth.SaveVideoResponse
 import okhttp3.MultipartBody

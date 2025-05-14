@@ -10,7 +10,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.danzle.R
 import com.example.danzle.data.api.RetrofitApi
-import com.example.danzle.data.remote.response.auth.CorrectionMusicSelectResponse
+import com.example.danzle.data.remote.response.auth.MusicSelectResponse
 import com.example.danzle.databinding.ActivityCorrectionMusicSelectBinding
 import retrofit2.Call
 import retrofit2.Callback
@@ -19,7 +19,7 @@ import retrofit2.Response
 class CorrectionMusicSelect : AppCompatActivity(),
     CorrectionMusicSelectRVAdapter.RecyclerViewEvent {
     private lateinit var binding: ActivityCorrectionMusicSelectBinding
-    private lateinit var musicList: ArrayList<CorrectionMusicSelectResponse>
+    private lateinit var musicList: ArrayList<MusicSelectResponse>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,18 +50,18 @@ class CorrectionMusicSelect : AppCompatActivity(),
         startActivity(intent)
     }
 
-    private fun setMusicRecyclerviewAdapter(list: ArrayList<CorrectionMusicSelectResponse>) {
+    private fun setMusicRecyclerviewAdapter(list: ArrayList<MusicSelectResponse>) {
         val adapter = CorrectionMusicSelectRVAdapter(list, this)
         binding.songListRecyclerView.adapter = adapter
     }
 
     fun retrofitCorrectionMusicSelect() {
-        val retrofit = RetrofitApi.getCorrectionMusicSelectInstance()
-        retrofit.getCorrectionMusicSelect()
-            .enqueue(object : Callback<List<CorrectionMusicSelectResponse>> {
+        val retrofit = RetrofitApi.getMusicSelectInstance()
+        retrofit.getMusicSelect()
+            .enqueue(object : Callback<List<MusicSelectResponse>> {
                 override fun onResponse(
-                    call: Call<List<CorrectionMusicSelectResponse>>,
-                    response: Response<List<CorrectionMusicSelectResponse>>
+                    call: Call<List<MusicSelectResponse>>,
+                    response: Response<List<MusicSelectResponse>>
                 ) {
                     if (response.isSuccessful) {
                         musicList = ArrayList(response.body() ?: emptyList())
@@ -77,7 +77,7 @@ class CorrectionMusicSelect : AppCompatActivity(),
                 }
 
                 override fun onFailure(
-                    call: Call<List<CorrectionMusicSelectResponse>>,
+                    call: Call<List<MusicSelectResponse>>,
                     p1: Throwable
                 ) {
                     Toast.makeText(this@CorrectionMusicSelect, "Error", Toast.LENGTH_SHORT).show()
