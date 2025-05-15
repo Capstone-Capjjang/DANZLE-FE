@@ -5,6 +5,7 @@ import com.example.danzle.commonService.SaveVideoService
 import com.example.danzle.commonService.SilhouetteService
 import com.example.danzle.correction.CorrectionDetailFeedback
 import com.example.danzle.correction.CorrectionDetailFeedbackService
+import com.example.danzle.correction.CorrectionResultService
 import com.example.danzle.correction.CorrectionService
 import com.example.danzle.correction.PoseAnalysis
 import com.example.danzle.myprofile.MyProfileService
@@ -109,6 +110,15 @@ object RetrofitApi {
         return correctionService
     }
 
+    // Correction result
+    private val correctionResultService: CorrectionResultService by lazy {
+        danzleRetrofit.create(CorrectionResultService::class.java)
+    }
+
+    fun getCorrectionResultInstance(): CorrectionResultService {
+        return correctionResultService
+    }
+
     // Silhouette
     private val SilhouetteService: SilhouetteService by lazy {
         danzleRetrofit.create(SilhouetteService::class.java)
@@ -127,7 +137,7 @@ object RetrofitApi {
         return poseAnalysisService
     }
 
-    // save videio
+    // save video
     private val saveVideoService: SaveVideoService by lazy {
         danzleRetrofit.create(SaveVideoService::class.java)
     }
