@@ -7,7 +7,6 @@ import retrofit2.http.Header
 
 interface MyProfileService {
     @GET("/user/profile")
-
     fun getMyProfile(
         @Header("Authorization") token: String
     ): Call<MyProfileResponse>

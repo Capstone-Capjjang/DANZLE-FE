@@ -10,7 +10,6 @@ import retrofit2.http.POST
 interface CorrectionService {
     @FormUrlEncoded
     @POST("/accuracy-session/full")
-
     fun getCorrection(
         @Field("songId")songId: Long,
         @Header("Authorization")token: String
