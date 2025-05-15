@@ -15,7 +15,7 @@
         android:fontFamily="@font/inter_18pt_bold"
         android:text="challenge"
         android:textColor="@color/challengeWord"
-        android:textSize="22dp"
+        android:textSize="22sp"
         app:layout_constraintEnd_toStartOf="@+id/alarm"
         app:layout_constraintStart_toEndOf="@+id/backButton"
         app:layout_constraintTop_toTopOf="parent" />
