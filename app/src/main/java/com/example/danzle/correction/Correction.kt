@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory
 import android.graphics.ImageFormat
 import android.graphics.Rect
 import android.graphics.YuvImage
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
@@ -33,6 +34,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.MediaItem
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
@@ -46,16 +48,21 @@ import com.example.danzle.data.api.RetrofitApi
 import com.example.danzle.data.remote.response.auth.CorrectionResponse
 import com.example.danzle.data.remote.response.auth.MusicSelectResponse
 import com.example.danzle.data.remote.response.auth.PoseAnalysisResponse
+import com.example.danzle.data.remote.response.auth.SaveVideoResponse
 import com.example.danzle.data.remote.response.auth.SilhouetteResponse
 import com.example.danzle.databinding.ActivityCorrectionBinding
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileOutputStream
 
 class Correction : AppCompatActivity() {
 
@@ -69,6 +76,8 @@ class Correction : AppCompatActivity() {
     private var pollingJob: Job? = null
 
     private var lastSentTime = 0L
+
+    private lateinit var token: String
 
     private var currentSessionId: Long? = null
     private lateinit var authHeader: String
@@ -93,6 +102,9 @@ class Correction : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        token = DanzleSharedPreferences.getAccessToken() ?: ""
+        authHeader = "Bearer $token"
 
         // initialize exoplayer
         player = ExoPlayer.Builder(this).build()
@@ -147,11 +159,8 @@ class Correction : AppCompatActivity() {
             recording?.stop()
 
         }
-        selectedSong?.songId?.let { songId ->
-            retrofitCorrection(songId)
-        } ?: run {
-            Toast.makeText(this, "선택한 곡 정보가 없습니다.", Toast.LENGTH_SHORT).show()
-        }
+
+        retrofitCorrection()
     }
 
     override fun onPause() {
@@ -167,16 +176,6 @@ class Correction : AppCompatActivity() {
         }
         super.onDestroy()
     }
-
-//    private fun startPolling(songId: Long, authHeader: String) {
-//        pollingJob = lifecycleScope.launch {
-//            while (player.playbackState != Player.STATE_ENDED) {
-//                Log.d("Polling", "Polling fetchCurrentScore 실행")
-//                fetchCurrentScore(songId, authHeader)
-//                delay(1000) // 음답 요청 속도
-//            }
-//        }
-//    }
 
     private fun startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
@@ -223,12 +222,14 @@ class Correction : AppCompatActivity() {
 
     private fun analyzeFrameWithMediaPipe(imageProxy: ImageProxy) {
         val currentTime = System.currentTimeMillis()
+        val songId = selectedSong?.songId ?: return
+        val sessionId = currentSessionId ?: return
 
         // 1초마다 한 번만 전송
         if (currentTime - lastSentTime >= 800) {
             try {
                 val bitmap = imageProxyToBitmap(imageProxy)
-                sendFrameToServer(bitmap)
+                sendFrameToServer(bitmap, songId, sessionId, authHeader)
                 lastSentTime = currentTime
             } catch (e: Exception) {
                 Log.e("MediaPipe", "Error converting frame: ${e.message}")
@@ -259,14 +260,12 @@ class Correction : AppCompatActivity() {
         return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
     }
 
-    private fun sendFrameToServer(bitmap: Bitmap) {
-        val songId = 14L
-
-        // 서버에서 받아온 sessionId 사용. 아직 받아오지 않았다면 전송하지 않음.
-        val sessionId = currentSessionId ?: run {
-            Log.e("AnalyzeFrame", "현재 sessionId가 없습니다. /accuracy-session/full API 호출 실패?")
-            return
-        }
+    private fun sendFrameToServer(
+        bitmap: Bitmap,
+        songId: Long,
+        sessionId: Long,
+        authHeader: String
+    ) {
         Log.d("SessionCheck", "Sending frame with sessionId = $sessionId")
 
         val stream = ByteArrayOutputStream().apply {
@@ -294,7 +293,7 @@ class Correction : AppCompatActivity() {
                         }
                     } else {
                         // 서버로부터 성공 응답이 오면 추가 처리를 여기에 구현 (예: UI 업데이트 등)
-                        // 🎯 여기에 점수 기반 피드백 출력
+                        // 여기에 점수 기반 피드백 출력
                         val result = response.body()
                         val score = result?.score
                         val feedback = result?.feedback
@@ -310,7 +309,12 @@ class Correction : AppCompatActivity() {
                                     else -> R.color.grayText
                                 }
 
-                                binding.scoreText.setTextColor(ContextCompat.getColor(this@Correction, colorRes))
+                                binding.scoreText.setTextColor(
+                                    ContextCompat.getColor(
+                                        this@Correction,
+                                        colorRes
+                                    )
+                                )
                             }
                         }
                     }
@@ -329,114 +333,7 @@ class Correction : AppCompatActivity() {
         ) == PackageManager.PERMISSION_GRANTED
     }
 
-
-    private fun retrofitCorrection(songId: Long) {
-        val token = DanzleSharedPreferences.getAccessToken()
-        val authHeader = "Bearer $token"
-
-        Log.d("CorrectionAPI", "Sending request to /accuracy-session/full")
-        Log.d("CorrectionAPI", "songId = $songId")
-        Log.d("CorrectionAPI", "authHeader = $authHeader")
-
-        if (token.isNullOrEmpty()) {
-            Toast.makeText(this@Correction, "로그인이 필요합니다.", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        val retrofit = RetrofitApi.getCorrectionInstance()
-        retrofit.getCorrection(songId, authHeader)
-            .enqueue(object : Callback<CorrectionResponse> {
-                override fun onResponse(
-                    call: Call<CorrectionResponse>,
-                    response: Response<CorrectionResponse>
-                ) {
-                    Log.d("CorrectionAPI", "response.isSuccessful = ${response.isSuccessful}")
-                    Log.d("CorrectionAPI", "response.code = ${response.code()}")
-                    Log.d("CorrectionAPI", "response.body = ${response.body()}")
-
-
-                    if (response.body() == null) {
-                        Log.w("CorrectionAPI", "body is NULL!")
-                        Log.d("CorrectionAPI", "response.raw = ${response.raw()}")
-                        Log.d("CorrectionAPI", "response.errorBody = ${response.errorBody()?.string()}")
-                    }
-
-                    if (response.isSuccessful) {
-                        val correctionResponse = response.body()
-                        // body 자체가 null이거나, 빈 리스트일 경우
-
-                        if (correctionResponse != null) {
-                            currentSessionId = correctionResponse.sessionId
-                            Log.d("SessionCheck", "Received sessionId = $currentSessionId")
-                            val songName = correctionResponse.song.title
-
-                            // 세션 받자마자 첫 프레임 전송!
-                            binding.previewView.bitmap?.let {
-                                sendFrameToServer(it)
-                            }
-
-                            retrofitSilhouetteCorrectionVideo(
-                                authHeader, songName, songId, currentSessionId!!
-                            )
-                        } else {
-                            // body 자체가 null이거나, 빈 리스트일 경우
-                            Log.w("CorrectionAPI", "응답은 성공했지만 데이터가 없습니다.")
-                            Toast.makeText(this@Correction, "아직 분석된 결과가 없어요!", Toast.LENGTH_SHORT)
-                                .show()
-                            return
-                        }
-
-                    }
-                }
-
-                override fun onFailure(call: Call<CorrectionResponse>, t: Throwable) {
-                    Log.d("Debug", "HighlightPractice / Error: ${t.message}")
-                    Toast.makeText(this@Correction, "Error", Toast.LENGTH_SHORT).show()
-                }
-            })
-    }
-
-
-    private fun retrofitSilhouetteCorrectionVideo(
-        authHeader: String, songName: String, songId: Long, sessionId: Long
-    ) {
-        Log.d("DEBUG", "Sending request to silhouette API")
-        Log.d("DEBUG", "authHeader = $authHeader")
-
-        val retrofit = RetrofitApi.getSilhouetteInstance()
-        retrofit.getSilhouette(authHeader, songName)
-            .enqueue(object : Callback<SilhouetteResponse> {
-                override fun onResponse(
-                    call: Call<SilhouetteResponse>,
-                    response: Response<SilhouetteResponse>
-                ) {
-                    Log.d("DEBUG", "Response code: ${response.code()}")
-                    Log.d("DEBUG", "Response body: ${response.body()}")
-                    Log.d("DEBUG", "Error body: ${response.errorBody()?.string()}")
-
-
-
-                    if (response.isSuccessful) {
-                        val videoUrl = response.body()?.silhouetteVideoUrl
-                        if (videoUrl == null) {
-                            Log.e("SilhouetteCorrection", "영상 URL이 null입니다.")
-                        }
-                        Log.d("SilhouetteCorrection", "Video URL: $videoUrl")
-                        videoUrl?.let {
-                            playVideo(videoUrl, songId, sessionId, authHeader)
-                        }
-                    }
-                }
-
-                override fun onFailure(call: Call<SilhouetteResponse>, t: Throwable) {
-                    Log.e("Silhouette", "Silhouette fetch error: ${t.message}")
-                }
-            })
-
-    }
-
-
-    private fun playVideo(videoUrl: String, songId: Long, sessionId: Long, authHeader: String) {
+    private fun playVideo(videoUrl: String) {
         val mediaItem = MediaItem.fromUri(videoUrl)
         player.setMediaItem(mediaItem)
         player.prepare()
@@ -476,11 +373,67 @@ class Correction : AppCompatActivity() {
 
                 is VideoRecordEvent.Finalize -> {
                     if (!event.hasError()) {
-                        Log.d("Recording", "Recording saved: ${event.outputResults.outputUri}")
+                        val videoUri = event.outputResults.outputUri
+                        Log.d("Recording", "Recording saved: $videoUri")
+                        uploadRecordedVideo(videoUri)
                     } else {
                         Log.e("Recording", "Recording error: ${event.error}")
                     }
                 }
+            }
+        }
+    }
+
+    private fun uploadRecordedVideo(videoUri: Uri) {
+        lifecycleScope.launch {
+            try {
+                val inputStream = contentResolver.openInputStream(videoUri) ?: return@launch
+                val tempFile = File(cacheDir, "upload_${System.currentTimeMillis()}.mp4")
+                val outputStream = FileOutputStream(tempFile)
+
+                inputStream.copyTo(outputStream)
+                inputStream.close()
+                outputStream.close()
+
+                val requestFile = tempFile.asRequestBody("video/mp4".toMediaTypeOrNull())
+                val filePart = MultipartBody.Part.createFormData("file", tempFile.name, requestFile)
+
+                val sessionId = currentSessionId ?: return@launch
+                val recordedAt = java.time.LocalDateTime.now().toString()  // ISO 8601 포맷
+                val duration = player.currentPosition  // ← 실제 길이에 맞게 계산 가능
+
+                val saveVideoService = RetrofitApi.getSaveVideoInstance()
+                val videoModeBody = "ACCURACY".toRequestBody("text/plain".toMediaTypeOrNull())
+                val recordedAtBody = recordedAt.toRequestBody("text/plain".toMediaTypeOrNull())
+                val durationBody =
+                    duration.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+                val sessionIdBody =
+                    sessionId.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+
+                saveVideoService.getSaveVideo(
+                    file = filePart,
+                    sessionId = sessionIdBody,
+                    videoMode = videoModeBody,
+                    recordedAt = recordedAtBody,
+                    duration = durationBody
+                ).enqueue(object : Callback<SaveVideoResponse> {
+                    override fun onResponse(
+                        call: Call<SaveVideoResponse>,
+                        response: Response<SaveVideoResponse>
+                    ) {
+                        if (response.isSuccessful) {
+                            Log.d("Upload", "Upload success: ${response.body()}")
+                        } else {
+                            Log.e("Upload", "Upload failed: ${response.code()}")
+                        }
+                    }
+
+                    override fun onFailure(call: Call<SaveVideoResponse>, t: Throwable) {
+                        Log.e("Upload", "Upload error: ${t.message}")
+                    }
+                })
+            } catch (e: Exception) {
+                Log.e("Upload", "Upload failed", e)
             }
         }
     }
@@ -498,13 +451,112 @@ class Correction : AppCompatActivity() {
         }.toTypedArray()
     }
 
-//    private fun getFeedbackFromScore(score: Double): String {
-//        return when {
-//            score >= 95 -> "Perfect"
-//            score >= 85 -> "Good"
-//            score >= 65 -> "Ok"
-//            else -> "Miss"
-//        }
-//    }
+    private fun retrofitCorrection() {
+        val songId = selectedSong?.songId ?: run {
+            Toast.makeText(this@Correction, "선택한 곡 정보가 없습니다.", Toast.LENGTH_SHORT).show()
+            return
+        }
 
+        Log.d("CorrectionAPI", "Sending request to /accuracy-session/full")
+        Log.d("CorrectionAPI", "songId = $songId")
+        Log.d("CorrectionAPI", "authHeader = $authHeader")
+
+        if (token.isNullOrEmpty()) {
+            Toast.makeText(this@Correction, "로그인이 필요합니다.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val retrofit = RetrofitApi.getCorrectionInstance()
+        retrofit.getCorrection(songId, authHeader)
+            .enqueue(object : Callback<CorrectionResponse> {
+                override fun onResponse(
+                    call: Call<CorrectionResponse>,
+                    response: Response<CorrectionResponse>
+                ) {
+                    Log.d("CorrectionAPI", "response.isSuccessful = ${response.isSuccessful}")
+                    Log.d("CorrectionAPI", "response.code = ${response.code()}")
+                    Log.d("CorrectionAPI", "response.body = ${response.body()}")
+
+
+                    if (response.body() == null) {
+                        Log.w("CorrectionAPI", "body is NULL!")
+                        Log.d("CorrectionAPI", "response.raw = ${response.raw()}")
+                        Log.d(
+                            "CorrectionAPI",
+                            "response.errorBody = ${response.errorBody()?.string()}"
+                        )
+                    }
+
+                    if (response.isSuccessful) {
+                        val correctionResponse = response.body()
+                        // body 자체가 null이거나, 빈 리스트일 경우
+
+                        if (correctionResponse != null) {
+                            currentSessionId = correctionResponse.sessionId
+                            Log.d("SessionCheck", "Received sessionId = $currentSessionId")
+                            val songName = correctionResponse.song.title
+
+                            // 세션 받자마자 첫 프레임 전송!
+                            binding.previewView.bitmap?.let {
+                                sendFrameToServer(it, songId, currentSessionId!!, authHeader)
+                            }
+
+                            retrofitSilhouetteCorrectionVideo(
+                                authHeader, songName
+                            )
+                        } else {
+                            // body 자체가 null이거나, 빈 리스트일 경우
+                            Log.w("CorrectionAPI", "응답은 성공했지만 데이터가 없습니다.")
+                            Toast.makeText(this@Correction, "아직 분석된 결과가 없어요!", Toast.LENGTH_SHORT)
+                                .show()
+                            return
+                        }
+
+                    }
+                }
+
+                override fun onFailure(call: Call<CorrectionResponse>, t: Throwable) {
+                    Log.d("Debug", "HighlightPractice / Error: ${t.message}")
+                    Toast.makeText(this@Correction, "Error", Toast.LENGTH_SHORT).show()
+                }
+            })
+    }
+
+
+    private fun retrofitSilhouetteCorrectionVideo(
+        authHeader: String, songName: String
+    ) {
+        Log.d("DEBUG", "Sending request to silhouette API")
+        Log.d("DEBUG", "authHeader = $authHeader")
+
+        val retrofit = RetrofitApi.getSilhouetteInstance()
+        retrofit.getSilhouette(authHeader, songName)
+            .enqueue(object : Callback<SilhouetteResponse> {
+                override fun onResponse(
+                    call: Call<SilhouetteResponse>,
+                    response: Response<SilhouetteResponse>
+                ) {
+                    Log.d("DEBUG", "Response code: ${response.code()}")
+                    Log.d("DEBUG", "Response body: ${response.body()}")
+                    Log.d("DEBUG", "Error body: ${response.errorBody()?.string()}")
+
+
+
+                    if (response.isSuccessful) {
+                        val videoUrl = response.body()?.silhouetteVideoUrl
+                        if (videoUrl == null) {
+                            Log.e("SilhouetteCorrection", "영상 URL이 null입니다.")
+                        }
+                        Log.d("SilhouetteCorrection", "Video URL: $videoUrl")
+                        videoUrl?.let {
+                            playVideo(videoUrl)
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<SilhouetteResponse>, t: Throwable) {
+                    Log.e("Silhouette", "Silhouette fetch error: ${t.message}")
+                }
+            })
+    }
 }

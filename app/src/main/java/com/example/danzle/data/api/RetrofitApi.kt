@@ -137,7 +137,7 @@ object RetrofitApi {
 
     // detail feedback
     private val correctionDetailFeedback: CorrectionService by lazy {
-        danzleRetrofit.create(CorrectionFinish::class.java)
+        danzleRetrofit.create(CorrectionService::class.java)
     }
 
     fun getCorrectionDetailFeedbackInstance(): CorrectionService {

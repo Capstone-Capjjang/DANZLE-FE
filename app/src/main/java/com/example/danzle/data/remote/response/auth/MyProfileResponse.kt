@@ -10,5 +10,5 @@ data class MyProfileResponse (
     val profileImageUrl: String,
     val practiceVideos: List<MyVideoResponse>,
     val challengeVideos: List<MyVideoResponse>,
-    val accuracyHistory: List<AccuracySessionResponse>
+    val accuracyHistory: List<CorrectionResponse>
 )
