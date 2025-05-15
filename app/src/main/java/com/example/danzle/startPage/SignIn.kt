@@ -14,17 +14,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.doAfterTextChanged
-import com.example.danzle.MainActivity
 import com.example.danzle.R
-import com.example.danzle.correction.Correction
-import com.example.danzle.correction.CorrectionDetailFeedback
-import com.example.danzle.correction.CorrectionMusicSelect
 import com.example.danzle.data.api.DanzleSharedPreferences
-import com.example.danzle.databinding.ActivitySignInBinding
 import com.example.danzle.data.api.RetrofitApi
 import com.example.danzle.data.remote.request.auth.SignInRequest
 import com.example.danzle.data.remote.response.auth.MyProfileResponse
 import com.example.danzle.data.remote.response.auth.SignInResponse
+import com.example.danzle.databinding.ActivitySignInBinding
 import com.example.danzle.practice.PracticeMusicSelect
 import retrofit2.Call
 import retrofit2.Callback
@@ -32,7 +28,8 @@ import retrofit2.Response
 
 val token: String = ""
 
-class SignIn : AppCompatActivity(), View.OnClickListener, View.OnFocusChangeListener, View.OnKeyListener {
+class SignIn : AppCompatActivity(), View.OnClickListener, View.OnFocusChangeListener,
+    View.OnKeyListener {
 
     // declare variable for SignIn
     var email: String = ""
@@ -65,12 +62,18 @@ class SignIn : AppCompatActivity(), View.OnClickListener, View.OnFocusChangeList
         binding.email.doAfterTextChanged {
             // assign value on email variable whenever user writes email
             email = it.toString()
+            if (binding.emailLayout.error != null) {
+                validateEmail()
+            }
         }
 
         // writing password
         binding.password.doAfterTextChanged {
             // assign value on password variable whenever user writes password
             password = it.toString()
+            if (binding.passwordLayout.error != null) {
+                validatePassword()
+            }
         }
 
         // click ForgotPassword text, then ForgotPassword
@@ -79,10 +82,10 @@ class SignIn : AppCompatActivity(), View.OnClickListener, View.OnFocusChangeList
         }
 
         // click remember checkbox
-        binding.checkButton.setOnClickListener{
-            if (binding.checkButton.isChecked){
+        binding.checkButton.setOnClickListener {
+            if (binding.checkButton.isChecked) {
                 Log.d("SignIN", "checkButton")
-            } else{
+            } else {
                 Log.d("SignIn", "No checkButton")
             }
         }
@@ -97,47 +100,41 @@ class SignIn : AppCompatActivity(), View.OnClickListener, View.OnFocusChangeList
     }
 
 
-    private fun validateEmail(): Boolean{
-        var errorMessage: String? = null
-        // convert written text to String
-        val email: String = binding.email.text.toString()
-        if (email.isEmpty()){
-            errorMessage = "Email is required"
-            Log.d("createAccount", "no email")
-        } else if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-            //checking Email is valid or not
-            errorMessage = "Email Address is invalid"
-            Log.d("createAccount", "email's form is wrong")
-        }
+    private fun validateEmail(): Boolean {
+        val email = binding.email.text.toString()
 
-        // print the error message
-        if (errorMessage != null){
-            // 에러 메세지가 하단에 생성
-            binding.emailLayout.error = errorMessage
-            // 말풍선처럼 에러 메세지가 뜬다.
-//            binding.email.apply {
-//                error = errorMessage
-//            }
-        }
+        return when {
+            email.isEmpty() -> {
+                binding.emailLayout.error = "Email is required"
+                false
+            }
 
-        // No error
-        return errorMessage == null
+            !Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {
+                binding.emailLayout.error = "Email Address is invalid"
+                false
+            }
+
+            else -> {
+                binding.emailLayout.error = null
+                true
+            }
+        }
     }
 
-    private fun validatePassword(): Boolean{
-        var errorMessage: String? = null
-        val password: String = binding.password.text.toString()
-        if (password.isEmpty()){
-            errorMessage = "Password is required"
-            Log.d("createAccount", "no password1")
-        }
+    private fun validatePassword(): Boolean {
+        val password = binding.password.text.toString()
 
-        // print the error message
-        if (errorMessage != null){
-            binding.passwordLayout.error = errorMessage
-        }
+        return when {
+            password.isEmpty() -> {
+                binding.passwordLayout.error = "Password is required"
+                false
+            }
 
-        return errorMessage == null
+            else -> {
+                binding.passwordLayout.error = null
+                true
+            }
+        }
     }
 
     // 사용 안 하고 있지만 지우면 오류 발생
@@ -146,19 +143,20 @@ class SignIn : AppCompatActivity(), View.OnClickListener, View.OnFocusChangeList
     }
 
     override fun onFocusChange(view: View?, hasFocus: Boolean) {
-        if (view != null){
-            when (view.id){
+        if (view != null) {
+            when (view.id) {
                 R.id.email -> {
-                    if (hasFocus){
-                        binding.email.error = null
-                    } else{
+                    if (hasFocus) {
+                        binding.emailLayout.error = null
+                    } else {
                         validateEmail()
                     }
                 }
+
                 R.id.password -> {
-                    if (hasFocus){
-                        binding.email.error = null
-                    } else{
+                    if (hasFocus) {
+                        binding.passwordLayout.error = null
+                    } else {
                         validatePassword()
                     }
                 }
@@ -171,15 +169,19 @@ class SignIn : AppCompatActivity(), View.OnClickListener, View.OnFocusChangeList
     }
 
     // about retrofit
-    private fun retrofitSignIn(userInfo: SignInRequest){
+    private fun retrofitSignIn(userInfo: SignInRequest) {
         val retrofit = RetrofitApi.getSignInInstance()
         retrofit.userLogin(userInfo)
             .enqueue(object : Callback<SignInResponse> {
-                override fun onResponse(call: Call<SignInResponse>, response: Response<SignInResponse>) {
+                override fun onResponse(
+                    call: Call<SignInResponse>,
+                    response: Response<SignInResponse>
+                ) {
                     if (response.isSuccessful) {
                         val signInResponse = response.body()
                         val bodyToken = signInResponse?.accessToken
-                        val headerToken = response.headers()["Authorization"]?.removePrefix("Bearer ")?.trim()
+                        val headerToken =
+                            response.headers()["Authorization"]?.removePrefix("Bearer ")?.trim()
                         val refreshToken = response.headers()["Refresh-Token"]
 
                         val accessToken = bodyToken ?: headerToken
@@ -205,28 +207,40 @@ class SignIn : AppCompatActivity(), View.OnClickListener, View.OnFocusChangeList
                             val authHeader = "Bearer $token"
                             RetrofitApi.getMyProfileServiceInstance()
                                 .getMyProfile(authHeader)
-                                .enqueue(object : Callback<MyProfileResponse>{
-                                    override fun onResponse(call: Call<MyProfileResponse>, response: Response<MyProfileResponse>
+                                .enqueue(object : Callback<MyProfileResponse> {
+                                    override fun onResponse(
+                                        call: Call<MyProfileResponse>,
+                                        response: Response<MyProfileResponse>
                                     ) {
                                         // Log about sever response
                                         Log.d("SignIn", "Raw Body: ${response.body()}")
                                         Log.d("SignIn", "Raw Response: ${response.raw()}")
-                                        Log.d("SignIn", "Error Body: ${response.errorBody()?.string()}")
+                                        Log.d(
+                                            "SignIn",
+                                            "Error Body: ${response.errorBody()?.string()}"
+                                        )
 
-                                        if (response.isSuccessful){
+                                        if (response.isSuccessful) {
                                             val user = response.body()
                                             user?.let {
                                                 DanzleSharedPreferences.setUserId(it.id)
                                                 DanzleSharedPreferences.setUserEmail(it.email)
-                                                Log.d("SignIn", "Save user information → userId: ${it.id}, email: ${it.email}")
+                                                Log.d(
+                                                    "SignIn",
+                                                    "Save user information → userId: ${it.id}, email: ${it.email}"
+                                                )
 
                                             }
-                                        } else{
-                                            Log.e("SignIn", "fail to user information response: ${response.code()}")
+                                        } else {
+                                            Log.e(
+                                                "SignIn",
+                                                "fail to user information response: ${response.code()}"
+                                            )
                                         }
                                     }
 
-                                    override fun onFailure(call: Call<MyProfileResponse>, t: Throwable
+                                    override fun onFailure(
+                                        call: Call<MyProfileResponse>, t: Throwable
                                     ) {
                                         // Log.d: debug -> 상태 확인용
                                         // Log.e: error -> 에러 보고용 (텍스트 색상이 빨강이다.)
@@ -242,7 +256,11 @@ class SignIn : AppCompatActivity(), View.OnClickListener, View.OnFocusChangeList
                         finish()
                     } else {
                         Log.d("Debug", "SignIn / Response Code: ${response.code()}")
-                        Toast.makeText(this@SignIn, "Fail to SingIn: ${response.message()}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            this@SignIn,
+                            "Fail to SingIn: ${response.message()}",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
 
@@ -252,7 +270,4 @@ class SignIn : AppCompatActivity(), View.OnClickListener, View.OnFocusChangeList
                 }
             })
     }
-
-
-
 }

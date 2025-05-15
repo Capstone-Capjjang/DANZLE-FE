@@ -29,7 +29,7 @@ import java.lang.reflect.Type
 
 object RetrofitApi {
 
-    private const val BASE_URL = "http://13.125.237.25:8080"
+    private const val BASE_URL = "http://15.164.225.67:8080"
 
     //54.180.117.41
     private val client: OkHttpClient by lazy {

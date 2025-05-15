@@ -5,7 +5,9 @@
         <item name="boxCornerRadiusTopEnd">4dp</item>
         <item name="boxCornerRadiusBottomStart">4dp</item>
         <item name="boxCornerRadiusBottomEnd">4dp</item>
-        <item name="boxStrokeColor">@color/lightGray</item>
+        <item name="boxStrokeColor">@color/gray</item>
+        <item name="boxStrokeWidthFocused">2dp</item>
+        <item name="boxStrokeWidth">1dp</item>
         <item name="boxStrokeErrorColor">@color/danzlePink</item>
     </style>
 </resources>
