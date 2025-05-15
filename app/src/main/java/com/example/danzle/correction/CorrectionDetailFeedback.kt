@@ -2,6 +2,7 @@ package com.example.danzle.correction
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -9,7 +10,6 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.danzle.MainActivity
 import com.example.danzle.R
-import com.example.danzle.data.api.DanzleSharedPreferences
 import com.example.danzle.data.api.RetrofitApi
 import com.example.danzle.databinding.ActivityCorrectionDetailFeedbackBinding
 import retrofit2.Call
@@ -57,25 +57,34 @@ class CorrectionDetailFeedback : AppCompatActivity() {
     }
 
     private fun retrofitCorrectionDetailFeedback(sessionId: Long) {
-        val token = DanzleSharedPreferences.getAccessToken() ?: ""
-        val authHeader = "Bearer $token"
+//        val token = DanzleSharedPreferences.getAccessToken() ?: ""
+//        val authHeader = "Bearer $token"
+
+        Log.d("CorrectionDetail", "Sending request with sessionId=$sessionId")
 
         val retrofit = RetrofitApi.getCorrectionDetailFeedbackInstance()
-        retrofit.getCorrectionDetailFeedback(sessionId, authHeader)
+        retrofit.getCorrectionDetailFeedback(sessionId)
             .enqueue(object : retrofit2.Callback<List<String>> {
                 override fun onResponse(
                     call: Call<List<String>>,
                     response: Response<List<String>>
                 ) {
+                    Log.d("CorrectionDetail", "Response code: ${response.code()}")
                     if (response.isSuccessful) {
                         val allFeedback = response.body().orEmpty()
                         val top3 = allFeedback.take(3)
                         val displayText = top3.joinToString(separator = "\n\n") { feedback ->
                             "💕 $feedback"
                         }
-
+                        Log.d("CorrectionDetail", "Received feedback list: $allFeedback")
                         binding.feedbackContent.text = displayText
                     } else {
+                        Log.e(
+                            "CorrectionDetail",
+                            "Server error: code=${response.code()}, errorBody=${
+                                response.errorBody()?.string()
+                            }"
+                        )
                         Toast.makeText(
                             this@CorrectionDetailFeedback,
                             "서버 오류: ${response.code()}",
@@ -85,6 +94,7 @@ class CorrectionDetailFeedback : AppCompatActivity() {
                 }
 
                 override fun onFailure(call: Call<List<String>>, t: Throwable) {
+                    Log.e("CorrectionDetail", "Network error", t)
                     Toast.makeText(
                         this@CorrectionDetailFeedback,
                         "네트워크 에러: ${t.localizedMessage}",

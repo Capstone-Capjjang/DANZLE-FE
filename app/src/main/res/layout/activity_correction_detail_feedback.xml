@@ -35,8 +35,9 @@
         android:layout_marginTop="10dp"
         android:fontFamily="@font/inter_18pt_bold"
         android:text="feedback"
-        android:textColor="@color/lightPink"
+        android:textColor="@color/lightBlue"
         android:textSize="22sp"
+        app:layout_constraintBottom_toBottomOf="@id/cancelButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
