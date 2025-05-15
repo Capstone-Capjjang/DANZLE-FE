@@ -131,7 +131,7 @@ class Correction : AppCompatActivity() {
                 if (state == Player.STATE_ENDED) {
                     pollingJob?.cancel()
                     recording?.stop()
-                    startActivity(Intent(this@Correction, CorrectionFinish::class.java))
+                    startActivity(Intent(this@Correction, CorrectionResult::class.java))
                 }
             }
 
@@ -423,6 +423,10 @@ class Correction : AppCompatActivity() {
                     ) {
                         if (response.isSuccessful) {
                             Log.d("Upload", "Upload success: ${response.body()}")
+
+                            val intent = Intent(this@Correction, CorrectionResult::class.java)
+                            intent.putExtra("sessionId", sessionId)
+                            startActivity(intent)
                         } else {
                             Log.e("Upload", "Upload failed: ${response.code()}")
                         }

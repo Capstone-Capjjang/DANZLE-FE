@@ -1,20 +1,21 @@
 package com.example.danzle.correction
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.danzle.R
-import com.example.danzle.databinding.ActivityCorrectioinFinishBinding
+import com.example.danzle.databinding.ActivityCorrectioinResultBinding
 
-class CorrectionFinish : AppCompatActivity() {
-    private lateinit var binding: ActivityCorrectioinFinishBinding
+class CorrectionResult : AppCompatActivity() {
+    private lateinit var binding: ActivityCorrectioinResultBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        binding = ActivityCorrectioinFinishBinding.inflate(layoutInflater)
+        binding = ActivityCorrectioinResultBinding.inflate(layoutInflater)
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -22,6 +23,13 @@ class CorrectionFinish : AppCompatActivity() {
             insets
         }
 
+        val sessionID = intent.getLongExtra("sessionId", -1L)
+
+//        binding.moreFeedbackButton.setOnClickListener {
+//            val intent = Intent(this, CorrectionDetailFeedback::class.java)
+//            intent.putExtra("sessionId", sessionID)
+//            startActivity(intent)
+//        }
 
 
     }

@@ -32,7 +32,7 @@
             android:name=".correction.Correction"
             android:exported="false" />
         <activity
-            android:name=".correction.CorrectionFinish"
+            android:name=".correction.CorrectionResult"
             android:exported="false" />
         <activity
             android:name=".VideoPlayerActivity"

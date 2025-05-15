@@ -1,8 +1,10 @@
 package com.example.danzle.data.api
 
 import com.example.danzle.commonService.MusicSelectService
+import com.example.danzle.commonService.SaveVideoService
 import com.example.danzle.commonService.SilhouetteService
-import com.example.danzle.correction.CorrectionFinish
+import com.example.danzle.correction.CorrectionDetailFeedback
+import com.example.danzle.correction.CorrectionDetailFeedbackService
 import com.example.danzle.correction.CorrectionService
 import com.example.danzle.correction.PoseAnalysis
 import com.example.danzle.myprofile.MyProfileService
@@ -12,7 +14,6 @@ import com.example.danzle.myprofile.myVideo.ChallengeVideoRepositoryService
 import com.example.danzle.myprofile.myVideo.MyVideoService
 import com.example.danzle.myprofile.myVideo.PracticeVideoRepositoryService
 import com.example.danzle.practice.PracticeService
-import com.example.danzle.commonService.SaveVideoService
 import com.example.danzle.startPage.CreateAccountService
 import com.example.danzle.startPage.ForgotPassword1Service
 import com.example.danzle.startPage.SignInsService
@@ -136,11 +137,11 @@ object RetrofitApi {
     }
 
     // detail feedback
-    private val correctionDetailFeedback: CorrectionService by lazy {
-        danzleRetrofit.create(CorrectionService::class.java)
+    private val correctionDetailFeedback: CorrectionDetailFeedbackService by lazy {
+        danzleRetrofit.create(CorrectionDetailFeedbackService::class.java)
     }
 
-    fun getCorrectionDetailFeedbackInstance(): CorrectionService {
+    fun getCorrectionDetailFeedbackInstance(): CorrectionDetailFeedbackService {
         return correctionDetailFeedback
     }
 
