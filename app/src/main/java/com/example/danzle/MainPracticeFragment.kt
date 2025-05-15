@@ -1,6 +1,7 @@
 package com.example.danzle
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -87,6 +88,7 @@ class FragmentAdapter(
 //        if (position == 1){
 //            FragmentPractice.setBackgroundResource
 //        }
+        Log.d("FragmentAdapter", "createFragment: $position")
         return when (position) {
             0 -> FragmentPractice()
             1 -> FragmentCorrection()

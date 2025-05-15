@@ -16,12 +16,16 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.doAfterTextChanged
 import com.example.danzle.MainActivity
 import com.example.danzle.R
+import com.example.danzle.correction.Correction
+import com.example.danzle.correction.CorrectionDetailFeedback
+import com.example.danzle.correction.CorrectionMusicSelect
 import com.example.danzle.data.api.DanzleSharedPreferences
 import com.example.danzle.databinding.ActivitySignInBinding
 import com.example.danzle.data.api.RetrofitApi
 import com.example.danzle.data.remote.request.auth.SignInRequest
 import com.example.danzle.data.remote.response.auth.MyProfileResponse
 import com.example.danzle.data.remote.response.auth.SignInResponse
+import com.example.danzle.practice.PracticeMusicSelect
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -233,8 +237,8 @@ class SignIn : AppCompatActivity(), View.OnClickListener, View.OnFocusChangeList
 
 
                         // 로그인 성공 후 MainActivity로 이동
-                        startActivity(Intent(this@SignIn, MainActivity::class.java))
-                        //startActivity(Intent(this@SignIn, HighlightPractice::class.java))
+                        //startActivity(Intent(this@SignIn, MainActivity::class.java))
+                        startActivity(Intent(this@SignIn, PracticeMusicSelect::class.java))
                         finish()
                     } else {
                         Log.d("Debug", "SignIn / Response Code: ${response.code()}")

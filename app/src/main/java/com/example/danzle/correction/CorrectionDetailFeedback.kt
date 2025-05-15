@@ -46,14 +46,15 @@ class CorrectionDetailFeedback : AppCompatActivity() {
             }
         }
 
-        sessionId = intent.getLongExtra("sessionId", -1L)
+        sessionId = 693L
+        retrofitCorrectionDetailFeedback(sessionId)
 
-        if (sessionId == -1L) {
-            Toast.makeText(this, "잘못된 sessionId입니다.", Toast.LENGTH_SHORT).show()
-        } else {
-            retrofitCorrectionDetailFeedback(sessionId)
-
-        }
+//        if (sessionId == -1L) {
+//            Toast.makeText(this, "잘못된 sessionId입니다.", Toast.LENGTH_SHORT).show()
+//        } else {
+//            retrofitCorrectionDetailFeedback(sessionId)
+//
+//        }
     }
 
     private fun retrofitCorrectionDetailFeedback(sessionId: Long) {

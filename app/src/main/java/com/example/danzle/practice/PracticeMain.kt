@@ -80,7 +80,7 @@ class PracticeMain : AppCompatActivity() {
         }
     }
 
-    val mode = intent.getStringExtra("mode")?.let { PracticeMode.valueOf(it) } ?: PracticeMode.FULL
+    private lateinit var mode: PracticeMode
 
     @OptIn(UnstableApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -93,6 +93,8 @@ class PracticeMain : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        mode = intent.getStringExtra("mode")?.let { PracticeMode.valueOf(it) } ?: PracticeMode.FULL
 
         // initialize exoplayer
         player = ExoPlayer.Builder(this).build()
@@ -404,9 +406,7 @@ class PracticeMain : AppCompatActivity() {
                     val practiceResponse = response.body()?.firstOrNull()
                     if (practiceResponse != null) {
                         val songName = practiceResponse.song.title
-                        currentSessionId =
-                            practiceResponse.song.id
-                        // TODO: sessioinId 추가하면 sessionId로 받기로
+                        currentSessionId = practiceResponse.sessionId
 
                         // 다음 요청: sessionId 기반으로 영상 URL 받기
                         retrofitSilhouetteVideo(authHeader, songName)

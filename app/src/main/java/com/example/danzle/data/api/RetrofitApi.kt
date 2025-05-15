@@ -29,7 +29,7 @@ import java.lang.reflect.Type
 
 object RetrofitApi {
 
-    private const val BASE_URL = "http://54.180.117.41:8080"
+    private const val BASE_URL = "http://13.125.237.25:8080"
 
     //54.180.117.41
     private val client: OkHttpClient by lazy {
@@ -120,12 +120,12 @@ object RetrofitApi {
     }
 
     // Silhouette
-    private val SilhouetteService: SilhouetteService by lazy {
+    private val silhouetteService: SilhouetteService by lazy {
         danzleRetrofit.create(SilhouetteService::class.java)
     }
 
     fun getSilhouetteInstance(): SilhouetteService {
-        return SilhouetteService
+        return silhouetteService
     }
 
     // sending pose information

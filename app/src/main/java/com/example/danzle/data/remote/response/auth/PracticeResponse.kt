@@ -2,6 +2,7 @@ package com.example.danzle.data.remote.response.auth
 
 
 data class PracticeResponse(
+    val sessionId: Long,
     val song: Song,
     val mode: String,
     val startTime: String,

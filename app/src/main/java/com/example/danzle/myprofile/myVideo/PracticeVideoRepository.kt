@@ -12,8 +12,8 @@ import com.example.danzle.R
 import com.example.danzle.data.api.DanzleSharedPreferences
 import com.example.danzle.data.api.RetrofitApi
 import com.example.danzle.data.remote.response.auth.MyVideoResponse
-import com.example.danzle.data.remote.response.auth.VideoMode
 import com.example.danzle.databinding.ActivityPracticeVideoRepositoryBinding
+import com.example.danzle.enum.VideoMode
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

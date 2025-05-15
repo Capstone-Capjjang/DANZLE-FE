@@ -8,13 +8,12 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.example.danzle.MyProfileFragment
 import com.example.danzle.R
 import com.example.danzle.data.api.DanzleSharedPreferences
 import com.example.danzle.data.api.RetrofitApi
 import com.example.danzle.data.remote.response.auth.MyVideoResponse
-import com.example.danzle.data.remote.response.auth.VideoMode
 import com.example.danzle.databinding.ActivityMyVideoBinding
+import com.example.danzle.enum.VideoMode
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
