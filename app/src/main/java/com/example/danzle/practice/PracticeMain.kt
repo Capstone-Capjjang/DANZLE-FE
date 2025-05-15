@@ -39,6 +39,7 @@ import com.example.danzle.data.api.DanzleSharedPreferences
 import com.example.danzle.data.api.RetrofitApi
 import com.example.danzle.data.remote.response.auth.MusicSelectResponse
 import com.example.danzle.data.remote.response.auth.PracticeResponse
+import com.example.danzle.data.remote.response.auth.SaveVideoResponse
 import com.example.danzle.data.remote.response.auth.SilhouetteResponse
 import com.example.danzle.databinding.ActivityMainPracticeBinding
 import com.example.danzle.enum.PracticeMode
@@ -46,6 +47,7 @@ import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -67,7 +69,7 @@ class PracticeMain : AppCompatActivity() {
 
     private var videoCapture: VideoCapture<Recorder>? = null
     private var recording: Recording? = null
-    private var highlightSessionId: Long? = null
+    private var currentSessionId: Long? = null
 
     private val selectedSong: MusicSelectResponse? by lazy {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -287,7 +289,7 @@ class PracticeMain : AppCompatActivity() {
                     is VideoRecordEvent.Finalize -> {
                         if (!event.hasError()) {
                             val videoUri = event.outputResults.outputUri
-                            uploadVideoToServer(videoUri)
+                            uploadRecordedVideo(videoUri)
                             Log.d("Recording", "녹화 완료: ${event.outputResults.outputUri}")
                         } else {
                             Log.e("Recording", "녹화 오류: ${event.error}")
@@ -319,41 +321,60 @@ class PracticeMain : AppCompatActivity() {
             }.toTypedArray()
     }
 
-    private fun uploadVideoToServer(videoUri: Uri) {
+    private fun uploadRecordedVideo(videoUri: Uri) {
         lifecycleScope.launch {
             try {
-                //val inputStream = contentResolver.openInputStream(videoUri) ?: return
+                val inputStream = contentResolver.openInputStream(videoUri) ?: return@launch
                 val tempFile = File(cacheDir, "upload_${System.currentTimeMillis()}.mp4")
                 val outputStream = FileOutputStream(tempFile)
 
-                //inputStream.copyTo(outputStream)
-                //inputStream.close()
+                inputStream.copyTo(outputStream)
+                inputStream.close()
                 outputStream.close()
 
-                // File → MultipartBody.Part 변환
                 val requestFile = tempFile.asRequestBody("video/mp4".toMediaTypeOrNull())
-                val body = MultipartBody.Part.createFormData("file", tempFile.name, requestFile)
+                val filePart = MultipartBody.Part.createFormData("file", tempFile.name, requestFile)
 
-                val sessionId = highlightSessionId ?: return@launch
-                val videoMode = "HIGHLIGHT"
-                //val recordedAt = java.time.LocalDateTime.now().toString()
-                val duration = 10
+                val sessionId = currentSessionId ?: return@launch
+                val recordedAt = java.time.LocalDateTime.now().toString()  // ISO 8601 포맷
+                val duration = player.currentPosition  // ← 실제 길이에 맞게 계산 가능
 
                 val saveVideoService = RetrofitApi.getSaveVideoInstance()
+                val videoModeBody = "ACCURACY".toRequestBody("text/plain".toMediaTypeOrNull())
+                val recordedAtBody = recordedAt.toRequestBody("text/plain".toMediaTypeOrNull())
+                val durationBody =
+                    duration.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+                val sessionIdBody =
+                    sessionId.toString().toRequestBody("text/plain".toMediaTypeOrNull())
 
-//                saveVideoService.getSaveVideo(
-//                    file = filePart,
-//                    sessionId = sessionIdPart,
-//                    videoMode = videoModePart,
-//                    recordedAt = recordedAtPart,
-//                    duration = durationPart
-//                ).let { }
+                saveVideoService.getSaveVideo(
+                    file = filePart,
+                    sessionId = sessionIdBody,
+                    videoMode = videoModeBody,
+                    recordedAt = recordedAtBody,
+                    duration = durationBody
+                ).enqueue(object : Callback<SaveVideoResponse> {
+                    override fun onResponse(
+                        call: Call<SaveVideoResponse>,
+                        response: Response<SaveVideoResponse>
+                    ) {
+                        if (response.isSuccessful) {
+                            Log.d("Upload", "Upload success: ${response.body()}")
+                        } else {
+                            Log.e("Upload", "Upload failed: ${response.code()}")
+                        }
+                    }
+
+                    override fun onFailure(call: Call<SaveVideoResponse>, t: Throwable) {
+                        Log.e("Upload", "Upload error: ${t.message}")
+                    }
+                })
             } catch (e: Exception) {
-                Log.e("Upload", "파일 변환/업로드 실패", e)
+                Log.e("Upload", "Upload failed", e)
             }
-
         }
     }
+
 
     //about retrofit
     // actity 내부에서 호출할 때는 context 없이 this로 호출해도 충분하다.
@@ -383,8 +404,9 @@ class PracticeMain : AppCompatActivity() {
                     val practiceResponse = response.body()?.firstOrNull()
                     if (practiceResponse != null) {
                         val songName = practiceResponse.song.title
-                        highlightSessionId =
-                            practiceResponse.song.id // sessioinId 추가하면 sessionId로 받기로
+                        currentSessionId =
+                            practiceResponse.song.id
+                        // TODO: sessioinId 추가하면 sessionId로 받기로
 
                         // 다음 요청: sessionId 기반으로 영상 URL 받기
                         retrofitSilhouetteVideo(authHeader, songName)
