@@ -45,6 +45,7 @@ import com.example.danzle.MainActivity
 import com.example.danzle.R
 import com.example.danzle.data.api.DanzleSharedPreferences
 import com.example.danzle.data.api.RetrofitApi
+import com.example.danzle.data.remote.request.auth.SaveVideoRequest
 import com.example.danzle.data.remote.response.auth.CorrectionResponse
 import com.example.danzle.data.remote.response.auth.MusicSelectResponse
 import com.example.danzle.data.remote.response.auth.PoseAnalysisResponse
@@ -60,6 +61,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import retrofit2.adapter.rxjava.Result.response
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -432,7 +434,10 @@ class Correction : AppCompatActivity() {
                         }
                     }
 
-                    override fun onFailure(call: Call<SaveVideoResponse>, t: Throwable) {
+                    override fun onFailure(
+                        call: Call<SaveVideoResponse>,
+                        t: Throwable
+                    ) {
                         Log.e("Upload", "Upload error: ${t.message}")
                     }
                 })
