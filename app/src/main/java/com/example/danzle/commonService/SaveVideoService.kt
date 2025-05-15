@@ -1,6 +1,6 @@
 package com.example.danzle.commonService
 
-import com.example.danzle.data.remote.response.auth.SaveVideoResponse
+import com.example.danzle.data.remote.request.auth.SaveVideoRequest
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -17,5 +17,5 @@ interface SaveVideoService {
         @Part("videoMode") videoMode: RequestBody,
         @Part("recordedAt") recordedAt: RequestBody,
         @Part("duration") duration: RequestBody
-    ): Call<SaveVideoResponse>
+    ): Call<SaveVideoRequest>
 }
