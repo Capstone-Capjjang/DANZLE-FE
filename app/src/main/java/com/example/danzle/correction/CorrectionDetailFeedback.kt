@@ -11,8 +11,10 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.danzle.MainActivity
 import com.example.danzle.R
 import com.example.danzle.data.api.RetrofitApi
+import com.example.danzle.data.remote.response.auth.CorrectionFeedbackDetailResponse
 import com.example.danzle.databinding.ActivityCorrectionDetailFeedbackBinding
 import retrofit2.Call
+import retrofit2.Callback
 import retrofit2.Response
 
 
@@ -65,17 +67,19 @@ class CorrectionDetailFeedback : AppCompatActivity() {
 
         val retrofit = RetrofitApi.getCorrectionDetailFeedbackInstance()
         retrofit.getCorrectionDetailFeedback(sessionId)
-            .enqueue(object : retrofit2.Callback<List<String>> {
+            .enqueue(object : Callback<List<CorrectionFeedbackDetailResponse>> {
                 override fun onResponse(
-                    call: Call<List<String>>,
-                    response: Response<List<String>>
+                    call: Call<List<CorrectionFeedbackDetailResponse>>,
+                    response: Response<List<CorrectionFeedbackDetailResponse>>
                 ) {
                     Log.d("CorrectionDetail", "Response code: ${response.code()}")
                     if (response.isSuccessful) {
                         val allFeedback = response.body().orEmpty()
                         val top3 = allFeedback.take(3)
                         val displayText = top3.joinToString(separator = "\n\n") { feedback ->
-                            "💕 $feedback"
+                            feedback.feedbacks.joinToString(separator = "\n") { single ->
+                                "💕 $single"
+                            }
                         }
                         Log.d("CorrectionDetail", "Received feedback list: $allFeedback")
                         binding.feedbackContent.text = displayText
@@ -94,7 +98,7 @@ class CorrectionDetailFeedback : AppCompatActivity() {
                     }
                 }
 
-                override fun onFailure(call: Call<List<String>>, t: Throwable) {
+                override fun onFailure(call: Call<List<CorrectionFeedbackDetailResponse>>, t: Throwable) {
                     Log.e("CorrectionDetail", "Network error", t)
                     Toast.makeText(
                         this@CorrectionDetailFeedback,

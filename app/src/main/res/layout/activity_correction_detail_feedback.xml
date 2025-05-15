@@ -71,17 +71,25 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/feedbackContent"
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/fedebackScroll"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="200dp"
             android:layout_margin="5dp"
-            android:text="이곳에 피드백 내용이 들어갑니다. 길이에 따라 자동 늘어납니다."
-            android:textColor="#000000"
-            android:textSize="15sp"
+            android:scrollbars="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/feedbackImage" />
+            app:layout_constraintTop_toBottomOf="@id/feedbackImage">
+
+            <TextView
+                android:id="@+id/feedbackContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="이곳에 피드백 내용이 들어갑니다. 길이에 따라 자동 늘어납니다."
+                android:textColor="@color/black"
+                android:textSize="15sp" />
+
+        </androidx.core.widget.NestedScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
