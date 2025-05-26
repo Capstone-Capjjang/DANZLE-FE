@@ -78,6 +78,8 @@ class Correction : AppCompatActivity() {
 
     private var lastSentTime = 0L
 
+    private var sec = 0
+
     private lateinit var token: String
 
     private var currentSessionId: Long? = null
@@ -227,10 +229,11 @@ class Correction : AppCompatActivity() {
         val sessionId = currentSessionId ?: return
 
         // 1초마다 한 번만 전송
-        if (currentTime - lastSentTime >= 800) {
+        if (currentTime - lastSentTime >= 1000) {
             try {
                 val bitmap = imageProxyToBitmap(imageProxy)
-                sendFrameToServer(bitmap, songId, sessionId, authHeader)
+                sendFrameToServer(bitmap, sec, songId, sessionId, authHeader)
+                sec += 1
                 lastSentTime = currentTime
             } catch (e: Exception) {
                 Log.e("MediaPipe", "Error converting frame: ${e.message}")
@@ -263,6 +266,7 @@ class Correction : AppCompatActivity() {
 
     private fun sendFrameToServer(
         bitmap: Bitmap,
+        sec: Int,
         songId: Long,
         sessionId: Long,
         authHeader: String
@@ -280,7 +284,7 @@ class Correction : AppCompatActivity() {
         // RequestBody 변환 다 제거! 그대로 Long 넘겨주기
         // /analyze 요청을 보내도록 변경 (기존 uploadFrame 대신 analyzeFrame 사용)
         RetrofitApi.getPoseAnalysisInstance()  // getAnalysisInstance()는 AnalysisApiService를 반환하는 메서드로 구현
-            .uploadFrame(authHeader, imagePart, songId, sessionId)
+            .uploadFrame(authHeader, imagePart, sec, songId, sessionId)
             .enqueue(object : Callback<PoseAnalysisResponse> {
                 override fun onResponse(
                     call: Call<PoseAnalysisResponse>,
@@ -531,7 +535,8 @@ class Correction : AppCompatActivity() {
 
                             // 세션 받자마자 첫 프레임 전송!
                             binding.previewView.bitmap?.let {
-                                sendFrameToServer(it, songId, currentSessionId!!, authHeader)
+                                sendFrameToServer(it, sec, songId, currentSessionId!!, authHeader)
+                                sec += 1
                             }
 
                             retrofitSilhouetteCorrectionVideo(

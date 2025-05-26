@@ -16,6 +16,7 @@ interface PoseAnalysis {
     fun uploadFrame(
         @Header("Authorization") token: String,
         @Part frame: MultipartBody.Part,
+        @Query("sec") sec: Int,
         @Query("songId") songId: Long,
         @Query("sessionId") sessionId: Long
     ): Call<PoseAnalysisResponse>
