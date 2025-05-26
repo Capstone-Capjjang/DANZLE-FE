@@ -86,7 +86,8 @@
         <androidx.core.widget.NestedScrollView
             android:id="@+id/fedebackScroll"
             android:layout_width="0dp"
-            android:layout_height="200dp"
+            android:layout_height="0dp"
+            app:layout_constraintDimensionRatio="5:3"
             android:layout_margin="10dp"
             android:scrollbars="vertical"
             app:layout_constraintEnd_toEndOf="parent"
@@ -97,7 +98,7 @@
                 android:id="@+id/feedbackContent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="이곳에 피드백 내용이 들어갑니다. 길이에 따라 자동 늘어납니다."
+                android:text=""
                 android:textColor="@color/black"
                 android:textSize="15sp" />
 
