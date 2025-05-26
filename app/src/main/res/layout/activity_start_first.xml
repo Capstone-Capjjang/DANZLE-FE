@@ -31,22 +31,16 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/tiltwarp_regular"
         android:text="Danzle"
-        android:textSize="30dp"
+        android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/danzleLogoImage" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.55" />
-
     <Button
         android:id="@+id/signinButton"
         android:layout_width="0dp"
-        android:layout_height="50dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="100dp"
         android:background="@drawable/button_round_radius"
         android:backgroundTint="@color/danzlePink"
         android:fontFamily="@font/inter_18pt_semibold"
@@ -55,15 +49,16 @@
         android:textColor="@color/white"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/createAccountButton"
+        app:layout_constraintDimensionRatio="7:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/guidelineButton"
+        app:layout_constraintTop_toBottomOf="@id/danzleTextView"
         app:layout_constraintWidth_percent="0.8" />
 
     <Button
         android:id="@+id/createAccountButton"
         android:layout_width="0dp"
-        android:layout_height="50dp"
+        android:layout_height="0dp"
         android:layout_marginTop="30dp"
         android:background="@drawable/button_round_radius"
         android:backgroundTint="@color/danzleBlue"
@@ -72,6 +67,7 @@
         android:text="Create Account"
         android:textColor="@color/white"
         android:textSize="16sp"
+        app:layout_constraintDimensionRatio="7:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/signinButton"
@@ -80,7 +76,7 @@
     <Button
         android:id="@+id/notSigninButton"
         android:layout_width="0dp"
-        android:layout_height="50dp"
+        android:layout_height="0dp"
         android:layout_marginTop="30dp"
         android:background="@drawable/button_round_radius"
         android:backgroundTint="@color/lightGray"
@@ -89,6 +85,7 @@
         android:text="Using without Sign In"
         android:textColor="@color/white"
         android:textSize="16sp"
+        app:layout_constraintDimensionRatio="7:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/createAccountButton"

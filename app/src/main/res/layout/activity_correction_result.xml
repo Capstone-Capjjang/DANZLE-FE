@@ -7,150 +7,385 @@
     android:layout_height="match_parent"
     tools:context=".correction.CorrectionResult">
 
-    <TextView
-        android:id="@+id/practice"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:fontFamily="@font/inter_18pt_bold"
-        android:text="correction"
-        android:textColor="@color/lightBlue"
-        android:textSize="22sp"
-        app:layout_constraintBottom_toBottomOf="@id/cancelButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/cancelButton"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginTop="18dp"
-        android:layout_marginEnd="18dp"
-        android:background="@drawable/cancel"
-        android:backgroundTint="@color/black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.1" />
-
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/songInfo"
-        android:layout_width="0dp"
-        android:layout_height="85dp"
-        android:background="@drawable/correction_song_background"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/guidelineTitle"
-        app:layout_constraintWidth_percent="0.8">
+        android:id="@+id/resultContentGroup"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+<!--        android:visibility="gone">-->
 
-        <ImageView
-            android:id="@+id/songImage"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_marginStart="18dp"
-            android:background="@drawable/albumcover"
-            app:layout_constraintBottom_toBottomOf="parent"
+        <TextView
+            android:id="@+id/practice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/inter_18pt_bold"
+            android:text="correction"
+            android:textColor="@color/lightBlue"
+            android:textSize="22sp"
+            app:layout_constraintBottom_toBottomOf="@id/cancelButton"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/songTitle"
+        <Button
+            android:id="@+id/cancelButton"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="18dp"
+            android:layout_marginEnd="18dp"
+            android:background="@drawable/cancel"
+            android:backgroundTint="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:fontFamily="@font/inter_18pt_medium"
-            android:text="Mantra"
-            android:textSize="22sp"
-            app:layout_constraintBottom_toTopOf="@id/singer"
-            app:layout_constraintStart_toEndOf="@id/songImage"
-            app:layout_constraintTop_toTopOf="@id/songImage" />
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.1" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/songInfo"
+            android:layout_width="0dp"
+            android:layout_height="85dp"
+            android:background="@drawable/correction_song_background"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/guidelineTitle"
+            app:layout_constraintWidth_percent="0.8">
+
+            <ImageView
+                android:id="@+id/songImage"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginStart="18dp"
+                android:background="@drawable/albumcover"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/songTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:fontFamily="@font/inter_18pt_medium"
+                android:text="Mantra"
+                android:textSize="22sp"
+                app:layout_constraintBottom_toTopOf="@id/singer"
+                app:layout_constraintStart_toEndOf="@id/songImage"
+                app:layout_constraintTop_toTopOf="@id/songImage" />
+
+            <TextView
+                android:id="@+id/singer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:fontFamily="@font/inter_18pt_medium"
+                android:text="Jennie"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@id/songImage"
+                app:layout_constraintStart_toEndOf="@id/songImage"
+                app:layout_constraintTop_toBottomOf="@id/songTitle" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
-            android:id="@+id/singer"
+            android:id="@+id/badgeResultText"
+            android:layout_width="230dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="35dp"
+            android:background="@drawable/correction_result_bar"
+            android:fontFamily="@font/inter_18pt_bold"
+            android:gravity="center"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="10dp"
+            android:text="Normal"
+            android:textColor="@color/scoreNormalText"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/songInfo" />
+
+        <LinearLayout
+            android:id="@+id/statisticsContainer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/correction_result_rounded"
+            android:orientation="vertical"
+            android:padding="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/badgeResultText"
+            app:layout_constraintWidth_percent="0.9">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:layout_marginBottom="25dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/labelExcellent"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Excellent"
+                    android:textColor="@color/scorePerfectText"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/countExcellent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text="8"
+                    android:textColor="@color/scorePerfectText"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <View
+                    android:id="@+id/barExcellent"
+                    android:layout_width="0dp"
+                    android:layout_height="12dp"
+                    android:layout_marginStart="4dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/scorePerfectText"
+                    android:background="@drawable/bar_rounded" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="25dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/labelGood"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Good"
+                    android:textColor="@color/scoreGoodText"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/countGood"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text="12"
+                    android:textColor="@color/scoreGoodText"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <View
+                    android:id="@+id/barGood"
+                    android:layout_width="0dp"
+                    android:layout_height="12dp"
+                    android:layout_marginStart="4dp"
+                    android:layout_weight="1.5"
+                    android:backgroundTint="@color/scoreGoodText"
+                    android:background="@drawable/bar_rounded" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="25dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/labelNormal"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Normal"
+                    android:textColor="@color/scoreNormalText"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/countNormal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text="40"
+                    android:textColor="@color/scoreNormalText"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <View
+                    android:id="@+id/barNormal"
+                    android:layout_width="0dp"
+                    android:layout_height="12dp"
+                    android:layout_marginStart="4dp"
+                    android:layout_weight="3"
+                    android:backgroundTint="@color/scoreNormalText"
+                    android:background="@drawable/bar_rounded" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="25dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/labelBad"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Bad"
+                    android:textColor="@color/scoreBadText"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/countBad"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text="12"
+                    android:textColor="@color/scoreBadText"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <View
+                    android:id="@+id/barBad"
+                    android:layout_width="0dp"
+                    android:layout_height="12dp"
+                    android:layout_marginStart="4dp"
+                    android:layout_weight="1.5"
+                    android:backgroundTint="@color/scoreBadText"
+                    android:background="@drawable/bar_rounded" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="25dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/labelMiss"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Miss"
+                    android:textColor="@color/scoreMissText"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/countMiss"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text="8"
+                    android:textColor="@color/scoreMissText"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <View
+                    android:id="@+id/barMiss"
+                    android:layout_width="0dp"
+                    android:layout_height="12dp"
+                    android:layout_marginStart="4dp"
+                    android:layout_weight="3"
+                    android:background="@drawable/bar_rounded" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/feedbackByText"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/feedback_by_text_shape"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/songInfo" />
+
+
+        <TextView
+            android:id="@+id/feedback"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:fontFamily="@font/inter_18pt_medium"
-            android:text="Jennie"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="@id/songImage"
-            app:layout_constraintStart_toEndOf="@id/songImage"
-            app:layout_constraintTop_toBottomOf="@id/songTitle" />
+            android:layout_marginBottom="10dp"
+            android:fontFamily="@font/inter_18pt_semibold"
+            android:text="feedback"
+            android:textSize="25sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/guidelineButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.8" />
+
+        <Button
+            android:id="@+id/tyeAgainButton"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:background="@drawable/button_round_radius"
+            android:backgroundTint="@color/lightPink"
+            android:fontFamily="@font/inter_18pt_semibold"
+            android:gravity="center"
+            android:text="Try Again"
+            android:textColor="@color/white"
+            android:textSize="17sp"
+            app:layout_constraintEnd_toStartOf="@id/otherSongsButton"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/guidelineButton"
+            app:layout_constraintWidth_percent="0.3" />
+
+        <Button
+            android:id="@+id/otherSongsButton"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:background="@drawable/button_round_radius"
+            android:backgroundTint="@color/lightBlue"
+            android:fontFamily="@font/inter_18pt_semibold"
+            android:gravity="center"
+            android:text="Other Songs"
+            android:textColor="@color/white"
+            android:textSize="17sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tyeAgainButton"
+            app:layout_constraintTop_toTopOf="@id/guidelineButton"
+            app:layout_constraintWidth_percent="0.3" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+<!--    <ProgressBar-->
+<!--        android:id="@+id/progressBar"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_gravity="center"-->
+<!--        android:visibility="visible"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
 
-    <Button
-        android:id="@+id/feedbackByText"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/feedback_by_text_shape"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/songInfo" />
-
-
-    <TextView
-        android:id="@+id/feedback"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:fontFamily="@font/inter_18pt_semibold"
-        android:text="feedback"
-        android:textSize="25sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/guidelineButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.8" />
-
-    <Button
-        android:id="@+id/tyeAgainButton"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:background="@drawable/button_round_radius"
-        android:backgroundTint="@color/lightPink"
-        android:fontFamily="@font/inter_18pt_semibold"
-        android:gravity="center"
-        android:text="Try Again"
-        android:textColor="@color/white"
-        android:textSize="17sp"
-        app:layout_constraintEnd_toStartOf="@id/otherSongsButton"
-        app:layout_constraintHorizontal_chainStyle="spread"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/guidelineButton"
-        app:layout_constraintWidth_percent="0.3" />
-
-    <Button
-        android:id="@+id/otherSongsButton"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:background="@drawable/button_round_radius"
-        android:backgroundTint="@color/lightBlue"
-        android:fontFamily="@font/inter_18pt_semibold"
-        android:gravity="center"
-        android:text="Other Songs"
-        android:textColor="@color/white"
-        android:textSize="17sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/tyeAgainButton"
-        app:layout_constraintTop_toTopOf="@id/guidelineButton"
-        app:layout_constraintWidth_percent="0.3" />
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>

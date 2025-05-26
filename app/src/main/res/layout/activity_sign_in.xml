@@ -47,8 +47,9 @@
         android:id="@+id/emailLayout"
         style="@style/Widget.Danzle.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginStart="40dp"
+        app:layout_constraintDimensionRatio="6:1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/idTextview"
         app:layout_constraintWidth_percent="0.8">
@@ -56,7 +57,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/email"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="match_parent"
             android:inputType="textEmailAddress"
             android:textSize="14dp" />
         <!-- inputType: "textEmailAddress": 사용자 입력 환경 개선 -->
@@ -77,8 +78,9 @@
         android:id="@+id/passwordLayout"
         style="@style/Widget.Danzle.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginStart="40dp"
+        app:layout_constraintDimensionRatio="6:1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/passwordTextview"
         app:layout_constraintWidth_percent="0.8"
@@ -89,7 +91,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/password"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="match_parent"
             android:inputType="textPassword"
             android:textSize="14dp" />
 
@@ -126,17 +128,12 @@
         app:layout_constraintBaseline_toBaselineOf="@id/rememberTextview"
         app:layout_constraintEnd_toEndOf="@id/passwordLayout" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.6" />
 
     <Button
         android:id="@+id/signinButton"
         android:layout_width="0dp"
         android:layout_height="50dp"
+        android:layout_marginTop="100dp"
         android:background="@drawable/button_round_radius"
         android:backgroundTint="@color/danzlePink"
         android:fontFamily="@font/inter_18pt_semibold"
@@ -146,7 +143,7 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/guidelineButton"
+        app:layout_constraintTop_toBottomOf="@id/passwordLayout"
         app:layout_constraintWidth_percent="0.8" />
 
     <TextView
@@ -170,27 +167,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/contentOneTextview" />
-
-    <View
-        android:id="@+id/line"
-        android:layout_width="188dp"
-        android:layout_height="1dp"
-        android:layout_marginTop="18dp"
-        android:background="@color/black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/createAccount" />
-
-    <TextView
-        android:id="@+id/contentTwoTextview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Other Sign In options"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/line" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

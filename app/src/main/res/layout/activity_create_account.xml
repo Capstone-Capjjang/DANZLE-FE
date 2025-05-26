@@ -37,7 +37,7 @@
         android:id="@+id/emailTextview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="35dp"
         android:text="Email"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@id/guidelineVertical"
@@ -47,8 +47,9 @@
         android:id="@+id/emailLayout"
         style="@style/Widget.Danzle.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         app:errorEnabled="true"
+        app:layout_constraintDimensionRatio="6:1"
         app:layout_constraintStart_toStartOf="@id/guidelineVertical"
         app:layout_constraintTop_toBottomOf="@id/emailTextview"
         app:layout_constraintWidth_percent="0.8">
@@ -56,7 +57,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/email"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="match_parent"
             android:inputType="textEmailAddress"
             android:textSize="14dp" />
 
@@ -67,6 +68,7 @@
         android:id="@+id/usernameTextview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:text="Username"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@id/guidelineVertical"
@@ -76,9 +78,10 @@
         android:id="@+id/usernameLayout"
         style="@style/Widget.Danzle.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginStart="40dp"
         app:errorEnabled="true"
+        app:layout_constraintDimensionRatio="6:1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/usernameTextview"
         app:layout_constraintWidth_percent="0.8">
@@ -86,7 +89,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/username"
             android:layout_width="match_parent"
-            android:layout_height="46dp"
+            android:layout_height="match_parent"
             android:inputType="text"
             android:textSize="14dp" />
 
@@ -97,6 +100,7 @@
         android:id="@+id/password1Textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:text="Password"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@id/guidelineVertical"
@@ -106,9 +110,10 @@
         android:id="@+id/password1Layout"
         style="@style/Widget.Danzle.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginStart="40dp"
         app:errorEnabled="true"
+        app:layout_constraintDimensionRatio="6:1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/password1Textview"
         app:layout_constraintWidth_percent="0.8"
@@ -119,7 +124,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/password1"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="match_parent"
             android:inputType="textPassword"
             android:textSize="14dp" />
 
@@ -130,6 +135,7 @@
         android:id="@+id/password2Textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:text="Confirm Password"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@id/guidelineVertical"
@@ -139,9 +145,10 @@
         android:id="@+id/password2Layout"
         style="@style/Widget.Danzle.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginStart="40dp"
         app:errorEnabled="true"
+        app:layout_constraintDimensionRatio="6:1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/password2Textview"
         app:layout_constraintWidth_percent="0.8"
@@ -152,7 +159,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/password2"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="match_parent"
             android:inputType="textPassword"
             android:textSize="14dp" />
 
@@ -190,17 +197,11 @@
         app:layout_constraintBaseline_toBaselineOf="@id/acceptText"
         app:layout_constraintStart_toEndOf="@id/acceptText" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.7" />
-
     <Button
         android:id="@+id/createAccountButton"
         android:layout_width="0dp"
-        android:layout_height="50dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="80dp"
         android:background="@drawable/button_round_radius"
         android:backgroundTint="@color/danzlePink"
         android:fontFamily="@font/inter_18pt_semibold"
@@ -208,16 +209,17 @@
         android:text="Create Account"
         android:textColor="@color/white"
         android:textSize="16sp"
+        app:layout_constraintDimensionRatio="7:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/guidelineButton"
+        app:layout_constraintTop_toBottomOf="@id/termsconditions"
         app:layout_constraintWidth_percent="0.8" />
 
     <TextView
         android:id="@+id/backToSignin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:text="Sign In"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

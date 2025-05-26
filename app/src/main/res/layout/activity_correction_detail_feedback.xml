@@ -60,22 +60,34 @@
         app:layout_constraintTop_toTopOf="@id/guidelineHorizontal">
 
         <ImageView
-            android:id="@+id/feedbackImage"
+            android:id="@+id/feedbackExpertImage"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:adjustViewBounds="true"
-            android:background="@drawable/albumcover"
             android:scaleType="centerCrop"
             app:layout_constraintDimensionRatio="3:4"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <ImageView
+            android:id="@+id/feedbackImage"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            app:layout_constraintDimensionRatio="3:4"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+
         <androidx.core.widget.NestedScrollView
             android:id="@+id/fedebackScroll"
             android:layout_width="0dp"
             android:layout_height="200dp"
-            android:layout_margin="5dp"
+            android:layout_margin="10dp"
             android:scrollbars="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -92,6 +104,5 @@
         </androidx.core.widget.NestedScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

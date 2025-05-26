@@ -10,6 +10,6 @@ interface SilhouetteService {
     @GET("/accuracy-session/video-paths")
     fun getSilhouette(
         @Header("Authorization") token: String,
-        @Query("songName") songName: String
+        @Query("songName") songTitle: String
     ): Call<SilhouetteResponse>
 }

@@ -14,7 +14,7 @@
     <color name="practice_main_fragment_grayline">#D3D3D3</color>
     <color name="challengeWord">#DEEE5E</color>
     <color name="correctionWord">#64E9EB</color>
-
+    <color name="transparent">#00000000</color>
     <!-- 점수 색상 -->
     <color name="scorePerfectText">#F71BD2</color>
     <color name="scoreGoodText">#835AFD</color>

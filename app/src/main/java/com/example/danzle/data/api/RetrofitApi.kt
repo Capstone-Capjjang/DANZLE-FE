@@ -1,12 +1,14 @@
 package com.example.danzle.data.api
 
 import com.example.danzle.commonService.MusicSelectService
+import com.example.danzle.commonService.SaveService
 import com.example.danzle.commonService.SaveVideoService
 import com.example.danzle.commonService.SilhouetteService
 import com.example.danzle.correction.CorrectionDetailFeedback
 import com.example.danzle.correction.CorrectionDetailFeedbackService
 import com.example.danzle.correction.CorrectionResultService
 import com.example.danzle.correction.CorrectionService
+import com.example.danzle.correction.FakeFeedbackService
 import com.example.danzle.correction.PoseAnalysis
 import com.example.danzle.myprofile.MyProfileService
 import com.example.danzle.myprofile.editProfile.ChangePasswordService
@@ -25,20 +27,25 @@ import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.lang.reflect.Type
+import java.util.concurrent.TimeUnit
 
 
 object RetrofitApi {
 
-    private const val BASE_URL = "http://15.164.225.67:8080"
+    private const val BASE_URL = "http://13.125.254.255:8080"
 
     //54.180.117.41
     private val client: OkHttpClient by lazy {
         OkHttpClient.Builder()
+            .connectTimeout(180, TimeUnit.SECONDS) // 서버 연결까지 기다리는 최대 시간
+            .readTimeout(180, TimeUnit.SECONDS)    // 서버 응답 읽기까지 기다리는 최대 시간
+            .writeTimeout(180, TimeUnit.SECONDS)   // 서버에 요청 쓰기까지 기다리는 최대 시간
             .addInterceptor(
                 HttpLoggingInterceptor().apply {
                     level = HttpLoggingInterceptor.Level.BODY
                 }
-            ).build()
+            )
+            .build()
     }
 
     private val danzleRetrofit = Retrofit.Builder()
@@ -71,6 +78,15 @@ object RetrofitApi {
 
     fun getSignInInstance(): SignInsService {
         return signInService
+    }
+
+    // fakefeedback
+    private val fakeFeedbackService: FakeFeedbackService by lazy {
+        danzleRetrofit.create(FakeFeedbackService::class.java)
+    }
+
+    fun getFakeFeedbackInstance(): FakeFeedbackService {
+        return fakeFeedbackService
     }
 
     // CreateAccount
@@ -135,6 +151,15 @@ object RetrofitApi {
 
     fun getPoseAnalysisInstance(): PoseAnalysis {
         return poseAnalysisService
+    }
+
+    // save
+    private val saveService: SaveService by lazy {
+        danzleRetrofit.create(SaveService::class.java)
+    }
+
+    fun getSaveInstance(): SaveService {
+        return saveService
     }
 
     // save video

@@ -49,30 +49,26 @@
 
     <ImageView
         android:id="@+id/songImage"
-        android:layout_width="260dp"
-        android:layout_height="340dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:background="@android:color/transparent"
+        app:layout_constraintDimensionRatio="5:6"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/guidelineImage" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.55" />
+        app:layout_constraintTop_toTopOf="@id/guidelineImage"
+        app:layout_constraintWidth_percent="0.6" />
 
     <TextView
         android:id="@+id/songName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:fontFamily="@font/inter_18pt_medium"
         android:text="Mantra"
         android:textSize="25sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/guidelineText" />
+        app:layout_constraintTop_toBottomOf="@id/songImage" />
 
     <TextView
         android:id="@+id/artist"
@@ -84,17 +80,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/songName" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.67" />
-
     <Button
         android:id="@+id/tryAgainButton"
         android:layout_width="0dp"
-        android:layout_height="50dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="50dp"
         android:background="@drawable/button_round_radius"
         android:backgroundTint="@color/lightPink"
         android:fontFamily="@font/inter_18pt_semibold"
@@ -102,15 +92,16 @@
         android:text="Try Again"
         android:textColor="@color/white"
         android:textSize="17sp"
+        app:layout_constraintDimensionRatio="7:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/guidelineButton"
+        app:layout_constraintTop_toBottomOf="@id/artist"
         app:layout_constraintWidth_percent="0.8" />
 
     <Button
         android:id="@+id/othersongsButton"
         android:layout_width="0dp"
-        android:layout_height="50dp"
+        android:layout_height="0dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/button_round_radius"
         android:backgroundTint="@color/lightBlue"
@@ -119,6 +110,7 @@
         android:text="Other Songs"
         android:textColor="@color/white"
         android:textSize="17sp"
+        app:layout_constraintDimensionRatio="7:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tryAgainButton"
@@ -127,7 +119,7 @@
     <Button
         android:id="@+id/quitButton"
         android:layout_width="0dp"
-        android:layout_height="50dp"
+        android:layout_height="0dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/button_round_radius"
         android:backgroundTint="@color/black"
@@ -136,6 +128,7 @@
         android:text="Quit"
         android:textColor="@color/white"
         android:textSize="17sp"
+        app:layout_constraintDimensionRatio="7:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/othersongsButton"

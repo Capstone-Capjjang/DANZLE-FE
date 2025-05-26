@@ -45,10 +45,10 @@ import com.example.danzle.MainActivity
 import com.example.danzle.R
 import com.example.danzle.data.api.DanzleSharedPreferences
 import com.example.danzle.data.api.RetrofitApi
-import com.example.danzle.data.remote.request.auth.SaveVideoRequest
 import com.example.danzle.data.remote.response.auth.CorrectionResponse
 import com.example.danzle.data.remote.response.auth.MusicSelectResponse
 import com.example.danzle.data.remote.response.auth.PoseAnalysisResponse
+import com.example.danzle.data.remote.response.auth.SaveResponse
 import com.example.danzle.data.remote.response.auth.SaveVideoResponse
 import com.example.danzle.data.remote.response.auth.SilhouetteResponse
 import com.example.danzle.databinding.ActivityCorrectionBinding
@@ -61,7 +61,6 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.adapter.rxjava.Result.response
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -377,13 +376,37 @@ class Correction : AppCompatActivity() {
                     if (!event.hasError()) {
                         val videoUri = event.outputResults.outputUri
                         Log.d("Recording", "Recording saved: $videoUri")
-                        uploadRecordedVideo(videoUri)
+                        val sessionId = currentSessionId ?: return@start
+                        saveSessionIdBeforeUploading(sessionId) {
+                            uploadRecordedVideo(videoUri)
+                        }
                     } else {
                         Log.e("Recording", "Recording error: ${event.error}")
                     }
                 }
             }
         }
+    }
+
+    private fun saveSessionIdBeforeUploading(sessionId: Long, onComplete: () -> Unit) {
+
+        Log.d("SaveVideo", "Sending SaveRequest: sessionId = $sessionId")
+
+        RetrofitApi.getSaveInstance().saveSession(authHeader,sessionId)
+            .enqueue(object : Callback<SaveResponse> {
+                override fun onResponse(call: Call<SaveResponse>, response: Response<SaveResponse>) {
+                    if (response.isSuccessful) {
+                        Log.d("SaveVideo", "Raw response: ${response.body().toString()}")
+                        onComplete() // 저장 성공 후 업로드 진행
+                    } else {
+                        Log.e("SaveVideo", "Failed to save session: ${response.code()}")
+                    }
+                }
+
+                override fun onFailure(call: Call<SaveResponse>, t: Throwable) {
+                    Log.e("SaveVideo", "Error saving session: ${t.message}")
+                }
+            })
     }
 
     private fun uploadRecordedVideo(videoUri: Uri) {
@@ -413,6 +436,7 @@ class Correction : AppCompatActivity() {
                     sessionId.toString().toRequestBody("text/plain".toMediaTypeOrNull())
 
                 saveVideoService.getSaveVideo(
+                    authHeader,
                     file = filePart,
                     sessionId = sessionIdBody,
                     videoMode = videoModeBody,
@@ -476,7 +500,7 @@ class Correction : AppCompatActivity() {
         }
 
         val retrofit = RetrofitApi.getCorrectionInstance()
-        retrofit.getCorrection(songId, authHeader)
+        retrofit.getCorrection(authHeader, songId)
             .enqueue(object : Callback<CorrectionResponse> {
                 override fun onResponse(
                     call: Call<CorrectionResponse>,
@@ -503,7 +527,7 @@ class Correction : AppCompatActivity() {
                         if (correctionResponse != null) {
                             currentSessionId = correctionResponse.sessionId
                             Log.d("SessionCheck", "Received sessionId = $currentSessionId")
-                            val songName = correctionResponse.song.title
+                            val songName = correctionResponse.songTitle
 
                             // 세션 받자마자 첫 프레임 전송!
                             binding.previewView.bitmap?.let {
@@ -513,7 +537,14 @@ class Correction : AppCompatActivity() {
                             retrofitSilhouetteCorrectionVideo(
                                 authHeader, songName
                             )
-                        } else {
+                        } else {  val code = response.code()
+                            val raw = response.raw()
+                            val errorBody = response.errorBody()?.string()
+
+                            Log.e("CorrectionAPI", "Server error")
+                            Log.e("CorrectionAPI", "→ Status code: $code")
+                            Log.e("CorrectionAPI", "→ Raw response: $raw")
+                            Log.e("CorrectionAPI", "→ Error body: $errorBody")
                             // body 자체가 null이거나, 빈 리스트일 경우
                             Log.w("CorrectionAPI", "응답은 성공했지만 데이터가 없습니다.")
                             Toast.makeText(this@Correction, "아직 분석된 결과가 없어요!", Toast.LENGTH_SHORT)

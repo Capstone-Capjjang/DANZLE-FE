@@ -63,6 +63,9 @@ class PracticeMain : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainPracticeBinding
 
+    private lateinit var token: String
+    private lateinit var authHeader: String
+
     // ExoPlayer는 Google이 만든 Android용 미디어 플레이어
     // player는 ExoPlayer 객체를 가리킨다.
     lateinit var player: ExoPlayer
@@ -93,6 +96,9 @@ class PracticeMain : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        token = DanzleSharedPreferences.getAccessToken() ?: ""
+        authHeader = "Bearer $token"
 
         mode = intent.getStringExtra("mode")?.let { PracticeMode.valueOf(it) } ?: PracticeMode.FULL
 
@@ -350,6 +356,7 @@ class PracticeMain : AppCompatActivity() {
                     sessionId.toString().toRequestBody("text/plain".toMediaTypeOrNull())
 
                 saveVideoService.getSaveVideo(
+                    authHeader,
                     file = filePart,
                     sessionId = sessionIdBody,
                     videoMode = videoModeBody,
@@ -382,12 +389,6 @@ class PracticeMain : AppCompatActivity() {
     // actity 내부에서 호출할 때는 context 없이 this로 호출해도 충분하다.
     // Fragment, Adapter 등에서 호출할 때는 requireContext() 또는 전달된 context 필요하다.
     private fun retrofitPractice(songId: Long, mode: PracticeMode) {
-        // SharedPreferences에 저장된 토큰 가져옴
-        val token = DanzleSharedPreferences.getAccessToken()
-
-        val authHeader = "Bearer $token"
-        //꼭 Baearer를 붙여야 한다.
-
         if (token.isNullOrEmpty()) {
             Toast.makeText(this@PracticeMain, "로그인이 필요합니다.", Toast.LENGTH_SHORT).show()
             return

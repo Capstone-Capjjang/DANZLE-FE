@@ -26,6 +26,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+        <activity
             android:name=".correction.CorrectionDetailFeedback"
             android:exported="false" />
         <activity
@@ -74,13 +77,13 @@
             android:name=".challenge.ChallengeMusicSelect"
             android:exported="false" />
         <activity
-            android:name=".correction.CorrectionMusicSelect"
+            android:name=".startPage.FirstStart"
             android:exported="false" />
         <activity
             android:name=".practice.PracticeMain"
             android:exported="false" />
         <activity
-            android:name=".startPage.FirstStart"
+            android:name=".challenge.Challenge"
             android:exported="false" />
         <activity
             android:name=".practice.PracticeMusicSelectPopup"
@@ -95,7 +98,7 @@
             android:name=".practice.PracticeMusicSelect"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".correction.CorrectionMusicSelect"
             android:exported="false" />
         <activity
             android:name=".startPage.SignIn"

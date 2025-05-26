@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.danzle.R
 import com.example.danzle.databinding.ChallengeFragmentBinding
 
 class FragmentChallenge: Fragment() {
@@ -28,7 +27,7 @@ class FragmentChallenge: Fragment() {
 
         // root -> 특정 카드 전체를 감싸는 상위 뷰에 대해, 그걸 클릭 타겟
         binding.root.setOnClickListener{
-            val intent = Intent(requireContext(), ChallengeMusicSelect::class.java)
+            val intent = Intent(requireContext(), Challenge::class.java)
             startActivity(intent)
         }
     }

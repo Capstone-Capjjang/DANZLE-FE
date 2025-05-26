@@ -41,7 +41,8 @@
     <EditText
         android:id="@+id/changeUsernameEdittext"
         android:layout_width="0dp"
-        android:layout_height="46dp"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="7:1"
         android:background="@drawable/edittext_box"
         android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
@@ -52,7 +53,8 @@
     <Button
         android:id="@+id/changeUsernameButton"
         android:layout_width="0dp"
-        android:layout_height="50dp"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="7:1"
         android:layout_marginTop="50dp"
         android:background="@drawable/button_round_radius"
         android:backgroundTint="@color/danzlePink"

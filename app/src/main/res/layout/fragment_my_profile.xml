@@ -51,7 +51,7 @@
         android:layout_marginTop="10dp"
         android:fontFamily="@font/inter_18pt_semibold"
         android:text="username"
-        android:textSize="22dp"
+        android:textSize="22sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/profileImageview" />
@@ -61,24 +61,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="email@email.com"
-        android:textSize="16dp"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/usernameTextview" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineForContent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.3" />
-
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/background"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="25dp"
         android:background="@drawable/custom_radius_background"
         android:backgroundTint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -88,9 +80,10 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/editProfile"
             android:layout_width="0dp"
-            android:layout_height="70dp"
+            android:layout_height="0dp"
             android:layout_marginTop="40dp"
             android:background="@drawable/shadow_background"
+            app:layout_constraintDimensionRatio="5:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/background"
@@ -123,9 +116,10 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/myVideo"
             android:layout_width="0dp"
-            android:layout_height="70dp"
+            android:layout_height="0dp"
             android:layout_marginTop="18dp"
             android:background="@drawable/shadow_background"
+            app:layout_constraintDimensionRatio="5:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/editProfile"
@@ -148,7 +142,7 @@
                 android:layout_marginStart="15dp"
                 android:fontFamily="@font/inter_18pt_medium"
                 android:text="My Video"
-                android:textSize="16dp"
+                android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/myVideoIcon"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -158,9 +152,10 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/myScore"
             android:layout_width="0dp"
-            android:layout_height="70dp"
+            android:layout_height="0dp"
             android:layout_marginTop="18dp"
             android:background="@drawable/shadow_background"
+            app:layout_constraintDimensionRatio="5:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/myVideo"
@@ -193,9 +188,10 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/infoApp"
             android:layout_width="0dp"
-            android:layout_height="70dp"
+            android:layout_height="0dp"
             android:layout_marginTop="18dp"
             android:background="@drawable/shadow_background"
+            app:layout_constraintDimensionRatio="5:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/myScore"
@@ -228,9 +224,10 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/logout"
             android:layout_width="0dp"
-            android:layout_height="70dp"
+            android:layout_height="0dp"
             android:layout_marginTop="18dp"
             android:background="@drawable/shadow_background"
+            app:layout_constraintDimensionRatio="5:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/infoApp"

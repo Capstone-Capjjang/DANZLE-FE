@@ -1,6 +1,6 @@
 package com.example.danzle.correction
 
-import com.example.danzle.data.remote.response.auth.CorrectionResponse
+import com.example.danzle.data.remote.response.auth.CorrectionResultResponse
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -11,5 +11,5 @@ interface CorrectionResultService {
     fun getCorrectionResultService(
         @Query("sessionId") sessionId: Long,
         @Header("authorization") token: String
-    ): Call<List<CorrectionResponse>>
+    ): Call<CorrectionResultResponse>
 }
