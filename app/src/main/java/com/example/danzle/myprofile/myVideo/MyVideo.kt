@@ -8,6 +8,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.danzle.R
 import com.example.danzle.data.api.DanzleSharedPreferences
 import com.example.danzle.data.api.RetrofitApi
@@ -23,6 +25,9 @@ class MyVideo : AppCompatActivity() {
 
     private lateinit var binding: ActivityMyVideoBinding
 
+    private lateinit var practiceAdapter: MyVideoRVAdapter
+    private lateinit var correctionAdapter: MyVideoRVAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -34,38 +39,62 @@ class MyVideo : AppCompatActivity() {
             insets
         }
 
-        // changing activity
         binding.practiceMore.setOnClickListener {
             startActivity(Intent(this@MyVideo, PracticeVideoRepository::class.java))
         }
-        binding.challengeMore.setOnClickListener {
-            startActivity(Intent(this@MyVideo, ChallengeVideoRepository::class.java))
+        binding.correctionMore.setOnClickListener {
+            startActivity(Intent(this@MyVideo, CorrectionVideoRepository::class.java))
         }
 
-        binding.vector.setOnClickListener {
+        binding.backButton.setOnClickListener {
             finish()
         }
 
         Log.d("MyVideo", "onCreate 실행됨")
+        practiceAdapter = MyVideoRVAdapter(arrayListOf())
+        correctionAdapter = MyVideoRVAdapter(arrayListOf())
+
+        binding.practiceVideoRecyclerview.adapter = practiceAdapter
+        binding.correctionVideoRecyclerview.adapter = correctionAdapter
+
+        binding.practiceVideoRecyclerview.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+
+        binding.correctionVideoRecyclerview.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+
+        val itemSpacing = resources.getDimensionPixelSize(R.dimen.recycler_item_spacing)
+
+        binding.practiceVideoRecyclerview.addItemDecoration(
+            HorizontalItemSpacingDecoration(
+                itemSpacing
+            )
+        )
+        binding.correctionVideoRecyclerview.addItemDecoration(
+            HorizontalItemSpacingDecoration(
+                itemSpacing
+            )
+        )
+
         retrofitMyVideo()
-
     }
 
-    // recyclerview와 MyVideoRVAdapter 연결
-    private fun setPracticeAdapter(list: ArrayList<MyVideoResponse>) {
-        val adapter = MyVideoRVAdapter(list)
-        binding.practiceVideoRecyclerview.adapter = adapter
-    }
-
-    private fun setChallengeAdapter(list: ArrayList<MyVideoResponse>) {
-        val adapter = MyVideoRVAdapter(list)
-        binding.challengeVideoRecyclerview.adapter = adapter
-    }
+//    // recyclerview와 MyVideoRVAdapter 연결
+//    private fun setPracticeAdapter(list: ArrayList<MyVideoResponse>) {
+//        val adapter = MyVideoRVAdapter(list)
+//        binding.practiceVideoRecyclerview.adapter = adapter
+//    }
+//
+//    private fun setCorrectionAdapter(list: ArrayList<MyVideoResponse>) {
+//        val adapter = MyVideoRVAdapter(list)
+//        binding.correctionVideoRecyclerview.adapter = adapter
+//    }
 
     //about retrofit
     private fun retrofitMyVideo() {
         val token = DanzleSharedPreferences.getAccessToken()
         val authHeader = "Bearer $token"
+
         val userId = DanzleSharedPreferences.getUserId()
 
         Log.d("MyVideo", "토큰: $token / 유저 ID: $userId")
@@ -77,7 +106,7 @@ class MyVideo : AppCompatActivity() {
         }
 
         val retrofit = RetrofitApi.getMyVideoInstance()
-        retrofit.getMyVideo(authHeader, userId)
+        retrofit.getMyVideo(authHeader)
             .enqueue(object : Callback<List<MyVideoResponse>> {
                 override fun onResponse(
                     call: Call<List<MyVideoResponse>>,
@@ -91,14 +120,15 @@ class MyVideo : AppCompatActivity() {
                         // separate data
                         // enum class로 선언되어 있어서 아래와 같이 VideoMode.PRACTICE로 불러와야 된다.
                         val practiceList = myVideoList.filter { it.mode == VideoMode.PRACTICE }
-                        val challengeList = myVideoList.filter { it.mode == VideoMode.CHALLENGE }
+                        val challengeList = myVideoList.filter { it.mode == VideoMode.ACCURACY }
 
-                        // connecting to adapter
-                        setPracticeAdapter(ArrayList(practiceList))
-                        setChallengeAdapter(ArrayList(challengeList))
+                        // retrofit 응답 성공 시
+                        practiceAdapter.updateList(practiceList)
+                        correctionAdapter.updateList(challengeList)
 
                     } else {
                         Log.d("MyVideo", "MyVideo / Response Code: ${response.code()}")
+                        Log.e("MyScore", "Error body: ${response.errorBody()?.string()}")
                         Toast.makeText(
                             this@MyVideo,
                             "Fail to MyVideo: ${response.message()}",
@@ -112,5 +142,20 @@ class MyVideo : AppCompatActivity() {
                     Toast.makeText(this@MyVideo, "Error", Toast.LENGTH_SHORT).show()
                 }
             })
+    }
+}
+
+class HorizontalItemSpacingDecoration(private val spacing: Int) : RecyclerView.ItemDecoration() {
+    override fun getItemOffsets(
+        outRect: android.graphics.Rect,
+        view: android.view.View,
+        parent: RecyclerView,
+        state: RecyclerView.State
+    ) {
+        val position = parent.getChildAdapterPosition(view)
+        outRect.right = spacing
+        if (position == 0) {
+            outRect.left = spacing // 첫 번째 아이템 왼쪽도 간격
+        }
     }
 }

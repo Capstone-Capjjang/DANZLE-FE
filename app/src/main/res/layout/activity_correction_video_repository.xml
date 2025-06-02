@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".myprofile.myVideo.ChallengeVideoRepository">
+    tools:context=".myprofile.myVideo.CorrectionVideoRepository">
 
     <Button
         android:id="@+id/backButton"
@@ -38,25 +38,25 @@
         app:layout_constraintTop_toBottomOf="@id/backButton" />
 
     <TextView
-        android:id="@+id/challengeTitleTextview"
+        android:id="@+id/correctionTitleTextview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:fontFamily="@font/inter_18pt_medium"
-        android:text="challenge"
+        android:text="correction"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="@id/scoreIcon"
         app:layout_constraintStart_toEndOf="@id/scoreIcon" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/challengeVideo"
+        android:id="@+id/correctionVideo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
-        app:layout_constraintTop_toBottomOf="@id/challengeTitleTextview">
+        app:layout_constraintTop_toBottomOf="@id/correctionTitleTextview">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/challengeVideoRecyclerview"
+            android:id="@+id/correctionVideoRecyclerview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="10dp"

@@ -12,20 +12,20 @@ import com.example.danzle.R
 import com.example.danzle.data.api.DanzleSharedPreferences
 import com.example.danzle.data.api.RetrofitApi
 import com.example.danzle.data.remote.response.auth.MyVideoResponse
-import com.example.danzle.databinding.ActivityChallengeVideoRepositoryBinding
+import com.example.danzle.databinding.ActivityCorrectionVideoRepositoryBinding
 import com.example.danzle.enum.VideoMode
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class ChallengeVideoRepository : AppCompatActivity() {
+class CorrectionVideoRepository : AppCompatActivity() {
 
-    private lateinit var binding: ActivityChallengeVideoRepositoryBinding
+    private lateinit var binding: ActivityCorrectionVideoRepositoryBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        binding = ActivityChallengeVideoRepositoryBinding.inflate(layoutInflater)
+        binding = ActivityCorrectionVideoRepositoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -34,66 +34,71 @@ class ChallengeVideoRepository : AppCompatActivity() {
         }
 
         // 영상 recyclerview 서버에서 가져오기
-        loadChallengeVideos()
+        loadCorrectionVideos()
 
         // back button
         binding.backButton.setOnClickListener {
-            startActivity(Intent(this@ChallengeVideoRepository, MyVideo::class.java))
+            startActivity(Intent(this@CorrectionVideoRepository, MyVideo::class.java))
         }
 
     }
 
 
-    private fun setChallengeAdapter(list: ArrayList<MyVideoResponse>) {
+    private fun setCorrectionAdapter(list: ArrayList<MyVideoResponse>) {
         val adapter = MyVideoRVAdapter(list)
-        binding.challengeVideoRecyclerview.adapter = adapter
+        binding.correctionVideoRecyclerview.adapter = adapter
     }
 
-    private fun loadChallengeVideos() {
-        val token = DanzleSharedPreferences.getAccessToken()
+    private fun loadCorrectionVideos() {
+        val token = DanzleSharedPreferences.getAccessToken() ?: ""
+        val authHeader = "Bearer $token"
         val userId = DanzleSharedPreferences.getUserId()
 
         if (token.isNullOrEmpty() || userId == null) {
             Toast.makeText(
-                this@ChallengeVideoRepository,
+                this@CorrectionVideoRepository,
                 "You have to sign in.",
                 Toast.LENGTH_SHORT
             ).show()
             return
         }
 
-        val retrofit = RetrofitApi.getChallengeVideoRepositoryInstance()
-        retrofit.getChallengeVideo(token, userId)
+        Log.d("CorrectionVideoRepository", "CorrectionVideoRepository / Token: $token")
+
+        val retrofit = RetrofitApi.getCorrectionVideoRepositoryInstance()
+        retrofit.getCorrectionVideo(authHeader)
             .enqueue(object : Callback<List<MyVideoResponse>> {
                 override fun onResponse(
                     call: Call<List<MyVideoResponse>>,
                     response: Response<List<MyVideoResponse>>
                 ) {
                     if (response.isSuccessful) {
-                        val challengeList =
-                            response.body()?.filter { it.mode == VideoMode.CHALLENGE }
-                        setChallengeAdapter(ArrayList(challengeList))
+                        val accuracyList =
+                            response.body()?.filter { it.mode == VideoMode.ACCURACY } ?: emptyList()
+                        setCorrectionAdapter(ArrayList(accuracyList))
                         Log.d(
-                            "Debug",
-                            "PracticeVideoRepository / Full Response Body: $challengeList"
+                            "CorrectionVideoRepository",
+                            "CorrectionVideoRepository / Full Response Body: $accuracyList"
                         ) // 응답 전체 확인
-                        Log.d("Debug", "PracticeVideoRepository / Token: $token")
+                        Log.d("CorrectionVideoRepository", "CorrectionVideoRepository / Token: $token")
                     } else {
                         Log.d(
-                            "Debug",
-                            "PracticeVideoRepository / Response Code: ${response.code()}"
+                            "CorrectionVideoRepository",
+                            "CorrectionVideoRepository / Response Code: ${response.code()}"
                         )
+                        val errorMsg = response.errorBody()?.string()
+                        Log.e("CorrectionVideoRepository", "Error Body: $errorMsg")
                         Toast.makeText(
-                            this@ChallengeVideoRepository,
-                            "Fail to PracticeVideoRepository: ${response.message()}",
+                            this@CorrectionVideoRepository,
+                            "Fail to CorrectionVideoRepository: ${response.message()}",
                             Toast.LENGTH_SHORT
                         ).show()
                     }
                 }
 
                 override fun onFailure(call: Call<List<MyVideoResponse>>, t: Throwable) {
-                    Log.d("Debug", "ChallengeVideoRepository / Error: ${t.message}")
-                    Toast.makeText(this@ChallengeVideoRepository, "Error", Toast.LENGTH_SHORT)
+                    Log.d("CorrectionVideoRepository", "CorrectionVideoRepository / Error: ${t.message}")
+                    Toast.makeText(this@CorrectionVideoRepository, "Error", Toast.LENGTH_SHORT)
                         .show()
                 }
             })

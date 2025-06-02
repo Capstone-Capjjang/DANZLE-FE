@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.danzle.VideoPlayerActivity
+import com.example.danzle.R
 import com.example.danzle.data.remote.response.auth.MyVideoResponse
 import com.example.danzle.databinding.MypageVideoRecyclerviewBinding
 
@@ -26,6 +26,8 @@ class MyVideoRVAdapter(private var info: ArrayList<MyVideoResponse>) :
             // Glide를 사용해 네트워크 또는 로컬에서 이미지 로딩
             Glide.with(binding.image.context)
                 .load(response.songImgPath)
+                .placeholder(R.drawable.profile_image) // 로딩 중일 때 표시할 이미지
+                .error(R.drawable.profile_image) // 실패했을 때 표시할 이미지
                 .into(binding.image)
 
             binding.root.setOnClickListener {
@@ -57,5 +59,12 @@ class MyVideoRVAdapter(private var info: ArrayList<MyVideoResponse>) :
     // position에 해당하는 데이터를 ViewHolder에 바인딩
     override fun onBindViewHolder(holder: VideoViewHolder, position: Int) {
         holder.bind(info[position])
+    }
+
+    // 갱신
+    fun updateList(newList: List<MyVideoResponse>) {
+        info.clear()
+        info.addAll(newList)
+        notifyDataSetChanged()
     }
 }

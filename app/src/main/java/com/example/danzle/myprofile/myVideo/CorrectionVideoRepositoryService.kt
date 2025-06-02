@@ -5,9 +5,9 @@ import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Header
 
-interface PracticeVideoRepositoryService {
-    @GET("/recorded-video/user/me?mode=PRACTICE")
-    fun getPracticeVideo(
+interface CorrectionVideoRepositoryService {
+    @GET("/recorded-video/user/me?mode=ACCURACY")
+    fun getCorrectionVideo(
         @Header("Authorization") authHeader: String
     ): Call<List<MyVideoResponse>>
 }
