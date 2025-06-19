@@ -26,25 +26,58 @@ Danzle is service that aims to help users learning K-pop choreography on their o
 
 ### 연습 모드
 
-| 메인 | 곡 선택 | 모드 선택 | 연습 모드 | 종료 화면 |
-|------|---------|------------|------------|-----------|
-| <img src="https://github.com/user-attachments/assets/762bd264-cdfd-4a66-a8ee-0cf95ce07465" width="200" height="400" /> | <img src="https://github.com/user-attachments/assets/0246063b-6535-4d40-9c7f-e5a5a142c404" width="200" height="400" /> | <img src="https://github.com/user-attachments/assets/ff27f778-bdc3-4f33-a6a1-6caefe598fc6" width="200" height="400" /> | <img src="https://github.com/user-attachments/assets/e4432328-3c8a-49e0-8c34-403e49260cb8" width="200" height="400" /> | <img src="https://github.com/user-attachments/assets/b6d83b5d-1d79-4a38-9d2d-d825d5a45393" width="200" height="400" /> |
+<div style="overflow-x: auto; white-space: nowrap;">
+
+<table>
+  <tr>
+    <th>메인</th>
+    <th>곡 선택</th>
+    <th>모드 선택</th>
+    <th>연습 모드</th>
+    <th>종료 화면</th>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/user-attachments/assets/762bd264-cdfd-4a66-a8ee-0cf95ce07465" width="200" height="400" /></td>
+    <td><img src="https://github.com/user-attachments/assets/0246063b-6535-4d40-9c7f-e5a5a142c404" width="200" height="400" /></td>
+    <td><img src="https://github.com/user-attachments/assets/ff27f778-bdc3-4f33-a6a1-6caefe598fc6" width="200" height="400" /></td>
+    <td><img src="https://github.com/user-attachments/assets/e4432328-3c8a-49e0-8c34-403e49260cb8" width="200" height="400" /></td>
+    <td><img src="https://github.com/user-attachments/assets/b6d83b5d-1d79-4a38-9d2d-d825d5a45393" width="200" height="400" /></td>
+  </tr>
+</table>
+
+</div>
 
 <br>
 
 ### 정확도 모드
 
-| 메인 | 곡 선택 | 정확도 모드 | 종합 피드백 | AI 피드백 |
-|------|---------|--------------|--------------|------------|
-| <img src="https://github.com/user-attachments/assets/436076bf-3347-4b2a-9ecf-661b56eba03b" width="200" height="400" /> | <img src="https://github.com/user-attachments/assets/f1d1efde-13fa-4159-bac7-919f8bd92a01" width="200" height="400" /> | <img src="https://github.com/user-attachments/assets/13d64c0b-a978-4030-9886-9fa154037a6f" width="200" height="400" /> | <img src="https://github.com/user-attachments/assets/393ffdab-75c0-4fe0-86e9-034398299762" width="200" height="400" /> | <img src="https://github.com/user-attachments/assets/4eb08aa4-904d-4f1d-8f52-34e63c01cd14" width="200" height="400" /> |
+<div style="overflow-x: auto; white-space: nowrap;">
 
+<table>
+  <tr>
+    <th>메인</th>
+    <th>곡 선택</th>
+    <th>정확도 모드</th>
+    <th>종합 피드백</th>
+    <th>AI 피드백</th>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/user-attachments/assets/436076bf-3347-4b2a-9ecf-661b56eba03b" width="200" height="400" /></td>
+    <td><img src="https://github.com/user-attachments/assets/f1d1efde-13fa-4159-bac7-919f8bd92a01" width="200" height="400" /></td>
+    <td><img src="https://github.com/user-attachments/assets/13d64c0b-a978-4030-9886-9fa154037a6f" width="200" height="400" /></td>
+    <td><img src="https://github.com/user-attachments/assets/393ffdab-75c0-4fe0-86e9-034398299762" width="200" height="400" /></td>
+    <td><img src="https://github.com/user-attachments/assets/4eb08aa4-904d-4f1d-8f52-34e63c01cd14" width="200" height="400" /></td>
+  </tr>
+</table>
+
+</div>
 <br>
 
 ### 챌린지 모드
 
 | 메인 | 곡 선택 | 챌린지 모드 |
 |------|---------|--------------|
-| <img src="https://github.com/user-attachments/assets/4bfb775d-cadd-403d-a02c-537532c177d9" width="200" height="400" /> | *(업로드 대기 중)* | <img src="https://github.com/user-attachments/assets/cb6104a6-1d98-4b70-988d-99c78d27ca5d" width="200" height="400" /> |
+| <img src="https://github.com/user-attachments/assets/4bfb775d-cadd-403d-a02c-537532c177d9" width="200" height="400" /> | <img src="https://github.com/user-attachments/assets/428c41b9-cdd6-4153-b790-2261df7d970f" width="200" height="400" /> | <img src="https://github.com/user-attachments/assets/cb6104a6-1d98-4b70-988d-99c78d27ca5d" width="200" height="400" /> |
 
 <br>
 
