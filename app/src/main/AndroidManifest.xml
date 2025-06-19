@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" >
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Danzle"
+        android:usesCleartextTraffic="true"
+        tools:targetApi="31" >
+        <activity
+            android:name=".HighlightFinish"
+            android:exported="false" />
+        <activity
+            android:name=".practice.FullFinish"
+            android:exported="false" />
+        <activity
+            android:name=".myprofile.infoApp.InfoApp"
+            android:exported="false" />
+        <activity
+            android:name=".myprofile.myScore.MyScore"
+            android:exported="false" />
+        <activity
+            android:name=".myprofile.myVideo.MyVideo"
+            android:exported="false" />
+        <activity
+            android:name=".myprofile.editProfile.EditProfile"
+            android:exported="false" />
+        <activity
+            android:name=".myprofile.MyProfileMain"
+            android:exported="false" />
+        <activity
+            android:name=".startPage.ForgotPassword2"
+            android:exported="false" />
+        <activity
+            android:name=".startPage.ForgotPassword1"
+            android:exported="false" />
+        <activity
+            android:name=".challenge.ChallengeMusicSelect"
+            android:exported="false" />
+        <activity
+            android:name=".challenge.ChallengeMain"
+            android:exported="false" />
+        <activity
+            android:name=".correction.CorrectionMusicSelect"
+            android:exported="false" />
+        <activity
+            android:name=".practice.HighlightPractice"
+            android:exported="false" />
+        <activity
+            android:name=".PracticeMain"
+            android:exported="false" />
+        <activity
+            android:name=".practice.PracticeMusicSelect"
+            android:exported="false" />
+        <activity
+            android:name=".correction.CorrectionMain"
+            android:exported="false" />
+        <activity
+            android:name=".practice.MusicSelectPopup"
+            android:exported="false" />
+        <activity
+            android:name=".SplashActivity"
+            android:exported="false" />
+        <activity
+            android:name=".practice.FullPractice"
+            android:exported="false" />
+        <activity
+            android:name=".startPage.CreateAccount"
+            android:exported="false" />
+        <activity
+            android:name=".startPage.FirstStart"
+            android:exported="false" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".startPage.SignIn"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

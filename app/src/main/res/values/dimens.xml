@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 페이지 간의 마진 -->
+    <dimen name="pageMargin">16dp</dimen>
+    <!-- 개별 페이지의 너비 (예제 값이므로 원하는 크기로 조정 가능) -->
+    <dimen name="pagerWidth">300dp</dimen>
+</resources>

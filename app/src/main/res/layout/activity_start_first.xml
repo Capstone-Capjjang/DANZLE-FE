@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".startPage.FirstStart">
+
+
+    <ImageView
+        android:id="@+id/danzleLogo"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        android:background="@drawable/danzle_logo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="150dp"
+        app:layout_constraintVertical_bias="0"
+        app:layout_constraintBottom_toTopOf="@id/danzle"/>
+
+    <TextView
+        android:id="@+id/danzle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Danzle"
+        android:fontFamily="@font/tiltwarp_regular"
+        android:textSize="30dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/danzleLogo"
+        app:layout_constraintBottom_toTopOf="@id/signin"/>
+
+    <Button
+        android:id="@+id/signin"
+        android:layout_width="304dp"
+        android:layout_height="40dp"
+        android:background="@drawable/button_round_radius"
+        android:backgroundTint="@color/danzlePink"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/danzle"
+        app:layout_constraintBottom_toTopOf="@+id/createAccount"
+        android:fontFamily="@font/inter_18pt_semibold"
+        android:layout_marginTop="100dp"
+        android:text="Sign In"
+        android:textColor="@color/white"
+        android:gravity="center"/>
+
+    <Button
+        android:id="@+id/createAccount"
+        android:layout_width="304dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/button_round_radius"
+        android:backgroundTint="@color/danzleBlue"
+        android:fontFamily="@font/inter_18pt_semibold"
+        android:gravity="center"
+        android:text="Create Account"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/signin" />
+
+    <Button
+        android:id="@+id/notSignin"
+        android:layout_width="304dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/button_round_radius"
+        android:backgroundTint="@color/gray"
+        android:fontFamily="@font/inter_18pt_semibold"
+        android:gravity="center"
+        android:text="Using without Sign In"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/createAccount" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

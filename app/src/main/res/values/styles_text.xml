@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Inter_Regular" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/inter_18pt_regular</item>
+    </style>
+
+    <style name="Inter_Light" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/inter_18pt_light</item>
+    </style>
+
+    <style name="Inter_SemiBold" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/inter_18pt_semibold</item>
+    </style>
+
+    <style name="Inter_Bold" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/inter_18pt_bold</item>
+    </style>
+
+    <style name="Inter_ExtraBold" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/inter_18pt_extrabold</item>
+    </style>
+
+</resources>

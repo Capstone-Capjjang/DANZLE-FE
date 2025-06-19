@@ -1,0 +1,16 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.Danzle" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+        <item name="android:textViewStyle">@style/Inter_Regular</item>
+        <item name="android:buttonStyle">@style/Inter_Regular</item>
+        <item name="android:editTextStyle">@style/Inter_Regular</item>
+        <item name="android:radioButtonStyle">@style/Inter_Regular</item>
+        <item name="android:checkboxStyle">@style/Inter_Regular</item>
+
+    </style>
+
+    <style name="Theme.Danzle" parent="Base.Theme.Danzle" />
+</resources>

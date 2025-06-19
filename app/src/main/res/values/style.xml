@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+
+    <item name="colorControlActivated">@color/danzlePink</item>
+    <item name="colorControlNormal">@color/gray</item>
+    <item name="android:textColorHighlight">#1AFF05B8</item>
+    <item name="android:textCursorDrawable">@color/danzlePink</item>
+
+
+
+</style>
+</resources>
