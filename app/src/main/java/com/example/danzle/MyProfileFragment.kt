@@ -4,7 +4,6 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +12,6 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
-import com.bumptech.glide.request.target.Target
 import com.example.danzle.data.api.DanzleSharedPreferences
 import com.example.danzle.data.api.RetrofitApi
 import com.example.danzle.data.remote.response.auth.MyProfileResponse
@@ -21,9 +19,7 @@ import com.example.danzle.databinding.FragmentMyProfileBinding
 import com.example.danzle.myprofile.editProfile.EditProfile
 import com.example.danzle.myprofile.myScore.MyScore
 import com.example.danzle.myprofile.myVideo.MyVideo
-import com.example.danzle.startPage.FirstStart
 import com.example.danzle.startPage.SignIn
-import com.example.danzle.startPage.token
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
