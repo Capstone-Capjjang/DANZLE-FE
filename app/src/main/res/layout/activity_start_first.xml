@@ -40,7 +40,7 @@
         android:id="@+id/signinButton"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="150dp"
         android:background="@drawable/button_round_radius"
         android:backgroundTint="@color/danzlePink"
         android:fontFamily="@font/inter_18pt_semibold"
@@ -72,24 +72,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/signinButton"
         app:layout_constraintWidth_percent="0.8" />
-
-    <Button
-        android:id="@+id/notSigninButton"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="30dp"
-        android:background="@drawable/button_round_radius"
-        android:backgroundTint="@color/lightGray"
-        android:fontFamily="@font/inter_18pt_semibold"
-        android:gravity="center"
-        android:text="Using without Sign In"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        app:layout_constraintDimensionRatio="7:1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/createAccountButton"
-        app:layout_constraintWidth_percent="0.8" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

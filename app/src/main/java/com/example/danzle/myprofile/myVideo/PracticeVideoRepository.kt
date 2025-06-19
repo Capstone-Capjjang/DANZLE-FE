@@ -2,7 +2,6 @@ package com.example.danzle.myprofile.myVideo
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -66,18 +65,9 @@ class PracticeVideoRepository : AppCompatActivity() {
                 ) {
                     if (response.isSuccessful) {
                         val practiceList =
-                            response.body()?.filter { it.mode == VideoMode.ACCURACY } ?: emptyList()
+                            response.body()?.filter { it.mode == VideoMode.PRACTICE } ?: emptyList()
                         setPracticeAdapter(ArrayList(practiceList))
-                        Log.d(
-                            "Debug",
-                            "PracticeVideoRepository / Full Response Body: $practiceList"
-                        ) // 응답 전체 확인
-                        Log.d("Debug", "PracticeVideoRepository / Token: $token")
                     } else {
-                        Log.d(
-                            "Debug",
-                            "PracticeVideoRepository / Response Code: ${response.code()}"
-                        )
                         Toast.makeText(
                             this@PracticeVideoRepository,
                             "Fail to PracticeVideoRepository: ${response.message()}",
@@ -88,12 +78,10 @@ class PracticeVideoRepository : AppCompatActivity() {
                 }
 
                 override fun onFailure(call: Call<List<MyVideoResponse>>, t: Throwable) {
-                    Log.d("Debug", "PracticeVideoRepository / Error: ${t.message}")
                     Toast.makeText(this@PracticeVideoRepository, "Error", Toast.LENGTH_SHORT)
                         .show()
                 }
             }
             )
-
     }
 }

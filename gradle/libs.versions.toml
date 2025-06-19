@@ -16,6 +16,7 @@ media3 = "1.6.1"
 glide = "4.16.0"
 retrofit2 = "2.11.0"
 okhttp3 = "4.12.0"
+splash = "1.0.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -51,6 +52,7 @@ retrofit2-adapter-rxjava = {group = "com.squareup.retrofit2", name = "adapter-rx
 okhttp3 = {group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp3"}
 okhttp3-logging-interceptor = {group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp3"}
 
+splash = {group = "androidx.core", name = "core-splashscreen", version.ref = "splash"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

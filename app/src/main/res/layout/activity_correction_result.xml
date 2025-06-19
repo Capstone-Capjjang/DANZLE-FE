@@ -7,363 +7,385 @@
     android:layout_height="match_parent"
     tools:context=".correction.CorrectionResult">
 
+    <FrameLayout
+        android:id="@+id/fullscreenLoading"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!-- 중앙에 큰 인디케이터 -->
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="@android:style/Widget.Material.ProgressBar.Large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminate="true" />
+
+    </FrameLayout>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/resultContentGroup"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/practice"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:fontFamily="@font/inter_18pt_bold"
-        android:text="correction"
-        android:textColor="@color/lightBlue"
-        android:textSize="22sp"
-        app:layout_constraintBottom_toBottomOf="@id/cancelButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/cancelButton"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginTop="18dp"
-        android:layout_marginEnd="18dp"
-        android:background="@drawable/cancel"
-        android:backgroundTint="@color/black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.1" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/songInfo"
-        android:layout_width="0dp"
-        android:layout_height="85dp"
-        android:background="@drawable/correction_song_background"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/guidelineTitle"
-        app:layout_constraintWidth_percent="0.8">
-
-        <ImageView
-            android:id="@+id/songImage"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_marginStart="18dp"
-            android:background="@drawable/albumcover"
-            app:layout_constraintBottom_toBottomOf="parent"
+        <TextView
+            android:id="@+id/practice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/inter_18pt_bold"
+            android:text="correction"
+            android:textColor="@color/lightBlue"
+            android:textSize="22sp"
+            app:layout_constraintBottom_toBottomOf="@id/cancelButton"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/songTitle"
+        <Button
+            android:id="@+id/cancelButton"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="18dp"
+            android:layout_marginEnd="18dp"
+            android:background="@drawable/cancel"
+            android:backgroundTint="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:fontFamily="@font/inter_18pt_medium"
-            android:text="Mantra"
-            android:textSize="22sp"
-            app:layout_constraintBottom_toTopOf="@id/singer"
-            app:layout_constraintStart_toEndOf="@id/songImage"
-            app:layout_constraintTop_toTopOf="@id/songImage" />
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.1" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/songInfo"
+            android:layout_width="0dp"
+            android:layout_height="85dp"
+            android:background="@drawable/correction_song_background"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/guidelineTitle"
+            app:layout_constraintWidth_percent="0.8">
+
+            <ImageView
+                android:id="@+id/songImage"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginStart="18dp"
+                android:background="@drawable/albumcover"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/songTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:fontFamily="@font/inter_18pt_medium"
+                android:text="Mantra"
+                android:textSize="22sp"
+                app:layout_constraintBottom_toTopOf="@id/singer"
+                app:layout_constraintStart_toEndOf="@id/songImage"
+                app:layout_constraintTop_toTopOf="@id/songImage" />
+
+            <TextView
+                android:id="@+id/singer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:fontFamily="@font/inter_18pt_medium"
+                android:text="Jennie"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@id/songImage"
+                app:layout_constraintStart_toEndOf="@id/songImage"
+                app:layout_constraintTop_toBottomOf="@id/songTitle" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
-            android:id="@+id/singer"
+            android:id="@+id/badgeResultText"
+            android:layout_width="230dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="35dp"
+            android:background="@drawable/correction_result_bar"
+            android:fontFamily="@font/inter_18pt_bold"
+            android:gravity="center"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="10dp"
+            android:text="Normal"
+            android:textColor="@color/scoreNormalText"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/songInfo" />
+
+        <LinearLayout
+            android:id="@+id/statisticsContainer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/correction_result_rounded"
+            android:orientation="vertical"
+            android:padding="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/badgeResultText"
+            app:layout_constraintWidth_percent="0.9">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="25dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/labelPerfect"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text="Perfect"
+                    android:textColor="@color/scorePerfectText"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/countPerfect"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text="0"
+                    android:textColor="@color/scorePerfectText"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <ProgressBar
+                    android:id="@+id/progressPerfect"
+                    style="@android:style/Widget.ProgressBar.Horizontal"
+                    android:layout_width="0dp"
+                    android:layout_height="10dp"
+                    android:layout_weight="1"
+                    android:max="100"
+                    android:progress="0"
+                    android:progressDrawable="@drawable/progress_bar_perfect" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="25dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/labelGood"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:text="Good"
+                    android:textColor="@color/scoreGoodText"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/countGood"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text="0"
+                    android:textColor="@color/scoreGoodText"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <ProgressBar
+                    android:id="@+id/progressGood"
+                    style="@android:style/Widget.ProgressBar.Horizontal"
+                    android:layout_width="0dp"
+                    android:layout_height="10dp"
+                    android:layout_weight="1"
+                    android:max="100"
+                    android:progress="0"
+                    android:progressDrawable="@drawable/progress_bar_good" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="25dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/labelNormal"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:text="Normal"
+                    android:textColor="@color/scoreNormalText"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/countNormal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text="0"
+                    android:textColor="@color/scoreNormalText"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <ProgressBar
+                    android:id="@+id/progressNormal"
+                    style="@android:style/Widget.ProgressBar.Horizontal"
+                    android:layout_width="0dp"
+                    android:layout_height="10dp"
+                    android:layout_weight="1"
+                    android:max="100"
+                    android:progress="0"
+                    android:progressDrawable="@drawable/progress_bar_normal" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="25dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/labelBad"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:text="Bad"
+                    android:textColor="@color/scoreBadText"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/countBad"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text="0"
+                    android:textColor="@color/scoreBadText"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <ProgressBar
+                    android:id="@+id/progressBad"
+                    style="@android:style/Widget.ProgressBar.Horizontal"
+                    android:layout_width="0dp"
+                    android:layout_height="10dp"
+                    android:layout_weight="1"
+                    android:max="100"
+                    android:progress="0"
+                    android:progressDrawable="@drawable/progress_bar_bad" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/labelMiss"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:text="Miss"
+                    android:textColor="@color/scoreMissText"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/countMiss"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text="0"
+                    android:textColor="@color/scoreMissText"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <ProgressBar
+                    android:id="@+id/progressMiss"
+                    style="@android:style/Widget.ProgressBar.Horizontal"
+                    android:layout_width="0dp"
+                    android:layout_height="10dp"
+                    android:layout_weight="1"
+                    android:max="100"
+                    android:progress="0"
+                    android:progressDrawable="@drawable/progress_bar_miss" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/feedback"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:fontFamily="@font/inter_18pt_medium"
-            android:text="Jennie"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="@id/songImage"
-            app:layout_constraintStart_toEndOf="@id/songImage"
-            app:layout_constraintTop_toBottomOf="@id/songTitle" />
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="10dp"
+            android:fontFamily="@font/inter_18pt_semibold"
+            android:text="feedback"
+            android:textSize="25sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/statisticsContainer" />
+
+        <Button
+            android:id="@+id/tyeAgainButton"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/button_round_radius"
+            android:backgroundTint="@color/lightPink"
+            android:fontFamily="@font/inter_18pt_semibold"
+            android:gravity="center"
+            android:text="Try Again"
+            android:textColor="@color/white"
+            android:textSize="17sp"
+            app:layout_constraintDimensionRatio="5:2"
+            app:layout_constraintEnd_toStartOf="@id/otherSongsButton"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/feedback"
+            app:layout_constraintWidth_percent="0.3" />
+
+        <Button
+            android:id="@+id/otherSongsButton"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/button_round_radius"
+            android:backgroundTint="@color/lightBlue"
+            android:fontFamily="@font/inter_18pt_semibold"
+            android:gravity="center"
+            android:text="Other Songs"
+            android:textColor="@color/white"
+            android:textSize="17sp"
+            app:layout_constraintDimensionRatio="5:2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tyeAgainButton"
+            app:layout_constraintTop_toBottomOf="@id/feedback"
+            app:layout_constraintWidth_percent="0.3" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <TextView
-        android:id="@+id/badgeResultText"
-        android:layout_width="230dp"
-        android:layout_height="80dp"
-        android:layout_marginTop="35dp"
-        android:background="@drawable/correction_result_bar"
-        android:fontFamily="@font/inter_18pt_bold"
-        android:gravity="center"
-        android:paddingHorizontal="20dp"
-        android:paddingVertical="10dp"
-        android:text="Normal"
-        android:textColor="@color/scoreNormalText"
-        android:textSize="30sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/songInfo" />
-
-    <LinearLayout
-        android:id="@+id/statisticsContainer"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="10dp"
-        android:layout_marginTop="30dp"
-        android:background="@drawable/correction_result_rounded"
-        android:orientation="vertical"
-        android:padding="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/badgeResultText"
-        app:layout_constraintWidth_percent="0.9">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="25dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/labelExcellent"
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:text="Excellent"
-                android:textColor="@color/scorePerfectText"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/countExcellent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:text="8"
-                android:textColor="@color/scorePerfectText"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <ProgressBar
-                android:id="@+id/progressExcellent"
-                style="@android:style/Widget.ProgressBar.Horizontal"
-                android:layout_width="0dp"
-                android:layout_height="10dp"
-                android:layout_weight="1"
-                android:max="100"
-                android:progress="0"
-                android:progressDrawable="@drawable/progress_bar_perfect" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="25dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/labelGood"
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                android:text="Good"
-                android:textColor="@color/scoreGoodText"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/countGood"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:text="12"
-                android:textColor="@color/scoreGoodText"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <ProgressBar
-                android:id="@+id/progressGood"
-                style="@android:style/Widget.ProgressBar.Horizontal"
-                android:layout_width="0dp"
-                android:layout_height="10dp"
-                android:layout_weight="1"
-                android:max="100"
-                android:progress="0"
-                android:progressDrawable="@drawable/progress_bar_good" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="25dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/labelNormal"
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                android:text="Normal"
-                android:textColor="@color/scoreNormalText"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/countNormal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:text="40"
-                android:textColor="@color/scoreNormalText"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <ProgressBar
-                android:id="@+id/progressNormal"
-                style="@android:style/Widget.ProgressBar.Horizontal"
-                android:layout_width="0dp"
-                android:layout_height="10dp"
-                android:layout_weight="1"
-                android:max="100"
-                android:progress="0"
-                android:progressDrawable="@drawable/progress_bar_normal" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="25dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/labelBad"
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                android:text="Bad"
-                android:textColor="@color/scoreBadText"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/countBad"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:text="12"
-                android:textColor="@color/scoreBadText"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <ProgressBar
-                android:id="@+id/progressBad"
-                style="@android:style/Widget.ProgressBar.Horizontal"
-                android:layout_width="0dp"
-                android:layout_height="10dp"
-                android:layout_weight="1"
-                android:max="100"
-                android:progress="0"
-                android:progressDrawable="@drawable/progress_bar_bad" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="25dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/labelMiss"
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                android:text="Miss"
-                android:textColor="@color/scoreMissText"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/countMiss"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:text="8"
-                android:textColor="@color/scoreMissText"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <ProgressBar
-                android:id="@+id/progressMiss"
-                style="@android:style/Widget.ProgressBar.Horizontal"
-                android:layout_width="0dp"
-                android:layout_height="10dp"
-                android:layout_weight="1"
-                android:max="100"
-                android:progress="0"
-                android:progressDrawable="@drawable/progress_bar_miss" />
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/feedback"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="10dp"
-        android:fontFamily="@font/inter_18pt_semibold"
-        android:text="feedback"
-        android:textSize="25sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/statisticsContainer" />
-
-    <Button
-        android:id="@+id/tyeAgainButton"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="15dp"
-        android:background="@drawable/button_round_radius"
-        android:backgroundTint="@color/lightPink"
-        android:fontFamily="@font/inter_18pt_semibold"
-        android:gravity="center"
-        android:text="Try Again"
-        android:textColor="@color/white"
-        android:textSize="17sp"
-        app:layout_constraintDimensionRatio="5:2"
-        app:layout_constraintEnd_toStartOf="@id/otherSongsButton"
-        app:layout_constraintHorizontal_chainStyle="spread"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/feedback"
-        app:layout_constraintWidth_percent="0.3" />
-
-    <Button
-        android:id="@+id/otherSongsButton"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="15dp"
-        android:background="@drawable/button_round_radius"
-        android:backgroundTint="@color/lightBlue"
-        android:fontFamily="@font/inter_18pt_semibold"
-        android:gravity="center"
-        android:text="Other Songs"
-        android:textColor="@color/white"
-        android:textSize="17sp"
-        app:layout_constraintDimensionRatio="5:2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/tyeAgainButton"
-        app:layout_constraintTop_toBottomOf="@id/feedback"
-        app:layout_constraintWidth_percent="0.3" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

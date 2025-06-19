@@ -20,7 +20,7 @@
 
     <!-- Background -->
     <item> <shape>
-        <solid android:color="#FF00B7"/><corners android:radius="40dp" /></shape> </item>
+        <solid android:color="#4DFF98D5"/><corners android:radius="40dp" /></shape> </item>
     <!-- upper layer -->
     <item
         android:left="10dp"

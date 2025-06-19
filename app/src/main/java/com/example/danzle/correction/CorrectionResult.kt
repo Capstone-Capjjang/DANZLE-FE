@@ -2,12 +2,14 @@ package com.example.danzle.correction
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
+import android.view.View
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.bumptech.glide.Glide
 import com.example.danzle.MainActivity
 import com.example.danzle.R
 import com.example.danzle.data.api.DanzleSharedPreferences
@@ -21,9 +23,6 @@ import retrofit2.Response
 class CorrectionResult : AppCompatActivity() {
     private lateinit var binding: ActivityCorrectionResultBinding
 
-    private lateinit var token: String
-    private lateinit var authHeader: String
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -35,8 +34,6 @@ class CorrectionResult : AppCompatActivity() {
             insets
         }
 
-        token = DanzleSharedPreferences.getAccessToken() ?: ""
-        authHeader = "Bearer $token"
 
         binding.cancelButton.setOnClickListener {
             Intent(this, MainActivity::class.java).apply {
@@ -47,10 +44,14 @@ class CorrectionResult : AppCompatActivity() {
             }
         }
 
+        binding.fullscreenLoading.visibility = View.VISIBLE
+        binding.resultContentGroup.visibility = View.GONE
+
+
         val sessionId = intent.getLongExtra("sessionId", -1L)
 
         if (sessionId != -1L) {
-            retrofitCorrectionResult(authHeader, sessionId)
+            retrofitCorrectionResult(sessionId)
         }
 
         binding.feedback.setOnClickListener {
@@ -58,13 +59,24 @@ class CorrectionResult : AppCompatActivity() {
             intent.putExtra("sessionId", sessionId)
             startActivity(intent)
         }
+
+        binding.tyeAgainButton.setOnClickListener {
+            startActivity(Intent(this@CorrectionResult, Correction::class.java))
+        }
+
+        binding.otherSongsButton.setOnClickListener {
+            startActivity(Intent(this@CorrectionResult, CorrectionMusicSelect::class.java))
+        }
+
     }
 
-    private fun retrofitCorrectionResult(authHeader: String, sessionId: Long) {
+    private fun retrofitCorrectionResult(sessionId: Long) {
 
-        //binding.progressBar.visibility = View.VISIBLE
-        //binding.resultContentGroup.visibility = View.GONE
+        binding.progressBar.visibility = View.GONE
+        binding.resultContentGroup.visibility = View.VISIBLE
 
+        val token = DanzleSharedPreferences.getAccessToken()
+        val authHeader = "Bearer $token"
         val retrofit = RetrofitApi.getCorrectionResultInstance()
 
         retrofit.getCorrectionResultService(authHeader, sessionId)
@@ -73,31 +85,36 @@ class CorrectionResult : AppCompatActivity() {
                     call: Call<CorrectionResultResponse>,
                     response: Response<CorrectionResultResponse>
                 ) {
-//                    binding.progressBar.visibility = View.GONE
-//                    binding.resultContentGroup.visibility = View.VISIBLE
+                    // 서버 응답이 도착하면 로딩 숨기기
+                    binding.fullscreenLoading.visibility = View.VISIBLE
+                    binding.resultContentGroup.visibility = View.VISIBLE
 
                     if (response.isSuccessful) {
                         val result = response.body() ?: return
-                        Log.d("CorrectionResult", "Response success: $result")
 
-                        val excellent = result.excellent
+                        Glide.with(this@CorrectionResult)
+                            .load(result.song.coverImagePath)
+                            .into(binding.songImage)
+                        binding.songTitle.text = result.song.title
+                        binding.singer.text = result.song.artist
+
+                        val excellent = result.perfect
                         val good = result.good
                         val normal = result.normal
                         val bad = result.bad
                         val miss = result.miss
 
-                        binding.countExcellent.text = excellent.toString()
+                        binding.countPerfect.text = excellent.toString()
                         binding.countGood.text = good.toString()
                         binding.countNormal.text = normal.toString()
                         binding.countBad.text = bad.toString()
                         binding.countMiss.text = miss.toString()
 
                         val total = excellent + good + normal + bad + miss
-                        val maxBarWidthDp = 100
 
                         if (total > 0) {
-                            binding.progressExcellent.max = total
-                            binding.progressExcellent.progress = excellent
+                            binding.progressPerfect.max = total
+                            binding.progressPerfect.progress = excellent
 
                             binding.progressGood.max = total
                             binding.progressGood.progress = good
@@ -112,17 +129,12 @@ class CorrectionResult : AppCompatActivity() {
                             binding.progressMiss.progress = miss
                         }
 
-                        if (result == null) {
-                            Log.e("CorrectionResult", "Response body is null")
-                            return
-                        }
-
                         val level = result.resultLevel ?: "Unknown"
 
                         // ContextCompat.getColor()는 버전 상관없이 색상을 안전하게 적용해준다.
                         when (level) {
-                            "Excellent" -> {
-                                binding.badgeResultText.text = "Excellent"
+                            "Perfect" -> {
+                                binding.badgeResultText.text = "Perfect"
                                 binding.badgeResultText.background.setTint(
                                     ContextCompat.getColor(
                                         this@CorrectionResult,
@@ -198,21 +210,25 @@ class CorrectionResult : AppCompatActivity() {
                         }
 
                     } else {
-                        Log.e("CorrectionResult", "Response failed with code: ${response.code()}")
-                        Log.e("CorrectionResult", "Error body: ${response.errorBody()?.string()}")
+                        Toast.makeText(
+                            this@CorrectionResult,
+                            "서버에서 결과를 받아오지 못했습니다.",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
-
                 }
 
                 override fun onFailure(
                     call: Call<CorrectionResultResponse>,
                     t: Throwable
                 ) {
-                    // binding.progressBar.visibility = View.GONE
-                    Log.e("CorrectionResult", "Network failure: ${t.message}")
+                    Toast.makeText(
+                        this@CorrectionResult,
+                        "네트워크 오류로 결과를 가져올 수 없습니다.",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
             )
-
     }
 }

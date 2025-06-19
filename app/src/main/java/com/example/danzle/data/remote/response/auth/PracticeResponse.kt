@@ -3,7 +3,7 @@ package com.example.danzle.data.remote.response.auth
 
 data class PracticeResponse(
     val sessionId: Long,
-    val song: Song,
+    val song: SongPractice,
     val mode: String,
     val startTime: String,
     val endTime: String,
@@ -11,7 +11,7 @@ data class PracticeResponse(
     val duration: String
 )
 
-data class Song(
+data class SongPractice(
     val id: Long,
     val title: String
 )

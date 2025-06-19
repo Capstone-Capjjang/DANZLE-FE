@@ -7,10 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.danzle.databinding.CorrectionFragmentBinding
-import com.example.danzle.practice.PracticeMusicSelect
 
-class FragmentCorrection: Fragment() {
-    private var _binding : CorrectionFragmentBinding? = null
+class FragmentCorrection : Fragment() {
+    private var _binding: CorrectionFragmentBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -28,7 +27,7 @@ class FragmentCorrection: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // root -> 특정 카드 전체를 감싸는 상위 뷰에 대해, 그걸 클릭 타겟
-        binding.root.setOnClickListener{
+        binding.root.setOnClickListener {
             val intent = Intent(requireContext(), CorrectionMusicSelect::class.java)
             startActivity(intent)
         }

@@ -15,7 +15,7 @@ object DanzleSharedPreferences {
     private const val USER_EMAIL = "USER_EMAIL"
 
     // 앱 시작시 초기화 필수
-    fun init(context: Context){
+    fun init(context: Context) {
         preferences = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
     }
 
@@ -23,7 +23,7 @@ object DanzleSharedPreferences {
     // 토큰 저장/조회
     // null이면 해당 키 삭제 → 로그아웃 시 필요
     // putString()은 토큰을 문자열로 저장
-    fun setAccessToken(token: String?){
+    fun setAccessToken(token: String?) {
         preferences.edit {
             if (token == null) remove(ACCESS_TOKEN)
             else putString(ACCESS_TOKEN, token)
@@ -34,7 +34,7 @@ object DanzleSharedPreferences {
 
 
     // Refresh token
-    fun setRefreshToken(token: String?){
+    fun setRefreshToken(token: String?) {
         preferences.edit {
             if (token == null) remove(REFRESH_TOKEN)
             else putString(REFRESH_TOKEN, token)
@@ -45,22 +45,22 @@ object DanzleSharedPreferences {
 
 
     // UserId
-    fun setUserId(id: Long?){
+    fun setUserId(id: String?) {
         preferences.edit {
             if (id == null) remove(USER_ID)
-            else putLong(USER_ID, id)
+            else putLong(USER_ID, id.toLong())
         }
     }
 
     // 기본값으로 -1을 넣고 실제 저장된 값이 없으면 null 반환.
-    fun getUserId(): Long?{
+    fun getUserId(): Long? {
         val id = preferences.getLong(USER_ID, -1)
         return if (id != -1L) id else null
     }
 
 
     // UserEmail
-    fun setUserEmail(email: String?){
+    fun setUserEmail(email: String?) {
         preferences.edit {
             if (email == null) remove(USER_EMAIL)
             else putString(USER_EMAIL, email)
@@ -71,7 +71,7 @@ object DanzleSharedPreferences {
 
 
     // clear
-    fun clear(){
+    fun clear() {
         preferences.edit().clear().apply()
     }
 

@@ -7,9 +7,9 @@ import retrofit2.http.Header
 import retrofit2.http.Query
 
 interface CorrectionResultService {
-    @GET("/accuracy-session/result")
+    @GET("/accuracy-session/summary")
     fun getCorrectionResultService(
-        @Query("sessionId") sessionId: Long,
-        @Header("authorization") token: String
+        @Header("authorization") token: String,
+        @Query("sessionId") sessionId: Long
     ): Call<CorrectionResultResponse>
 }

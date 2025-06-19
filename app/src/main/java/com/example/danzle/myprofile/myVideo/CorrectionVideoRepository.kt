@@ -2,7 +2,6 @@ package com.example.danzle.myprofile.myVideo
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -63,8 +62,6 @@ class CorrectionVideoRepository : AppCompatActivity() {
             return
         }
 
-        Log.d("CorrectionVideoRepository", "CorrectionVideoRepository / Token: $token")
-
         val retrofit = RetrofitApi.getCorrectionVideoRepositoryInstance()
         retrofit.getCorrectionVideo(authHeader)
             .enqueue(object : Callback<List<MyVideoResponse>> {
@@ -76,18 +73,8 @@ class CorrectionVideoRepository : AppCompatActivity() {
                         val accuracyList =
                             response.body()?.filter { it.mode == VideoMode.ACCURACY } ?: emptyList()
                         setCorrectionAdapter(ArrayList(accuracyList))
-                        Log.d(
-                            "CorrectionVideoRepository",
-                            "CorrectionVideoRepository / Full Response Body: $accuracyList"
-                        ) // 응답 전체 확인
-                        Log.d("CorrectionVideoRepository", "CorrectionVideoRepository / Token: $token")
                     } else {
-                        Log.d(
-                            "CorrectionVideoRepository",
-                            "CorrectionVideoRepository / Response Code: ${response.code()}"
-                        )
                         val errorMsg = response.errorBody()?.string()
-                        Log.e("CorrectionVideoRepository", "Error Body: $errorMsg")
                         Toast.makeText(
                             this@CorrectionVideoRepository,
                             "Fail to CorrectionVideoRepository: ${response.message()}",
@@ -97,7 +84,6 @@ class CorrectionVideoRepository : AppCompatActivity() {
                 }
 
                 override fun onFailure(call: Call<List<MyVideoResponse>>, t: Throwable) {
-                    Log.d("CorrectionVideoRepository", "CorrectionVideoRepository / Error: ${t.message}")
                     Toast.makeText(this@CorrectionVideoRepository, "Error", Toast.LENGTH_SHORT)
                         .show()
                 }

@@ -8,7 +8,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.OptIn
@@ -116,15 +115,11 @@ class PracticeMain : AppCompatActivity() {
 
         player.addListener(object : Player.Listener {
             override fun onPlaybackStateChanged(state: Int) {
-                Log.d("ExoPlayerState", "State changed: $state")
-
                 if (state == Player.STATE_READY && player.playWhenReady) {
-                    Log.d("HighlightPractice", "영상 시작됨 → 녹화 시작")
                     startRecording()
                 }
 
                 if (state == Player.STATE_ENDED) {
-                    Log.d("HighlightPractice", "영상 끝남 → 녹화 중지 및 화면 전환")
                     stopRecording()
 
                     val intent = Intent(this@PracticeMain, PracticeFinish::class.java)
@@ -135,7 +130,6 @@ class PracticeMain : AppCompatActivity() {
             }
 
             override fun onPlayerError(error: PlaybackException) {
-                Log.e("ExoPlayerError", "Playback error: ${error.message}")
             }
         })
 
@@ -220,7 +214,6 @@ class PracticeMain : AppCompatActivity() {
                 )
 
             } catch (exc: Exception) {
-                Log.e(TAG, "Use case binding failed", exc)
             }
 
         }, ContextCompat.getMainExecutor(this))
@@ -258,7 +251,6 @@ class PracticeMain : AppCompatActivity() {
     private fun startRecording() {
         // 이미 녹화 중이면 아무것도 하지 않음
         if (recording != null) {
-            Log.w("Recording", "녹화 이미 진행 중이므로 startRecording 무시됨")
             return
         }
 
@@ -290,17 +282,13 @@ class PracticeMain : AppCompatActivity() {
             }
             .start(ContextCompat.getMainExecutor(this)) { event ->
                 when (event) {
-                    is VideoRecordEvent.Start -> {
-                        Log.d("Recording", "녹화 시작됨")
-                    }
-
                     is VideoRecordEvent.Finalize -> {
                         if (!event.hasError()) {
                             val videoUri = event.outputResults.outputUri
-                            uploadRecordedVideo(videoUri)
-                            Log.d("Recording", "녹화 완료: ${event.outputResults.outputUri}")
-                        } else {
-                            Log.e("Recording", "녹화 오류: ${event.error}")
+                            val sessionId = currentSessionId ?: return@start
+                            savePracticeSessionBeforeUploading(sessionId) {
+                                uploadRecordedVideo(videoUri)
+                            }
                         }
                         // Finalize 후 녹화 인스턴스 정리
                         recording = null
@@ -316,7 +304,6 @@ class PracticeMain : AppCompatActivity() {
 
     companion object {
         private const val TAG = "CameraXApp"
-        private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
         private const val REQUEST_CODE_PERMISSIONS = 10
         private val REQUIRED_PERMISSIONS =
             mutableListOf(
@@ -327,6 +314,24 @@ class PracticeMain : AppCompatActivity() {
                     add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 }
             }.toTypedArray()
+    }
+
+    private fun savePracticeSessionBeforeUploading(sessionId: Long, onComplete: () -> Unit) {
+        RetrofitApi.getPracticeSaveInstance()
+            .savePracticeSession(authHeader, sessionId)
+            .enqueue(object : Callback<Any> {
+                override fun onResponse(call: Call<Any>, response: Response<Any>) {
+                    if (response.isSuccessful) {
+                        onComplete()
+                    } else {
+                        Toast.makeText(this@PracticeMain, "세션 저장에 실패했습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                override fun onFailure(call: Call<Any>, t: Throwable) {
+                    Toast.makeText(this@PracticeMain, "서버와 연결되지 않았어요. 인터넷 상태를 확인해주세요.", Toast.LENGTH_SHORT).show()
+                }
+            })
     }
 
     private fun uploadRecordedVideo(videoUri: Uri) {
@@ -348,7 +353,7 @@ class PracticeMain : AppCompatActivity() {
                 val duration = player.currentPosition  // ← 실제 길이에 맞게 계산 가능
 
                 val saveVideoService = RetrofitApi.getSaveVideoInstance()
-                val videoModeBody = "ACCURACY".toRequestBody("text/plain".toMediaTypeOrNull())
+                val videoModeBody = "PRACTICE".toRequestBody("text/plain".toMediaTypeOrNull())
                 val recordedAtBody = recordedAt.toRequestBody("text/plain".toMediaTypeOrNull())
                 val durationBody =
                     duration.toString().toRequestBody("text/plain".toMediaTypeOrNull())
@@ -367,19 +372,17 @@ class PracticeMain : AppCompatActivity() {
                         call: Call<SaveVideoResponse>,
                         response: Response<SaveVideoResponse>
                     ) {
-                        if (response.isSuccessful) {
-                            Log.d("Upload", "Upload success: ${response.body()}")
-                        } else {
-                            Log.e("Upload", "Upload failed: ${response.code()}")
+                        if (!response.isSuccessful) {
+                            Toast.makeText(this@PracticeMain, "영상 업로드에 실패했습니다.", Toast.LENGTH_SHORT).show()
                         }
                     }
 
                     override fun onFailure(call: Call<SaveVideoResponse>, t: Throwable) {
-                        Log.e("Upload", "Upload error: ${t.message}")
+                        Toast.makeText(this@PracticeMain, "네트워크 오류로 업로드에 실패했습니다.", Toast.LENGTH_SHORT).show()
                     }
                 })
             } catch (e: Exception) {
-                Log.e("Upload", "Upload failed", e)
+                Toast.makeText(this@PracticeMain, "영상 처리 중 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -403,6 +406,7 @@ class PracticeMain : AppCompatActivity() {
                 call: Call<List<PracticeResponse>>,
                 response: Response<List<PracticeResponse>>
             ) {
+                val practiceResponse = response.body()?.firstOrNull()
                 if (response.isSuccessful) {
                     val practiceResponse = response.body()?.firstOrNull()
                     if (practiceResponse != null) {
@@ -412,26 +416,18 @@ class PracticeMain : AppCompatActivity() {
                         // 다음 요청: sessionId 기반으로 영상 URL 받기
                         retrofitSilhouetteVideo(authHeader, songName)
                     }
-
                 } else {
-                    Log.e(
-                        "HighlightPractice",
-                        "Fail to call fetchSilhouetteVideo: ${response.code()}"
-                    )
+                    Toast.makeText(this@PracticeMain, "연습 세션 정보를 불러오지 못했습니다.", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<List<PracticeResponse>>, t: Throwable) {
-                Log.d("Debug", "HighlightPractice / Error: ${t.message}")
-                Toast.makeText(this@PracticeMain, "Error", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@PracticeMain, "서버 연결에 실패했습니다.", Toast.LENGTH_SHORT).show()
             }
         })
     }
 
     private fun retrofitSilhouetteVideo(authHeader: String, songName: String) {
-        Log.d("DEBUG", "Sending request to silhouette API")
-        Log.d("DEBUG", "authHeader = $authHeader")
-
         val retrofit = RetrofitApi.getSilhouetteInstance()
         retrofit.getSilhouette(authHeader, songName)
             .enqueue(object : Callback<SilhouetteResponse> {
@@ -439,23 +435,19 @@ class PracticeMain : AppCompatActivity() {
                     call: Call<SilhouetteResponse>,
                     response: Response<SilhouetteResponse>
                 ) {
-                    Log.d("DEBUG", "Response code: ${response.code()}")
-                    Log.d("DEBUG", "Response body: ${response.body()}")
-                    Log.d("DEBUG", "Error body: ${response.errorBody()?.string()}")
-
                     if (response.isSuccessful) {
                         val videoUrl = response.body()?.silhouetteVideoUrl
-                        Log.d("Silhouette", "Video URL: $videoUrl")
                         videoUrl?.let {
                             playVideo(videoUrl, startTime, endTime)
                         }
+                    }  else {
+                        Toast.makeText(this@PracticeMain, "실루엣 영상을 불러오지 못했습니다.", Toast.LENGTH_SHORT).show()
                     }
                 }
 
                 override fun onFailure(call: Call<SilhouetteResponse>, t: Throwable) {
-                    Log.e("Silhouette", "Silhouette fetch error: ${t.message}")
+                    Toast.makeText(this@PracticeMain, "영상 요청 중 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
                 }
             })
     }
-
 }

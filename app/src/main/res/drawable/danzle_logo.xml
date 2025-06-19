@@ -13,33 +13,29 @@
     <!-- 보라색 줄기 -->
     <path
         android:fillColor="#FC00FF"
+        android:pathData="M 45,20 L 25,80"
         android:strokeWidth="4"
-        android:strokeColor="#FC00FF"
-        android:pathData="M 45,20 L 25,80" />
+        android:strokeColor="#FC00FF" />
 
     <!-- 하늘색 Z 모양 - 상단 대각선 -->
     <path
         android:fillColor="#00DDED"
+        android:pathData="M 43,20 L 70,45"
         android:strokeWidth="4"
-        android:strokeColor="#00DDED"
-        android:pathData="M 43,20 L 70,45" />
+        android:strokeColor="#00DDED" />
 
     <!-- 하늘색 Z 모양 - 하단 대각선 -->
     <path
         android:fillColor="#00DDED"
+        android:pathData="M 72,45 L 45, 60"
         android:strokeWidth="4"
-        android:strokeColor="#00DDED"
-        android:pathData="M 72,45 L 45, 60" />
+        android:strokeColor="#00DDED" />
 
     <!-- 하늘색 Z 모양 - 우측 수직선 -->
     <path
         android:fillColor="#00DDED"
+        android:pathData="M 43,60 L 80,75"
         android:strokeWidth="4"
-        android:strokeColor="#00DDED"
-        android:pathData="M 43,60 L 80,75" />
-
-
-
-
+        android:strokeColor="#00DDED" />
 
 </vector>

@@ -17,11 +17,10 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.doAfterTextChanged
 import com.example.danzle.R
+import com.example.danzle.data.api.DanzleSharedPreferences
 import com.example.danzle.data.api.RetrofitApi
 import com.example.danzle.data.remote.request.auth.ChangePasswordRequest
-import com.example.danzle.data.remote.request.auth.ChangeUsernameRequest
 import com.example.danzle.data.remote.response.auth.ChangePasswordResponse
-import com.example.danzle.data.remote.response.auth.ChangeUsernameResponse
 import com.example.danzle.databinding.ActivityChangePasswordBinding
 import retrofit2.Call
 import retrofit2.Callback
@@ -33,7 +32,6 @@ class ChangePassword : AppCompatActivity() {
     var currentPassword: String = ""
     var newPassword: String = ""
     var confirmNewPassword: String = ""
-    var token: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,17 +78,14 @@ class ChangePassword : AppCompatActivity() {
 
         val confirmButton = view.findViewById<Button>(R.id.confirmButton)
 
-        alertDialog.window!!.attributes.windowAnimations = R.style.dialogAniamtion
+        alertDialog.window!!.attributes.windowAnimations = R.style.dialogAnimation
         alertDialog.window!!.setGravity(Gravity.BOTTOM)
         alertDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         confirmButton.setOnClickListener {
-            val intent = Intent(this@ChangePassword, EditProfile::class.java)
-
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivity(intent)
-
+            setResult(RESULT_OK)
             alertDialog.dismiss()
+            finish()
         }
         alertDialog.show()
     }
@@ -98,7 +93,10 @@ class ChangePassword : AppCompatActivity() {
     // about retrofit
     private fun retrofitChangePassword(changePasswordInfo: ChangePasswordRequest, context: Context){
         val retrofit = RetrofitApi.getChangePasswordInstance()
-        retrofit.getChangePassword(token, changePasswordInfo)
+        val token = DanzleSharedPreferences.getAccessToken() ?: ""
+        val authHeader = "Bearer $token"
+
+        retrofit.getChangePassword(authHeader, changePasswordInfo)
             .enqueue((object : Callback<ChangePasswordResponse> {
                 override fun onResponse(call: Call<ChangePasswordResponse>, response: Response<ChangePasswordResponse>) {
                     if (response.isSuccessful){

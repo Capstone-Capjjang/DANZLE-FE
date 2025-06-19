@@ -13,7 +13,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.OptIn
@@ -68,24 +67,16 @@ import java.io.FileOutputStream
 class Correction : AppCompatActivity() {
 
     private lateinit var binding: ActivityCorrectionBinding
-
     lateinit var player: ExoPlayer
-
     private var videoCapture: VideoCapture<Recorder>? = null
     private var recording: Recording? = null
-
     private var pollingJob: Job? = null
-
     private var lastSentTime = 0L
-
     private var sec = 0
-
     private lateinit var token: String
-
     private var currentSessionId: Long? = null
     private lateinit var authHeader: String
 
-    // 나중에 서버 수정하고 서버에서 songId 데이터 받아서 넣어주기
     private val selectedSong: MusicSelectResponse? by lazy {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             intent.getParcelableExtra("selected song", MusicSelectResponse::class.java)
@@ -122,10 +113,8 @@ class Correction : AppCompatActivity() {
 
         player.addListener(object : Player.Listener {
             override fun onPlaybackStateChanged(state: Int) {
-                Log.d("ExoPlayerState", "State changed: $state, isPlaying=${player.isPlaying}")
 
                 if (state == Player.STATE_READY && player.playWhenReady) {
-                    Log.d("Polling", "State READY & playWhenReady = true → Start polling")
                     if (pollingJob == null) {
                         //startPolling(songId, authHeader)
                     }
@@ -139,7 +128,6 @@ class Correction : AppCompatActivity() {
             }
 
             override fun onPlayerError(error: PlaybackException) {
-                Log.e("ExoPlayerError", "Playback error: ${error.message}")
             }
         })
 
@@ -217,7 +205,6 @@ class Correction : AppCompatActivity() {
                 )
 
             } catch (exc: Exception) {
-                Log.e(TAG, "Use case binding failed", exc)
             }
 
         }, ContextCompat.getMainExecutor(this))
@@ -236,7 +223,6 @@ class Correction : AppCompatActivity() {
                 sec += 1
                 lastSentTime = currentTime
             } catch (e: Exception) {
-                Log.e("MediaPipe", "Error converting frame: ${e.message}")
             } finally {
                 imageProxy.close()
             }
@@ -271,8 +257,6 @@ class Correction : AppCompatActivity() {
         sessionId: Long,
         authHeader: String
     ) {
-        Log.d("SessionCheck", "Sending frame with sessionId = $sessionId")
-
         val stream = ByteArrayOutputStream().apply {
             bitmap.compress(Bitmap.CompressFormat.JPEG, 80, this)
         }.toByteArray()
@@ -291,19 +275,14 @@ class Correction : AppCompatActivity() {
                     response: Response<PoseAnalysisResponse>
                 ) {
                     if (!response.isSuccessful) {
-                        Log.e("AnalyzeFrame", "서버 응답 실패: ${response.code()}")
-                        response.errorBody()?.let { errorBody ->
-                            val errorMessage = errorBody.string()
-                            Log.e("AnalyzeFrame", "에러 상세내용: $errorMessage")
-                        }
+
                     } else {
                         // 서버로부터 성공 응답이 오면 추가 처리를 여기에 구현 (예: UI 업데이트 등)
                         // 여기에 점수 기반 피드백 출력
                         val result = response.body()
                         val score = result?.score
-                        val feedback = result?.feedback
+                        val feedback = result?.resultTag
                         if (score != null) {
-                            Log.d("AnalyzeFrame", "Score: $score → Feedback: $feedback")
                             runOnUiThread {
                                 binding.scoreText.text = feedback
                                 val colorRes = when (feedback) {
@@ -326,7 +305,6 @@ class Correction : AppCompatActivity() {
                 }
 
                 override fun onFailure(call: Call<PoseAnalysisResponse>, t: Throwable) {
-                    Log.e("AnalyzeFrame", "전송 실패: ${t.message}")
                 }
             })
     }
@@ -372,20 +350,14 @@ class Correction : AppCompatActivity() {
             }
         }.start(ContextCompat.getMainExecutor(this)) { event ->
             when (event) {
-                is VideoRecordEvent.Start -> {
-                    Log.d("Recording", "Recording started")
-                }
-
                 is VideoRecordEvent.Finalize -> {
                     if (!event.hasError()) {
                         val videoUri = event.outputResults.outputUri
-                        Log.d("Recording", "Recording saved: $videoUri")
                         val sessionId = currentSessionId ?: return@start
                         saveSessionIdBeforeUploading(sessionId) {
                             uploadRecordedVideo(videoUri)
                         }
                     } else {
-                        Log.e("Recording", "Recording error: ${event.error}")
                     }
                 }
             }
@@ -393,22 +365,21 @@ class Correction : AppCompatActivity() {
     }
 
     private fun saveSessionIdBeforeUploading(sessionId: Long, onComplete: () -> Unit) {
-
-        Log.d("SaveVideo", "Sending SaveRequest: sessionId = $sessionId")
-
-        RetrofitApi.getSaveInstance().saveSession(authHeader,sessionId)
+        RetrofitApi.getCorrectionSaveInstance().saveCorrectionSession(authHeader, sessionId)
             .enqueue(object : Callback<SaveResponse> {
-                override fun onResponse(call: Call<SaveResponse>, response: Response<SaveResponse>) {
+                override fun onResponse(
+                    call: Call<SaveResponse>,
+                    response: Response<SaveResponse>
+                ) {
                     if (response.isSuccessful) {
-                        Log.d("SaveVideo", "Raw response: ${response.body().toString()}")
                         onComplete() // 저장 성공 후 업로드 진행
                     } else {
-                        Log.e("SaveVideo", "Failed to save session: ${response.code()}")
+                        Toast.makeText(this@Correction, "세션 저장 실패", Toast.LENGTH_SHORT).show()
                     }
                 }
 
                 override fun onFailure(call: Call<SaveResponse>, t: Throwable) {
-                    Log.e("SaveVideo", "Error saving session: ${t.message}")
+                    Toast.makeText(this@Correction, "네트워크 오류로 세션 저장 실패", Toast.LENGTH_SHORT).show()
                 }
             })
     }
@@ -452,13 +423,11 @@ class Correction : AppCompatActivity() {
                         response: Response<SaveVideoResponse>
                     ) {
                         if (response.isSuccessful) {
-                            Log.d("Upload", "Upload success: ${response.body()}")
-
                             val intent = Intent(this@Correction, CorrectionResult::class.java)
                             intent.putExtra("sessionId", sessionId)
                             startActivity(intent)
                         } else {
-                            Log.e("Upload", "Upload failed: ${response.code()}")
+                            Toast.makeText(this@Correction, "영상 업로드 실패", Toast.LENGTH_SHORT).show()
                         }
                     }
 
@@ -466,18 +435,16 @@ class Correction : AppCompatActivity() {
                         call: Call<SaveVideoResponse>,
                         t: Throwable
                     ) {
-                        Log.e("Upload", "Upload error: ${t.message}")
+                        Toast.makeText(this@Correction, "네트워크 오류로 업로드 실패", Toast.LENGTH_SHORT).show()
                     }
                 })
             } catch (e: Exception) {
-                Log.e("Upload", "Upload failed", e)
             }
         }
     }
 
     companion object {
         private const val TAG = "CameraXApp"
-        private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
         private const val REQUEST_CODE_PERMISSIONS = 10
         private val REQUIRED_PERMISSIONS = mutableListOf(
             Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO
@@ -494,10 +461,6 @@ class Correction : AppCompatActivity() {
             return
         }
 
-        Log.d("CorrectionAPI", "Sending request to /accuracy-session/full")
-        Log.d("CorrectionAPI", "songId = $songId")
-        Log.d("CorrectionAPI", "authHeader = $authHeader")
-
         if (token.isNullOrEmpty()) {
             Toast.makeText(this@Correction, "로그인이 필요합니다.", Toast.LENGTH_SHORT).show()
             return
@@ -510,27 +473,12 @@ class Correction : AppCompatActivity() {
                     call: Call<CorrectionResponse>,
                     response: Response<CorrectionResponse>
                 ) {
-                    Log.d("CorrectionAPI", "response.isSuccessful = ${response.isSuccessful}")
-                    Log.d("CorrectionAPI", "response.code = ${response.code()}")
-                    Log.d("CorrectionAPI", "response.body = ${response.body()}")
-
-
-                    if (response.body() == null) {
-                        Log.w("CorrectionAPI", "body is NULL!")
-                        Log.d("CorrectionAPI", "response.raw = ${response.raw()}")
-                        Log.d(
-                            "CorrectionAPI",
-                            "response.errorBody = ${response.errorBody()?.string()}"
-                        )
-                    }
-
                     if (response.isSuccessful) {
                         val correctionResponse = response.body()
                         // body 자체가 null이거나, 빈 리스트일 경우
 
                         if (correctionResponse != null) {
                             currentSessionId = correctionResponse.sessionId
-                            Log.d("SessionCheck", "Received sessionId = $currentSessionId")
                             val songName = correctionResponse.songTitle
 
                             // 세션 받자마자 첫 프레임 전송!
@@ -542,26 +490,15 @@ class Correction : AppCompatActivity() {
                             retrofitSilhouetteCorrectionVideo(
                                 authHeader, songName
                             )
-                        } else {  val code = response.code()
-                            val raw = response.raw()
-                            val errorBody = response.errorBody()?.string()
-
-                            Log.e("CorrectionAPI", "Server error")
-                            Log.e("CorrectionAPI", "→ Status code: $code")
-                            Log.e("CorrectionAPI", "→ Raw response: $raw")
-                            Log.e("CorrectionAPI", "→ Error body: $errorBody")
-                            // body 자체가 null이거나, 빈 리스트일 경우
-                            Log.w("CorrectionAPI", "응답은 성공했지만 데이터가 없습니다.")
+                        } else {
                             Toast.makeText(this@Correction, "아직 분석된 결과가 없어요!", Toast.LENGTH_SHORT)
                                 .show()
                             return
                         }
-
                     }
                 }
 
                 override fun onFailure(call: Call<CorrectionResponse>, t: Throwable) {
-                    Log.d("Debug", "HighlightPractice / Error: ${t.message}")
                     Toast.makeText(this@Correction, "Error", Toast.LENGTH_SHORT).show()
                 }
             })
@@ -571,9 +508,6 @@ class Correction : AppCompatActivity() {
     private fun retrofitSilhouetteCorrectionVideo(
         authHeader: String, songName: String
     ) {
-        Log.d("DEBUG", "Sending request to silhouette API")
-        Log.d("DEBUG", "authHeader = $authHeader")
-
         val retrofit = RetrofitApi.getSilhouetteInstance()
         retrofit.getSilhouette(authHeader, songName)
             .enqueue(object : Callback<SilhouetteResponse> {
@@ -581,18 +515,12 @@ class Correction : AppCompatActivity() {
                     call: Call<SilhouetteResponse>,
                     response: Response<SilhouetteResponse>
                 ) {
-                    Log.d("DEBUG", "Response code: ${response.code()}")
-                    Log.d("DEBUG", "Response body: ${response.body()}")
-                    Log.d("DEBUG", "Error body: ${response.errorBody()?.string()}")
-
-
-
                     if (response.isSuccessful) {
                         val videoUrl = response.body()?.silhouetteVideoUrl
                         if (videoUrl == null) {
-                            Log.e("SilhouetteCorrection", "영상 URL이 null입니다.")
+                            Toast.makeText(this@Correction, "영상 주소를 받아오지 못했어요.", Toast.LENGTH_SHORT)
+                                .show()
                         }
-                        Log.d("SilhouetteCorrection", "Video URL: $videoUrl")
                         videoUrl?.let {
                             playVideo(videoUrl)
                         }
@@ -600,7 +528,7 @@ class Correction : AppCompatActivity() {
                 }
 
                 override fun onFailure(call: Call<SilhouetteResponse>, t: Throwable) {
-                    Log.e("Silhouette", "Silhouette fetch error: ${t.message}")
+                    Toast.makeText(this@Correction, "네트워크 오류로 영상 재생 실패", Toast.LENGTH_SHORT).show()
                 }
             })
     }

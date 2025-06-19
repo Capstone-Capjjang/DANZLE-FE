@@ -5,7 +5,6 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.widget.Button
@@ -17,9 +16,9 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.doAfterTextChanged
 import com.example.danzle.R
+import com.example.danzle.data.api.DanzleSharedPreferences
 import com.example.danzle.data.api.RetrofitApi
 import com.example.danzle.data.remote.request.auth.ChangeUsernameRequest
-import com.example.danzle.data.remote.request.auth.SignInRequest
 import com.example.danzle.data.remote.response.auth.ChangeUsernameResponse
 import com.example.danzle.databinding.ActivityChangeUsernameBinding
 import retrofit2.Call
@@ -30,7 +29,6 @@ class ChangeUsername : AppCompatActivity() {
 
     private lateinit var binding: ActivityChangeUsernameBinding
     var username: String = ""
-    val token: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +42,14 @@ class ChangeUsername : AppCompatActivity() {
         }
 
         // backbutton
-        binding.backButton.setOnClickListener { startActivity(Intent(this@ChangeUsername, EditProfile::class.java)) }
+        binding.backButton.setOnClickListener {
+            startActivity(
+                Intent(
+                    this@ChangeUsername,
+                    EditProfile::class.java
+                )
+            )
+        }
 
         // assign after writing
         binding.changeUsernameEdittext.doAfterTextChanged {
@@ -54,7 +59,6 @@ class ChangeUsername : AppCompatActivity() {
         // click button
         binding.changeUsernameButton.setOnClickListener {
             val changeUsernameData = ChangeUsernameRequest(username)
-            Log.d("Debug", "changeUsername Request - Username: $username")  // 디버깅 추가
             retrofitChangeUsername(changeUsernameData, this)
         }
 
@@ -73,7 +77,7 @@ class ChangeUsername : AppCompatActivity() {
         val confirmButton = view.findViewById<Button>(R.id.confirmButton)
 
         alertDialog.window!!.setGravity(Gravity.BOTTOM)
-        alertDialog.window!!.attributes.windowAnimations = R.style.dialogAniamtion
+        alertDialog.window!!.attributes.windowAnimations = R.style.dialogAnimation
         alertDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
 
@@ -90,14 +94,14 @@ class ChangeUsername : AppCompatActivity() {
     }
 
     // check the condition of username
-    private fun validateUsername(): Boolean{
+    private fun validateUsername(): Boolean {
         var errorMessage: String? = null
         val username: String = binding.changeUsernameEdittext.text.toString()
-        if (username.isEmpty()){
+        if (username.isEmpty()) {
             errorMessage = "Username is required"
         }
 
-        if (errorMessage != null){
+        if (errorMessage != null) {
             binding.changeUsernameEdittext.apply {
                 error = errorMessage
             }
@@ -106,30 +110,39 @@ class ChangeUsername : AppCompatActivity() {
     }
 
     // about retrofit
-    private fun retrofitChangeUsername(changeUsernameInfo: ChangeUsernameRequest, context: Context){
+    private fun retrofitChangeUsername(
+        changeUsernameInfo: ChangeUsernameRequest,
+        context: Context
+    ) {
+        val token = DanzleSharedPreferences.getAccessToken() ?: ""
+        val authHeader = "Bearer $token"
         val retrofit = RetrofitApi.getChangeUsernameInstance()
-            retrofit.getChangeUsername(token, changeUsernameInfo)
-                .enqueue((object : Callback<ChangeUsernameResponse>{
-                    override fun onResponse(call: Call<ChangeUsernameResponse>, response: Response<ChangeUsernameResponse>) {
-                        if (response.isSuccessful){
-                            val changeUsernameResponse = response.body()
-                            Log.d("Debug", "ChangeUsername / Full Response Body: $changeUsernameResponse") // 응답 전체 확인
+        retrofit.getChangeUsername(authHeader, changeUsernameInfo)
+            .enqueue((object : Callback<ChangeUsernameResponse> {
+                override fun onResponse(
+                    call: Call<ChangeUsernameResponse>,
+                    response: Response<ChangeUsernameResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        val changeUsernameResponse = response.body()
 
-                            // confirm dial
-                            // if it is success, then show dialog
-                            showConfirmDialog()
-                        } else{
-                            Log.d("Debug", "ChangeUsername / Response Code: ${response.code()}")
-                            Toast.makeText(context, "Fail to ChangeUsername: ${response.message()}", Toast.LENGTH_SHORT).show()
-                        }
+                        // confirm dial
+                        // if it is success, then show dialog
+                        showConfirmDialog()
+                    } else {
+                        Toast.makeText(
+                            context,
+                            "Fail to ChangeUsername: ${response.message()}",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
+                }
 
-                    override fun onFailure(call: Call<ChangeUsernameResponse>, t: Throwable) {
-                        Log.d("Debug", "ChangeUsername / Error: ${t.message}")
-                        Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
-                    }
+                override fun onFailure(call: Call<ChangeUsernameResponse>, t: Throwable) {
+                    Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
+                }
 
-                }))
+            }))
     }
 
 }

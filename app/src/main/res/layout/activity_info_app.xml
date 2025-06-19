@@ -9,7 +9,7 @@
     tools:context=".myprofile.infoApp.InfoApp">
 
     <Button
-        android:id="@+id/vector"
+        android:id="@+id/backButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="18dp"
@@ -42,7 +42,7 @@
         android:layout_marginTop="40dp"
         android:background="@drawable/info2"
         app:layout_constraintStart_toStartOf="@id/guidelineVerticalTitle"
-        app:layout_constraintTop_toBottomOf="@id/vector" />
+        app:layout_constraintTop_toBottomOf="@id/backButton" />
 
     <TextView
         android:layout_width="wrap_content"

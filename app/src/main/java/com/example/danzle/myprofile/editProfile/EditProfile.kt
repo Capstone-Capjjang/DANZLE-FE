@@ -28,12 +28,33 @@ class EditProfile : AppCompatActivity() {
             insets
         }
 
+        val username = intent.getStringExtra("username") ?: ""
+        val email = intent.getStringExtra("email") ?: ""
+
+        // 2. TextView에 표시하기
+        binding.originUsername.text = username
+        binding.originEmail.text = email
+
         // converting screen when clicking
         //username
-        binding.username.setOnClickListener {startActivity(Intent(this@EditProfile, ChangeUsername::class.java))}
+        binding.username.setOnClickListener {
+            startActivity(
+                Intent(
+                    this@EditProfile,
+                    ChangeUsername::class.java
+                )
+            )
+        }
 
         // change password
-        binding.changePassword.setOnClickListener {startActivity(Intent(this@EditProfile, ChangePassword::class.java))}
+        binding.changePassword.setOnClickListener {
+            startActivity(
+                Intent(
+                    this@EditProfile,
+                    ChangePassword::class.java
+                )
+            )
+        }
 
         // delete account
         // click button -> delete account -> (ok) start first
@@ -47,10 +68,9 @@ class EditProfile : AppCompatActivity() {
         }
 
 
-
     }
 
-    private fun retrofitEditProfile(){
+    private fun retrofitEditProfile() {
 
     }
 }

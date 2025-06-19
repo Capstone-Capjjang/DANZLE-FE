@@ -13,6 +13,7 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.request.target.Target
 import com.example.danzle.data.api.DanzleSharedPreferences
 import com.example.danzle.data.api.RetrofitApi
 import com.example.danzle.data.remote.response.auth.MyProfileResponse
@@ -21,6 +22,7 @@ import com.example.danzle.myprofile.editProfile.EditProfile
 import com.example.danzle.myprofile.myScore.MyScore
 import com.example.danzle.myprofile.myVideo.MyVideo
 import com.example.danzle.startPage.FirstStart
+import com.example.danzle.startPage.SignIn
 import com.example.danzle.startPage.token
 import retrofit2.Call
 import retrofit2.Callback
@@ -35,7 +37,6 @@ class MyProfileFragment : Fragment() {
 
     var username: String = ""
     var email: String = ""
-    var image: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,9 +52,17 @@ class MyProfileFragment : Fragment() {
 
         retrofitMyProfileMain()
 
+        // 버튼을 미리 비활성화
+        binding.editProfile.isEnabled = false
+
         // converting screen when clicking
         // editProfile
-        binding.editProfile.setOnClickListener { startActivity(Intent(requireContext(), EditProfile::class.java)) }
+        binding.editProfile.setOnClickListener {
+            val intent = Intent(requireContext(), EditProfile::class.java)
+            intent.putExtra("username", username)
+            intent.putExtra("email", email)
+            startActivity(intent)
+        }
 
         // myVideo
         binding.myVideo.setOnClickListener { startActivity(Intent(requireContext(), MyVideo::class.java)) }
@@ -68,8 +77,6 @@ class MyProfileFragment : Fragment() {
             // 로그아웃 시 정보 없앰
             DanzleSharedPreferences.clear()
         }
-
-
     }
 
     // 사용자가 돌아올 때마다 최신 데이터 보여줌
@@ -87,7 +94,7 @@ class MyProfileFragment : Fragment() {
             .create()
 
         alertDialog.setCancelable(false)
-        alertDialog.window!!.attributes.windowAnimations = R.style.dialogAniamtion
+        alertDialog.window!!.attributes.windowAnimations = R.style.dialogAnimation
         alertDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
 
@@ -103,7 +110,7 @@ class MyProfileFragment : Fragment() {
 
         // click logoutButton
         logoutButton.setOnClickListener {
-            val intent = Intent(requireContext(), FirstStart::class.java)
+            val intent = Intent(requireContext(), SignIn::class.java)
 
             // clear activity log
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -115,7 +122,7 @@ class MyProfileFragment : Fragment() {
     }
 
     // getting some information from server
-    private fun retrofitMyProfileMain(){
+    private fun retrofitMyProfileMain() {
         // SharedPreferences에 저장된 토큰 가져옴
         val token = DanzleSharedPreferences.getAccessToken()
 
@@ -123,16 +130,19 @@ class MyProfileFragment : Fragment() {
         //꼭 Baearer를 붙여야 한다.
 
 
-        if (token.isNullOrEmpty()){
+        if (token.isNullOrEmpty()) {
             Toast.makeText(requireContext(), "로그인이 필요합니다.", Toast.LENGTH_SHORT).show()
             return
         }
 
-       val retrofit = RetrofitApi.getMyProfileServiceInstance()
+        val retrofit = RetrofitApi.getMyProfileServiceInstance()
         retrofit.getMyProfile(authHeader)
-            .enqueue(object : Callback<MyProfileResponse>{
-                override fun onResponse(call: Call<MyProfileResponse>, response: Response<MyProfileResponse>) {
-                    if (response.isSuccessful){
+            .enqueue(object : Callback<MyProfileResponse> {
+                override fun onResponse(
+                    call: Call<MyProfileResponse>,
+                    response: Response<MyProfileResponse>
+                ) {
+                    if (response.isSuccessful) {
                         val myProfileResponse = response.body()
 
                         username = myProfileResponse!!.username
@@ -142,12 +152,13 @@ class MyProfileFragment : Fragment() {
                         binding.usernameTextview.text = username
                         binding.emailTextview.text = email
 
+                        binding.editProfile.isEnabled = true
                     }
                 }
 
                 override fun onFailure(call: Call<MyProfileResponse>, t: Throwable) {
-                    Log.d("Debug", "MyProfile / Error: ${t.message}")
-                    Toast.makeText(requireContext(), "Error to retrieve data", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Error to retrieve data", Toast.LENGTH_SHORT)
+                        .show()
 
                 }
             })

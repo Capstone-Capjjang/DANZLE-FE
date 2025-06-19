@@ -4,14 +4,11 @@ import com.example.danzle.data.remote.request.auth.CreateAccountRequest
 import com.example.danzle.data.remote.response.auth.CreateAccountResponse
 import retrofit2.Call
 import retrofit2.http.Body
-import retrofit2.http.Headers
 import retrofit2.http.POST
 
-interface CreateAccountService{
-
+interface CreateAccountService {
     @POST("/join")
-    fun addUser(
+    fun userCreateAccount(
         @Body createAccountRequest: CreateAccountRequest
     ): Call<CreateAccountResponse>
-
 }

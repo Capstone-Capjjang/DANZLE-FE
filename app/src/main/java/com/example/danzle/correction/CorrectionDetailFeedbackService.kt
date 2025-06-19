@@ -9,7 +9,7 @@ import retrofit2.http.Query
 interface CorrectionDetailFeedbackService {
     @GET("/api/low-score-feedback")
     fun getCorrectionDetailFeedback(
-        @Header("Authorization")token: String,
+        @Header("Authorization") token: String,
         @Query("sessionId") sessionId: Long
     ): Call<List<CorrectionFeedbackDetailResponse>>
 }

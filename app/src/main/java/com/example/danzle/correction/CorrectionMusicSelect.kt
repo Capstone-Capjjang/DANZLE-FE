@@ -39,7 +39,6 @@ class CorrectionMusicSelect : AppCompatActivity(),
         retrofitCorrectionMusicSelect()
 
         binding.songListRecyclerView.layoutManager = LinearLayoutManager(this)
-
     }
 
     override fun onItemClick(position: Int) {

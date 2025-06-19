@@ -4,4 +4,5 @@
     <dimen name="pageMargin">16dp</dimen>
     <!-- 개별 페이지의 너비 (예제 값이므로 원하는 크기로 조정 가능) -->
     <dimen name="pagerWidth">300dp</dimen>
+    <dimen name="recycler_item_spacing">8dp</dimen>
 </resources>

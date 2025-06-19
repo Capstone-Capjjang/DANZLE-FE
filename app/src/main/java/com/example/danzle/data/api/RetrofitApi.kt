@@ -1,21 +1,26 @@
 package com.example.danzle.data.api
 
+import com.example.danzle.BuildConfig
+import com.example.danzle.challenge.ChallengeHighlightService
+import com.example.danzle.challenge.ChallengeSaveService
+import com.example.danzle.challenge.ChallengeService
 import com.example.danzle.commonService.MusicSelectService
-import com.example.danzle.commonService.SaveService
+import com.example.danzle.correction.CorrectionSaveService
 import com.example.danzle.commonService.SaveVideoService
 import com.example.danzle.commonService.SilhouetteService
-import com.example.danzle.correction.CorrectionDetailFeedback
 import com.example.danzle.correction.CorrectionDetailFeedbackService
 import com.example.danzle.correction.CorrectionResultService
 import com.example.danzle.correction.CorrectionService
-import com.example.danzle.correction.FakeFeedbackService
 import com.example.danzle.correction.PoseAnalysis
 import com.example.danzle.myprofile.MyProfileService
 import com.example.danzle.myprofile.editProfile.ChangePasswordService
 import com.example.danzle.myprofile.editProfile.ChangeUsernameService
+import com.example.danzle.myprofile.myScore.MyScoreService
 import com.example.danzle.myprofile.myVideo.ChallengeVideoRepositoryService
+import com.example.danzle.myprofile.myVideo.CorrectionVideoRepositoryService
 import com.example.danzle.myprofile.myVideo.MyVideoService
 import com.example.danzle.myprofile.myVideo.PracticeVideoRepositoryService
+import com.example.danzle.practice.PracticeSaveService
 import com.example.danzle.practice.PracticeService
 import com.example.danzle.startPage.CreateAccountService
 import com.example.danzle.startPage.ForgotPassword1Service
@@ -32,14 +37,13 @@ import java.util.concurrent.TimeUnit
 
 object RetrofitApi {
 
-    private const val BASE_URL = "http://13.125.254.255:8080"
+    private val BASE_URL = BuildConfig.BASE_URL
 
-    //54.180.117.41
     private val client: OkHttpClient by lazy {
         OkHttpClient.Builder()
-            .connectTimeout(180, TimeUnit.SECONDS) // 서버 연결까지 기다리는 최대 시간
-            .readTimeout(180, TimeUnit.SECONDS)    // 서버 응답 읽기까지 기다리는 최대 시간
-            .writeTimeout(180, TimeUnit.SECONDS)   // 서버에 요청 쓰기까지 기다리는 최대 시간
+            .connectTimeout(240, TimeUnit.SECONDS) // 서버 연결까지 기다리는 최대 시간
+            .readTimeout(240, TimeUnit.SECONDS)    // 서버 응답 읽기까지 기다리는 최대 시간
+            .writeTimeout(240, TimeUnit.SECONDS)   // 서버에 요청 쓰기까지 기다리는 최대 시간
             .addInterceptor(
                 HttpLoggingInterceptor().apply {
                     level = HttpLoggingInterceptor.Level.BODY
@@ -54,13 +58,6 @@ object RetrofitApi {
         .addConverterFactory(GsonConverterFactory.create())
         .client(client)
         .build()
-
-//    private val danzleFlaskRetrofit = Retrofit.Builder()
-//        .baseUrl(FLASK_BASE_URL)
-//        .addConverterFactory(NullOnEmptyConverterFactory())
-//        .addConverterFactory(GsonConverterFactory.create())
-//        .client(client)
-//        .build()
 
     // RefreshToken
     private val authService: AuthService by lazy {
@@ -78,15 +75,6 @@ object RetrofitApi {
 
     fun getSignInInstance(): SignInsService {
         return signInService
-    }
-
-    // fakefeedback
-    private val fakeFeedbackService: FakeFeedbackService by lazy {
-        danzleRetrofit.create(FakeFeedbackService::class.java)
-    }
-
-    fun getFakeFeedbackInstance(): FakeFeedbackService {
-        return fakeFeedbackService
     }
 
     // CreateAccount
@@ -153,13 +141,31 @@ object RetrofitApi {
         return poseAnalysisService
     }
 
-    // save
-    private val saveService: SaveService by lazy {
-        danzleRetrofit.create(SaveService::class.java)
+    // save Practice video
+    private val savePracticeService: PracticeSaveService by lazy {
+        danzleRetrofit.create(PracticeSaveService::class.java)
     }
 
-    fun getSaveInstance(): SaveService {
-        return saveService
+    fun getPracticeSaveInstance(): PracticeSaveService {
+        return savePracticeService
+    }
+
+    // save Correction video
+    private val saveCorrectionService: CorrectionSaveService by lazy {
+        danzleRetrofit.create(CorrectionSaveService::class.java)
+    }
+
+    fun getCorrectionSaveInstance(): CorrectionSaveService {
+        return saveCorrectionService
+    }
+
+    // save Challenge video
+    private val saveChallengeService: ChallengeSaveService by lazy {
+        danzleRetrofit.create(ChallengeSaveService::class.java)
+    }
+
+    fun getChallengeSaveInstance(): ChallengeSaveService {
+        return saveChallengeService
     }
 
     // save video
@@ -178,6 +184,24 @@ object RetrofitApi {
 
     fun getCorrectionDetailFeedbackInstance(): CorrectionDetailFeedbackService {
         return correctionDetailFeedback
+    }
+
+    // challenge
+    private val challengeService: ChallengeService by lazy {
+        danzleRetrofit.create(ChallengeService::class.java)
+    }
+
+    fun getChallengeInstance(): ChallengeService {
+        return challengeService
+    }
+
+    // ChallengeHighlightService
+    private val challengeHighlightService: ChallengeHighlightService by lazy {
+        danzleRetrofit.create(ChallengeHighlightService::class.java)
+    }
+
+    fun getChallengeHighlightInstance(): ChallengeHighlightService {
+        return challengeHighlightService
     }
 
     // ForgotPassword1
@@ -234,7 +258,16 @@ object RetrofitApi {
         return practiceVideoRepositoryService
     }
 
-    // challenge repository
+    // correction repository
+    private val correctionVideoRepositoryService: CorrectionVideoRepositoryService by lazy {
+        danzleRetrofit.create(CorrectionVideoRepositoryService::class.java)
+    }
+
+    fun getCorrectionVideoRepositoryInstance(): CorrectionVideoRepositoryService {
+        return correctionVideoRepositoryService
+    }
+
+    // challenge
     private val challengeVideoRepositoryService: ChallengeVideoRepositoryService by lazy {
         danzleRetrofit.create(ChallengeVideoRepositoryService::class.java)
     }
@@ -243,6 +276,14 @@ object RetrofitApi {
         return challengeVideoRepositoryService
     }
 
+    // ScoreSave
+    private val myScoreService: MyScoreService by lazy {
+        danzleRetrofit.create(MyScoreService::class.java)
+    }
+
+    fun getMyScoreInstance(): MyScoreService {
+        return myScoreService
+    }
 }
 
 

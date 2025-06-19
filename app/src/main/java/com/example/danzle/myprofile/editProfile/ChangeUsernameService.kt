@@ -5,13 +5,12 @@ import com.example.danzle.data.remote.response.auth.ChangeUsernameResponse
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.Header
-import retrofit2.http.POST
+import retrofit2.http.PATCH
 
 interface ChangeUsernameService {
-    @POST("/user/profile/edit/name")
+    @PATCH("/user/profile/edit/name")
     fun getChangeUsername(
         @Header("Authorization") token: String,
         @Body changeUsernameRequest: ChangeUsernameRequest
     ): Call<ChangeUsernameResponse>
-
 }

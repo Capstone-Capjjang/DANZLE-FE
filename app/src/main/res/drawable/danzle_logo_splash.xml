@@ -1,0 +1,36 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="80dp"
+    android:height="80dp"
+    android:viewportWidth="150"
+    android:viewportHeight="150">
+
+    <!-- (1) 뷰포트를 절반으로 줄이고, -->
+    <!-- (2) PathData 좌표(x,y)와 strokeWidth를 모두 절반으로 수정 -->
+    <path
+        android:fillColor="#FC00FF"
+        android:pathData="M 57.5,85 C 51,85 44.5,91.5 44.5,98 C 44.5,104.5 51,111 57.5,111 C 64,111 70.5,104.5 70.5,98 C 70.5,91.5 64,85 57.5,85 Z" />
+
+    <path
+        android:fillColor="#FC00FF"
+        android:strokeColor="#FC00FF"
+        android:strokeWidth="4.5"
+        android:pathData="M 84,27 L 57.5,90" />
+
+    <path
+        android:fillColor="#00DDED"
+        android:strokeColor="#00DDED"
+        android:strokeWidth="4.5"
+        android:pathData="M 82,27 L 109.5,52" />
+
+    <path
+        android:fillColor="#00DDED"
+        android:strokeColor="#00DDED"
+        android:strokeWidth="4.5"
+        android:pathData="M 110.5,51 L 77.5,64.5" />
+
+    <path
+        android:fillColor="#00DDED"
+        android:strokeColor="#00DDED"
+        android:strokeWidth="4.5"
+        android:pathData="M 79.5,64.5 L 120,88.5" />
+</vector>

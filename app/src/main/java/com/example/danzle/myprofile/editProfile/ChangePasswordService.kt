@@ -5,14 +5,12 @@ import com.example.danzle.data.remote.response.auth.ChangePasswordResponse
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.Header
-import retrofit2.http.POST
+import retrofit2.http.PATCH
 
 interface ChangePasswordService {
-    @POST("/user/profile/edit/password")
-
+    @PATCH("/user/profile/edit/password")
     fun getChangePassword(
         @Header("Authorization") token: String,
         @Body changePasswordRequest: ChangePasswordRequest
     ): Call<ChangePasswordResponse>
-
 }

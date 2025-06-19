@@ -26,6 +26,15 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".myprofile.myVideo.ChallengeVideoRepository"
+            android:exported="false" />
+        <activity
+            android:name=".myprofile.myScore.MyScoreResult2"
+            android:exported="false" />
+        <activity
+            android:name=".myprofile.myScore.MyScoreResult1"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="false" />
         <activity
@@ -38,10 +47,10 @@
             android:name=".correction.CorrectionResult"
             android:exported="false" />
         <activity
-            android:name=".VideoPlayerActivity"
+            android:name=".myprofile.myVideo.VideoPlayerActivity"
             android:exported="false" />
         <activity
-            android:name=".myprofile.myVideo.ChallengeVideoRepository"
+            android:name=".myprofile.myVideo.CorrectionVideoRepository"
             android:exported="false" />
         <activity
             android:name=".myprofile.myVideo.PracticeVideoRepository"
@@ -51,10 +60,12 @@
             android:exported="false" />
         <activity
             android:name=".myprofile.editProfile.ChangePassword"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".myprofile.editProfile.ChangeUsername"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".practice.PracticeFinish"
             android:exported="false" />
@@ -77,8 +88,9 @@
             android:name=".challenge.ChallengeMusicSelect"
             android:exported="false" />
         <activity
-            android:name=".startPage.FirstStart"
-            android:exported="false" />
+            android:name=".startPage.SignIn"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".practice.PracticeMain"
             android:exported="false" />
@@ -89,11 +101,9 @@
             android:name=".practice.PracticeMusicSelectPopup"
             android:exported="false" />
         <activity
-            android:name=".SplashActivity"
-            android:exported="false" />
-        <activity
             android:name=".startPage.CreateAccount"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".practice.PracticeMusicSelect"
             android:exported="false" />
@@ -101,8 +111,9 @@
             android:name=".correction.CorrectionMusicSelect"
             android:exported="false" />
         <activity
-            android:name=".startPage.SignIn"
-            android:exported="true">
+            android:name=".startPage.FirstStart"
+            android:exported="true"
+            android:theme="@style/Theme.App.Starting">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

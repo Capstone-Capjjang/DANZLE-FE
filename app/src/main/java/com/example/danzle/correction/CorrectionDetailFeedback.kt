@@ -2,13 +2,12 @@ package com.example.danzle.correction
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.bumptech.glide.Glide
 import com.example.danzle.MainActivity
 import com.example.danzle.R
 import com.example.danzle.data.api.DanzleSharedPreferences
@@ -25,8 +24,6 @@ class CorrectionDetailFeedback : AppCompatActivity() {
     private lateinit var binding: ActivityCorrectionDetailFeedbackBinding
 
     private var sessionId: Long = -1L
-    private lateinit var token: String
-    private lateinit var authHeader: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,8 +36,8 @@ class CorrectionDetailFeedback : AppCompatActivity() {
             insets
         }
 
-        token = DanzleSharedPreferences.getAccessToken() ?: ""
-        authHeader = "Bearer $token"
+        binding.fullscreenLoading.visibility = View.VISIBLE
+        binding.resultContentGroup.visibility = View.GONE
 
         binding.backButton.setOnClickListener {
             startActivity(Intent(this@CorrectionDetailFeedback, CorrectionResult::class.java))
@@ -54,11 +51,7 @@ class CorrectionDetailFeedback : AppCompatActivity() {
                 startActivity(it)
             }
         }
-
-        //sessionId = 729L
-
         sessionId = intent.getLongExtra("sessionId", sessionId)
-        Log.d("CorrectionDetailFeedaback", "sessionId: $sessionId")
 
         if (sessionId == -1L) {
             Toast.makeText(this, "잘못된 sessionId입니다.", Toast.LENGTH_SHORT).show()
@@ -71,8 +64,6 @@ class CorrectionDetailFeedback : AppCompatActivity() {
         val token = DanzleSharedPreferences.getAccessToken() ?: ""
         val authHeader = "Bearer $token"
 
-        Log.d("CorrectionDetail", "Sending request with sessionId=$sessionId")
-
         val retrofit = RetrofitApi.getCorrectionDetailFeedbackInstance()
         retrofit.getCorrectionDetailFeedback(authHeader, sessionId)
             .enqueue(object : Callback<List<CorrectionFeedbackDetailResponse>> {
@@ -80,27 +71,14 @@ class CorrectionDetailFeedback : AppCompatActivity() {
                     call: Call<List<CorrectionFeedbackDetailResponse>>,
                     response: Response<List<CorrectionFeedbackDetailResponse>>
                 ) {
-                    Log.d("CorrectionDetail", "Response code: ${response.code()}")
+                    binding.fullscreenLoading.visibility = View.VISIBLE
+                    binding.resultContentGroup.visibility = View.VISIBLE
+
                     if (response.isSuccessful) {
                         val allFeedback = response.body().orEmpty()
-                        val top3 = allFeedback.take(3)
-
-                        val displayText = top3.firstOrNull()?.feedbacks ?: "피드백이 없습니다."
-                        binding.feedbackContent.text = displayText.toString()
-
-                        top3.firstOrNull()?.let { first ->
-                            // 사용자 이미지
-                            Glide.with(this@CorrectionDetailFeedback)
-                                .load(first.userImageUrl)
-                                .into(binding.feedbackImage)
-                        }
+                        val adapter = CorrectionDetailFeedbackPagerAdapter(allFeedback)
+                        binding.feedbackPager.adapter = adapter
                     } else {
-                        Log.e(
-                            "CorrectionDetail",
-                            "Server error: code=${response.code()}, errorBody=${
-                                response.errorBody()?.string()
-                            }"
-                        )
                         Toast.makeText(
                             this@CorrectionDetailFeedback,
                             "서버 오류: ${response.code()}",
@@ -113,7 +91,6 @@ class CorrectionDetailFeedback : AppCompatActivity() {
                     call: Call<List<CorrectionFeedbackDetailResponse>>,
                     t: Throwable
                 ) {
-                    Log.e("CorrectionDetail", "Network error", t)
                     Toast.makeText(
                         this@CorrectionDetailFeedback,
                         "네트워크 에러: ${t.localizedMessage}",

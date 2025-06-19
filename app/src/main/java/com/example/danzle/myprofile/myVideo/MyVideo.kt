@@ -2,7 +2,6 @@ package com.example.danzle.myprofile.myVideo
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -27,6 +26,7 @@ class MyVideo : AppCompatActivity() {
 
     private lateinit var practiceAdapter: MyVideoRVAdapter
     private lateinit var correctionAdapter: MyVideoRVAdapter
+    private lateinit var challengeAdapter: MyVideoRVAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,22 +45,29 @@ class MyVideo : AppCompatActivity() {
         binding.correctionMore.setOnClickListener {
             startActivity(Intent(this@MyVideo, CorrectionVideoRepository::class.java))
         }
+        binding.challengeMore.setOnClickListener {
+            startActivity(Intent(this@MyVideo, ChallengeVideoRepository::class.java))
+        }
 
         binding.backButton.setOnClickListener {
             finish()
         }
 
-        Log.d("MyVideo", "onCreate 실행됨")
         practiceAdapter = MyVideoRVAdapter(arrayListOf())
         correctionAdapter = MyVideoRVAdapter(arrayListOf())
+        challengeAdapter = MyVideoRVAdapter(arrayListOf())
 
         binding.practiceVideoRecyclerview.adapter = practiceAdapter
         binding.correctionVideoRecyclerview.adapter = correctionAdapter
+        binding.challengeVideoRecyclerview.adapter = challengeAdapter
 
         binding.practiceVideoRecyclerview.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 
         binding.correctionVideoRecyclerview.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+
+        binding.challengeVideoRecyclerview.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 
         val itemSpacing = resources.getDimensionPixelSize(R.dimen.recycler_item_spacing)
@@ -75,20 +82,14 @@ class MyVideo : AppCompatActivity() {
                 itemSpacing
             )
         )
+        binding.challengeVideoRecyclerview.addItemDecoration(
+            HorizontalItemSpacingDecoration(
+                itemSpacing
+            )
+        )
 
         retrofitMyVideo()
     }
-
-//    // recyclerview와 MyVideoRVAdapter 연결
-//    private fun setPracticeAdapter(list: ArrayList<MyVideoResponse>) {
-//        val adapter = MyVideoRVAdapter(list)
-//        binding.practiceVideoRecyclerview.adapter = adapter
-//    }
-//
-//    private fun setCorrectionAdapter(list: ArrayList<MyVideoResponse>) {
-//        val adapter = MyVideoRVAdapter(list)
-//        binding.correctionVideoRecyclerview.adapter = adapter
-//    }
 
     //about retrofit
     private fun retrofitMyVideo() {
@@ -96,8 +97,6 @@ class MyVideo : AppCompatActivity() {
         val authHeader = "Bearer $token"
 
         val userId = DanzleSharedPreferences.getUserId()
-
-        Log.d("MyVideo", "토큰: $token / 유저 ID: $userId")
 
         if (token.isNullOrEmpty() || userId == null) {
             // Fragment는 requireContext, Activity는 this
@@ -114,22 +113,19 @@ class MyVideo : AppCompatActivity() {
                 ) {
                     if (response.isSuccessful) {
                         val myVideoList = response.body() ?: emptyList()
-                        Log.d("MyVideo", "MyVideo / Full Response Body: $myVideoList") // 응답 전체 확인
-                        Log.d("MyVideo", "MyVideo / Token: $token")
-
                         // separate data
                         // enum class로 선언되어 있어서 아래와 같이 VideoMode.PRACTICE로 불러와야 된다.
                         val practiceList = myVideoList.filter { it.mode == VideoMode.PRACTICE }
-                        val challengeList = myVideoList.filter { it.mode == VideoMode.ACCURACY }
+                        val correctionList = myVideoList.filter { it.mode == VideoMode.ACCURACY }
+                        val challengeList = myVideoList.filter { it.mode == VideoMode.CHALLENGE }
 
                         // retrofit 응답 성공 시
                         practiceAdapter.updateList(practiceList)
-                        correctionAdapter.updateList(challengeList)
+                        correctionAdapter.updateList(correctionList)
+                        challengeAdapter.updateList(challengeList)
 
                     } else {
-                        Log.d("MyVideo", "MyVideo / Response Code: ${response.code()}")
-                        Log.e("MyScore", "Error body: ${response.errorBody()?.string()}")
-                        Toast.makeText(
+                          Toast.makeText(
                             this@MyVideo,
                             "Fail to MyVideo: ${response.message()}",
                             Toast.LENGTH_SHORT
@@ -138,7 +134,6 @@ class MyVideo : AppCompatActivity() {
                 }
 
                 override fun onFailure(call: Call<List<MyVideoResponse>>, t: Throwable) {
-                    Log.d("MyVideo", "MyVideo / Error: ${t.message}")
                     Toast.makeText(this@MyVideo, "Error", Toast.LENGTH_SHORT).show()
                 }
             })

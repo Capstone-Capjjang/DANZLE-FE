@@ -9,7 +9,7 @@ import retrofit2.http.Query
 interface CorrectionService {
     @POST("/accuracy-session/full")
     fun getCorrection(
-        @Header("Authorization")token: String,
-        @Query("songId")songId: Long,
-        ): Call<CorrectionResponse>
+        @Header("Authorization") token: String,
+        @Query("songId") songId: Long,
+    ): Call<CorrectionResponse>
 }

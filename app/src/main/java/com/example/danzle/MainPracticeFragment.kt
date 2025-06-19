@@ -85,10 +85,6 @@ class FragmentAdapter(
     }
 
     override fun createFragment(position: Int): Fragment {
-//        if (position == 1){
-//            FragmentPractice.setBackgroundResource
-//        }
-        Log.d("FragmentAdapter", "createFragment: $position")
         return when (position) {
             0 -> FragmentPractice()
             1 -> FragmentCorrection()
