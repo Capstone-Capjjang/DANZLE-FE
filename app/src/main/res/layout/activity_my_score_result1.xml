@@ -131,7 +131,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:text="8"
+                android:text="0"
                 android:textColor="@color/scorePerfectText"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -169,7 +169,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:text="12"
+                android:text="0"
                 android:textColor="@color/scoreGoodText"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -207,7 +207,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:text="40"
+                android:text="0"
                 android:textColor="@color/scoreNormalText"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -245,7 +245,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:text="12"
+                android:text="0"
                 android:textColor="@color/scoreBadText"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -283,7 +283,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:text="8"
+                android:text="0"
                 android:textColor="@color/scoreMissText"
                 android:textSize="18sp"
                 android:textStyle="bold" />
