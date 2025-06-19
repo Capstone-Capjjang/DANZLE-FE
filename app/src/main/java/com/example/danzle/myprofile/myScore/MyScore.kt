@@ -2,6 +2,7 @@ package com.example.danzle.myprofile.myScore
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -48,9 +49,9 @@ class MyScore : AppCompatActivity(),
 
     override fun onItemClick(position: Int) {
         val selectedScore = scoreList[position]
-        val intent = Intent(this@MyScore, MyScoreResult1::class.java)
-        intent.putExtra("selectedScore Id", selectedScore.id)
-        startActivity(intent)
+//        val intent = Intent(this@MyScore, MyScoreResult1::class.java)
+//        intent.putExtra("selectedScore Id", selectedScore.id)
+//        startActivity(intent)
     }
 
 
@@ -68,6 +69,8 @@ class MyScore : AppCompatActivity(),
                 ) {
                     if (response.isSuccessful) {
                         val result = response.body() ?: return
+                        Log.d("MyScore", "서버 응답 성공: $result")
+
                         val filtered = result.filterNot {
                             it.song.title.isNullOrBlank() &&
                                     it.song.coverImagePath.isNullOrBlank() &&
@@ -84,8 +87,6 @@ class MyScore : AppCompatActivity(),
                             binding.scoreRecyclerview.adapter = null
                             binding.scoreRecyclerview.visibility = View.GONE
                         }
-
-
                     } else {
                     }
                 }

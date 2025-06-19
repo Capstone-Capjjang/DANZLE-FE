@@ -2,6 +2,7 @@ package com.example.danzle.myprofile.myScore
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -76,6 +77,9 @@ class MyScoreResult1 : AppCompatActivity() {
                         binding.countMiss.text = miss.toString()
 
                         val total = excellent + good + normal + bad + miss
+                        Log.d("MyScoreResult1", "응답 성공: $result")
+                        Log.d("MyScoreResult1", "점수 분포: perfect=$excellent, good=$good, normal=$normal, bad=$bad, miss=$miss, total=$total")
+
 
                         if (total > 0) {
                             binding.progressPerfect.max = total
